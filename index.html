@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#000814">
+<link rel="manifest" href="manifest.json">
+<title>J.A.R.V.I.S.</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#000814;--bg2:#001220;
+  --cyan:#00d4ff;--cyan-d:rgba(0,212,255,.12);--cyan-b:rgba(0,212,255,.25);
+  --orange:#ff6b00;--orange-d:rgba(255,107,0,.15);
+  --green:#00ff88;--red:#ff4455;
+  --text:#c8e8ff;--text-d:rgba(200,232,255,.45);
+  --panel:rgba(0,18,32,.92);
+  --r:12px;
+}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Courier New',monospace;font-size:14px;line-height:1.4}
+
+/* ── BOOT ── */
+#boot{position:fixed;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;transition:opacity .7s ease}
+#boot.out{opacity:0;pointer-events:none}
+.boot-ring{width:110px;height:110px;border-radius:50%;border:2px solid transparent;border-top-color:var(--cyan);border-right-color:var(--cyan);animation:spin 1s linear infinite;box-shadow:0 0 24px var(--cyan),inset 0 0 24px rgba(0,212,255,.08)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.boot-title{margin-top:22px;font-size:10px;letter-spacing:6px;color:var(--cyan);text-shadow:0 0 12px var(--cyan)}
+.boot-log{margin-top:14px;font-size:10px;color:var(--text-d);letter-spacing:2px;text-align:center;min-height:32px}
+
+/* ── APP ── */
+#app{display:flex;flex-direction:column;height:100%;max-width:520px;margin:0 auto;position:relative}
+
+/* ── TOP BAR ── */
+.topbar{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top));background:var(--panel);border-bottom:1px solid var(--cyan-b)}
+.topbar-l{display:flex;align-items:center;gap:10px}
+.logo{font-size:17px;font-weight:bold;color:var(--cyan);letter-spacing:4px;text-shadow:0 0 14px var(--cyan)}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:blink-dot 2.5s infinite}
+.dot.off{background:var(--red);box-shadow:0 0 6px var(--red);animation:none}
+@keyframes blink-dot{0%,100%{opacity:1}50%{opacity:.35}}
+.topbar-r{display:flex;align-items:center;gap:12px}
+.clock{font-size:12px;color:var(--cyan);letter-spacing:1px}
+.icon-btn{background:none;border:none;color:var(--text-d);font-size:18px;cursor:pointer;padding:4px;line-height:1;transition:color .15s}
+.icon-btn:active{color:var(--cyan)}
+
+/* ── STATUS STRIP ── */
+.strip{flex-shrink:0;display:flex;gap:7px;padding:7px 14px;background:var(--bg2);border-bottom:1px solid var(--cyan-b);overflow-x:auto;scrollbar-width:none}
+.strip::-webkit-scrollbar{display:none}
+.stat{flex-shrink:0;background:var(--cyan-d);border:1px solid var(--cyan-b);border-radius:8px;padding:5px 12px;min-width:90px;text-align:center}
+.stat-l{font-size:8px;letter-spacing:2px;color:var(--text-d);text-transform:uppercase}
+.stat-v{font-size:14px;color:var(--cyan);font-weight:bold;margin-top:1px}
+
+/* ── TABS ── */
+.tabs{flex-shrink:0;display:flex;background:var(--panel);border-bottom:1px solid var(--cyan-b);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:1;min-width:62px;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-d);font-family:inherit;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab.on{color:var(--cyan);border-bottom-color:var(--cyan);text-shadow:0 0 8px var(--cyan)}
+
+/* ── PANELS ── */
+.content{flex:1;overflow:hidden;position:relative}
+.panel{display:none;flex-direction:column;height:100%}
+.panel.on{display:flex}
+
+/* ── MESSAGES ── */
+.msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:11px}
+.msg{display:flex;flex-direction:column;max-width:87%}
+.msg.u{align-self:flex-end;align-items:flex-end}
+.msg.a{align-self:flex-start;align-items:flex-start}
+.msg-who{font-size:8px;letter-spacing:2px;color:var(--text-d);margin-bottom:3px;text-transform:uppercase}
+.bubble{padding:10px 13px;border-radius:12px;font-size:13px;line-height:1.55;word-break:break-word}
+.msg.u .bubble{background:var(--orange-d);border:1px solid rgba(255,107,0,.35);color:#ffd4a0;border-top-right-radius:3px}
+.msg.a .bubble{background:var(--cyan-d);border:1px solid var(--cyan-b);color:var(--text);border-top-left-radius:3px}
+.msg.a.thinking .bubble{border-color:var(--cyan);box-shadow:0 0 12px rgba(0,212,255,.18);animation:tp 1.1s infinite}
+@keyframes tp{0%,100%{box-shadow:0 0 10px rgba(0,212,255,.12)}50%{box-shadow:0 0 22px rgba(0,212,255,.35)}}
+.cur{display:inline-block;width:2px;height:13px;background:var(--cyan);margin-left:2px;animation:blink .65s infinite;vertical-align:text-bottom}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* ── QUICK ACTIONS ── */
+.qrow{flex-shrink:0;display:flex;gap:7px;padding:7px 14px;overflow-x:auto;scrollbar-width:none;border-top:1px solid var(--cyan-b)}
+.qrow::-webkit-scrollbar{display:none}
+.qbtn{flex-shrink:0;padding:6px 13px;background:var(--cyan-d);border:1px solid var(--cyan-b);border-radius:18px;color:var(--cyan);font-family:inherit;font-size:11px;letter-spacing:1px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.qbtn:active{background:var(--cyan);color:var(--bg)}
+
+/* ── INPUT AREA ── */
+.inp-area{flex-shrink:0;display:flex;align-items:flex-end;gap:8px;padding:10px 14px;padding-bottom:max(10px,env(safe-area-inset-bottom));background:var(--panel);border-top:1px solid var(--cyan-b)}
+.inp-wrap{flex:1;background:rgba(0,212,255,.04);border:1px solid var(--cyan-b);border-radius:18px;display:flex;align-items:flex-end;transition:border-color .2s}
+.inp-wrap.focus{border-color:var(--cyan);box-shadow:0 0 10px rgba(0,212,255,.15)}
+textarea.inp{flex:1;background:none;border:none;outline:none;color:var(--text);font-family:inherit;font-size:13px;padding:9px 12px;resize:none;max-height:110px;min-height:36px;line-height:1.4}
+textarea.inp::placeholder{color:var(--text-d)}
+.send-btn{width:37px;height:37px;background:var(--cyan);border:none;border-radius:50%;color:var(--bg);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s}
+.send-btn:active{transform:scale(.92)}
+.send-btn:disabled{background:var(--cyan-b)}
+.mic-btn{width:42px;height:42px;background:var(--cyan-d);border:2px solid var(--cyan-b);border-radius:50%;color:var(--cyan);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;user-select:none;-webkit-user-select:none}
+.mic-btn.on{background:rgba(255,50,50,.2);border-color:var(--red);color:var(--red);box-shadow:0 0 14px rgba(255,50,50,.3);animation:mic-pulse .5s infinite alternate}
+@keyframes mic-pulse{to{transform:scale(1.08)}}
+
+/* ── AGENT CARD (collapsible) ── */
+.agent-card{flex-shrink:0;border-bottom:1px solid var(--cyan-b)}
+.agent-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;background:var(--cyan-d)}
+.agent-nm{font-size:12px;font-weight:bold;letter-spacing:3px;color:var(--cyan)}
+.agent-role{font-size:9px;color:var(--text-d);letter-spacing:1px;margin-top:1px}
+.agent-exp{color:var(--text-d);font-size:11px;transition:transform .2s}
+.agent-exp.up{transform:rotate(180deg)}
+.agent-body{display:none;padding:10px 14px 12px;background:var(--bg2)}
+.agent-body.open{display:block}
+.agent-desc{font-size:11px;color:var(--text-d);line-height:1.55;margin-bottom:10px}
+.act-btns{display:flex;flex-wrap:wrap;gap:7px}
+.abtn{padding:7px 12px;background:var(--cyan-d);border:1px solid var(--cyan-b);border-radius:8px;color:var(--cyan);font-family:inherit;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .15s}
+.abtn:active{background:var(--cyan);color:var(--bg)}
+
+/* ── OVERSEER ── */
+.ov-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:13px}
+.ov-desc{background:var(--cyan-d);border:1px solid var(--cyan-b);border-radius:var(--r);padding:14px;font-size:12px;color:var(--text-d);line-height:1.6}
+.ov-desc strong{color:var(--cyan)}
+.run-btn{width:100%;padding:15px;background:linear-gradient(135deg,rgba(0,212,255,.18),rgba(255,107,0,.18));border:1px solid var(--cyan);border-radius:var(--r);color:var(--cyan);font-family:inherit;font-size:13px;font-weight:bold;letter-spacing:3px;cursor:pointer;text-shadow:0 0 10px var(--cyan);transition:transform .15s}
+.run-btn:active{transform:scale(.97)}
+.run-btn:disabled{opacity:.45;cursor:default}
+.ov-log{background:rgba(0,0,0,.5);border:1px solid var(--cyan-b);border-radius:var(--r);padding:11px;font-size:10px;color:var(--text-d);line-height:1.6;white-space:pre-wrap;letter-spacing:.5px}
+.ov-out{display:flex;flex-direction:column;gap:10px}
+.out-sec{background:var(--panel);border:1px solid var(--cyan-b);border-radius:var(--r);overflow:hidden}
+.out-sec-hdr{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;background:var(--cyan-d);font-size:10px;letter-spacing:2px;color:var(--cyan)}
+.out-sec-body{padding:11px 13px;font-size:12px;color:var(--text);line-height:1.6;max-height:180px;overflow-y:auto;white-space:pre-wrap}
+.copy-btn{background:none;border:1px solid var(--cyan-b);border-radius:4px;color:var(--text-d);font-size:9px;padding:2px 7px;cursor:pointer;font-family:inherit;transition:color .15s}
+.copy-btn:active{color:var(--cyan)}
+
+/* ── CONFIG PANEL ── */
+#cfg{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;background:var(--bg);transform:translateY(100%);transition:transform .3s ease}
+#cfg.open{transform:translateY(0)}
+.cfg-hdr{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;padding-top:max(14px,env(safe-area-inset-top));border-bottom:1px solid var(--cyan-b);background:var(--panel)}
+.cfg-title{font-size:12px;letter-spacing:4px;color:var(--cyan)}
+.close-btn{background:none;border:none;color:var(--text-d);font-size:22px;cursor:pointer;line-height:1}
+.cfg-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:14px}
+.cfg-sec{background:var(--panel);border:1px solid var(--cyan-b);border-radius:var(--r);padding:14px}
+.cfg-sec-title{font-size:9px;letter-spacing:3px;color:var(--cyan);margin-bottom:11px;text-transform:uppercase}
+.field{margin-bottom:11px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:9px;color:var(--text-d);letter-spacing:2px;text-transform:uppercase;margin-bottom:5px}
+.field input,.field textarea,.field select{width:100%;background:rgba(0,212,255,.04);border:1px solid var(--cyan-b);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;padding:9px 11px;outline:none;-webkit-appearance:none}
+.field input:focus,.field textarea:focus{border-color:var(--cyan)}
+.field textarea{resize:vertical;min-height:72px}
+.hint{font-size:9px;color:var(--text-d);margin-top:5px;line-height:1.5}
+.save-btn{width:100%;padding:13px;background:var(--cyan);border:none;border-radius:var(--r);color:var(--bg);font-family:inherit;font-size:12px;font-weight:bold;letter-spacing:3px;cursor:pointer}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(12px);background:var(--panel);border:1px solid var(--cyan-b);border-radius:20px;padding:7px 18px;font-size:11px;color:var(--cyan);opacity:0;transition:all .25s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ── IOS BANNER ── */
+.ios-banner{display:none;background:var(--cyan-d);border-bottom:1px solid var(--cyan-b);padding:8px 14px;font-size:10px;color:var(--text-d);align-items:center;gap:8px;letter-spacing:.5px}
+.ios-banner.show{display:flex}
+.ios-x{margin-left:auto;background:none;border:none;color:var(--text-d);font-size:16px;cursor:pointer}
+
+/* ── UTILS ── */
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--cyan-b);border-radius:2px}
+code{background:rgba(0,212,255,.1);padding:1px 4px;border-radius:3px;font-size:11px}
+strong{color:#fff}
+</style>
+</head>
+<body>
+
+<!-- Boot -->
+<div id="boot">
+  <div class="boot-ring"></div>
+  <div class="boot-title">J.A.R.V.I.S.</div>
+  <div class="boot-log" id="boot-log"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<!-- Config -->
+<div id="cfg">
+  <div class="cfg-hdr">
+    <span class="cfg-title">CONFIGURATION</span>
+    <button class="close-btn" onclick="closeCfg()">×</button>
+  </div>
+  <div class="cfg-body">
+    <div class="cfg-sec">
+      <div class="cfg-sec-title">API Connection</div>
+      <div class="field">
+        <label>Ollama URL</label>
+        <input type="url" id="c-url" placeholder="http://192.168.1.x:11434">
+        <div class="hint">Your home machine IP or ngrok URL running Ollama.<br>Set <code>OLLAMA_ORIGINS=https://bozo0711.github.io</code> on your machine.</div>
+      </div>
+      <div class="field">
+        <label>Model</label>
+        <input type="text" id="c-model" placeholder="llama3.2:3b">
+      </div>
+    </div>
+    <div class="cfg-sec">
+      <div class="cfg-sec-title">Your Profile</div>
+      <div class="field"><label>Your Name</label><input type="text" id="c-name" placeholder="Commander"></div>
+      <div class="field"><label>Monthly Income Goal ($)</label><input type="number" id="c-goal" placeholder="10000"></div>
+      <div class="field"><label>Current Monthly Income ($)</label><input type="number" id="c-income" placeholder="0"></div>
+      <div class="field"><label>Target Date</label><input type="date" id="c-date"></div>
+    </div>
+    <div class="cfg-sec">
+      <div class="cfg-sec-title">Context</div>
+      <div class="field">
+        <label>Active Tasks (one per line)</label>
+        <textarea id="c-tasks" placeholder="Close 3 clients this week&#10;Finish the website&#10;Post daily content"></textarea>
+      </div>
+      <div class="field">
+        <label>Business Context</label>
+        <textarea id="c-ctx" placeholder="Your business, offer, target client, current situation..."></textarea>
+      </div>
+    </div>
+    <button class="save-btn" onclick="saveCfg()">SAVE &amp; APPLY</button>
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+
+  <!-- iOS install hint -->
+  <div class="ios-banner" id="ios-banner">
+    <span>Tap Share → "Add to Home Screen" for the full app experience</span>
+    <button class="ios-x" onclick="document.getElementById('ios-banner').classList.remove('show')">×</button>
+  </div>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-l">
+      <span class="logo">JARVIS</span>
+      <div class="dot" id="dot"></div>
+    </div>
+    <div class="topbar-r">
+      <span class="clock" id="clock">--:--</span>
+      <button class="icon-btn" onclick="toggleVoiceOut()" id="voice-out-btn" title="Toggle voice output">🔊</button>
+      <button class="icon-btn" onclick="openCfg()">⚙</button>
+    </div>
+  </div>
+
+  <!-- Status strip -->
+  <div class="strip">
+    <div class="stat"><div class="stat-l">Time Left</div><div class="stat-v" id="s-days">--</div></div>
+    <div class="stat"><div class="stat-l">Prosperity</div><div class="stat-v" id="s-pct">0%</div></div>
+    <div class="stat"><div class="stat-l">Tasks</div><div class="stat-v" id="s-tasks">0/0</div></div>
+    <div class="stat"><div class="stat-l">Income</div><div class="stat-v" id="s-income">$0</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab on" data-tab="jarvis" onclick="switchTab('jarvis')">JARVIS</button>
+    <button class="tab" data-tab="atlas" onclick="switchTab('atlas')">ATLAS</button>
+    <button class="tab" data-tab="scribe" onclick="switchTab('scribe')">SCRIBE</button>
+    <button class="tab" data-tab="hunter" onclick="switchTab('hunter')">HUNTER</button>
+    <button class="tab" data-tab="ledger" onclick="switchTab('ledger')">LEDGER</button>
+    <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">OVERSEER</button>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+
+    <!-- JARVIS -->
+    <div class="panel on" id="p-jarvis">
+      <div class="msgs" id="m-jarvis"></div>
+      <div class="qrow">
+        <button class="qbtn" onclick="qp('jarvis','Plan my day and prioritize my tasks')">Plan Day</button>
+        <button class="qbtn" onclick="qp('jarvis','Motivate me right now. I need to push through')">Motivate</button>
+        <button class="qbtn" onclick="qp('jarvis','Review my progress. Be honest')">Review</button>
+        <button class="qbtn" onclick="qp('jarvis','What is the single highest-leverage move I can make today?')">Focus</button>
+        <button class="qbtn" onclick="cmd('status')">Status</button>
+        <button class="qbtn" onclick="cmd('list')">List Tasks</button>
+      </div>
+      <div class="inp-area">
+        <button class="mic-btn" id="mic"
+          ontouchstart="startMic(event)" ontouchend="stopMic(event)"
+          onmousedown="startMic(event)" onmouseup="stopMic(event)">🎙</button>
+        <div class="inp-wrap" id="iw-jarvis">
+          <textarea class="inp" id="i-jarvis" placeholder="Talk to JARVIS…" rows="1"
+            oninput="autoH(this)" onkeydown="handleKey(event,'jarvis')"></textarea>
+        </div>
+        <button class="send-btn" id="sb-jarvis" onclick="send('jarvis')">▶</button>
+      </div>
+    </div>
+
+    <!-- ATLAS -->
+    <div class="panel" id="p-atlas">
+      <div class="agent-card">
+        <div class="agent-hdr" onclick="toggleCard('atlas')">
+          <div><div class="agent-nm">ATLAS</div><div class="agent-role">Strategy &amp; Planning</div></div>
+          <span class="agent-exp up" id="exp-atlas">▼</span>
+        </div>
+        <div class="agent-body open" id="ab-atlas">
+          <div class="agent-desc">Analyzes your position and builds strategic plans. Big picture — what to do, in what order, and why.</div>
+          <div class="act-btns">
+            <button class="abtn" onclick="runAgent('atlas','Build a focused 30-day sprint plan based on my goals and current tasks. Be specific and prioritized.')">30-Day Sprint</button>
+            <button class="abtn" onclick="runAgent('atlas','Analyze my current situation and identify the single biggest bottleneck holding back my income.')">Find Bottleneck</button>
+            <button class="abtn" onclick="runAgent('atlas','What is the highest-leverage move I can make this week to accelerate income?')">High Leverage</button>
+            <button class="abtn" onclick="runAgent('atlas','Do a SWOT analysis of my current business situation.')">SWOT</button>
+          </div>
+        </div>
+      </div>
+      <div class="msgs" id="m-atlas"></div>
+      <div class="inp-area">
+        <div class="inp-wrap" id="iw-atlas">
+          <textarea class="inp" id="i-atlas" placeholder="Ask ATLAS…" rows="1"
+            oninput="autoH(this)" onkeydown="handleKey(event,'atlas')"></textarea>
+        </div>
+        <button class="send-btn" onclick="send('atlas')">▶</button>
+      </div>
+    </div>
+
+    <!-- SCRIBE -->
+    <div class="panel" id="p-scribe">
+      <div class="agent-card">
+        <div class="agent-hdr" onclick="toggleCard('scribe')">
+          <div><div class="agent-nm">SCRIBE</div><div class="agent-role">Content Creation</div></div>
+          <span class="agent-exp up" id="exp-scribe">▼</span>
+        </div>
+        <div class="agent-body open" id="ab-scribe">
+          <div class="agent-desc">Drafts content that converts — social posts, emails, pitches. Built for your voice and audience.</div>
+          <div class="act-btns">
+            <button class="abtn" onclick="runAgent('scribe','Write 3 high-engagement social media posts for today based on my business.')">Social Posts</button>
+            <button class="abtn" onclick="runAgent('scribe','Write a cold outreach email that gets replies, tailored to my specific business and offer.')">Cold Email</button>
+            <button class="abtn" onclick="runAgent('scribe','Write a compelling pitch/offer for what I sell. Make it irresistible.')">Pitch Draft</button>
+            <button class="abtn" onclick="runAgent('scribe','Create a 7-day content calendar with specific post ideas for each day.')">7-Day Calendar</button>
+          </div>
+        </div>
+      </div>
+      <div class="msgs" id="m-scribe"></div>
+      <div class="inp-area">
+        <div class="inp-wrap" id="iw-scribe">
+          <textarea class="inp" id="i-scribe" placeholder="Ask SCRIBE…" rows="1"
+            oninput="autoH(this)" onkeydown="handleKey(event,'scribe')"></textarea>
+        </div>
+        <button class="send-btn" onclick="send('scribe')">▶</button>
+      </div>
+    </div>
+
+    <!-- HUNTER -->
+    <div class="panel" id="p-hunter">
+      <div class="agent-card">
+        <div class="agent-hdr" onclick="toggleCard('hunter')">
+          <div><div class="agent-nm">HUNTER</div><div class="agent-role">Outreach &amp; Sales</div></div>
+          <span class="agent-exp up" id="exp-hunter">▼</span>
+        </div>
+        <div class="agent-body open" id="ab-hunter">
+          <div class="agent-desc">Finds prospects and closes deals. Scripts, objection handlers, and follow-up sequences that convert.</div>
+          <div class="act-btns">
+            <button class="abtn" onclick="runAgent('hunter','Give me 10 specific ideal prospects and exactly where to find them for my business.')">Find Prospects</button>
+            <button class="abtn" onclick="runAgent('hunter','Write a DM outreach script for cold prospects on social media that actually gets responses.')">DM Script</button>
+            <button class="abtn" onclick="runAgent('hunter','Give me the top 5 objections to my offer and a powerful response to each one.')">Objection Handlers</button>
+            <button class="abtn" onclick="runAgent('hunter','Write a 5-step follow-up sequence for leads who ghosted after showing initial interest.')">Follow-up Sequence</button>
+          </div>
+        </div>
+      </div>
+      <div class="msgs" id="m-hunter"></div>
+      <div class="inp-area">
+        <div class="inp-wrap" id="iw-hunter">
+          <textarea class="inp" id="i-hunter" placeholder="Ask HUNTER…" rows="1"
+            oninput="autoH(this)" onkeydown="handleKey(event,'hunter')"></textarea>
+        </div>
+        <button class="send-btn" onclick="send('hunter')">▶</button>
+      </div>
+    </div>
+
+    <!-- LEDGER -->
+    <div class="panel" id="p-ledger">
+      <div class="agent-card">
+        <div class="agent-hdr" onclick="toggleCard('ledger')">
+          <div><div class="agent-nm">LEDGER</div><div class="agent-role">Finance &amp; Tracking</div></div>
+          <span class="agent-exp up" id="exp-ledger">▼</span>
+        </div>
+        <div class="agent-body open" id="ab-ledger">
+          <div class="agent-desc">Tracks money, projects cash flow, and gives you the numbers you need to hit your targets.</div>
+          <div class="act-btns">
+            <button class="abtn" onclick="runAgent('ledger','Based on my income goal and current income, what do I need to achieve each week to hit the target?')">Revenue Projection</button>
+            <button class="abtn" onclick="runAgent('ledger','Am I on track to hit my income goal? Analyze my current pace and tell me exactly what I need to do.')">Check Pace</button>
+            <button class="abtn" onclick="runAgent('ledger','What are the fastest ways to generate income from my current position? Give me a ranked list.')">Fast Revenue</button>
+            <button class="abtn" onclick="runAgent('ledger','What should I price my offer at and what pricing structure maximizes revenue for my business?')">Pricing Strategy</button>
+          </div>
+        </div>
+      </div>
+      <div class="msgs" id="m-ledger"></div>
+      <div class="inp-area">
+        <div class="inp-wrap" id="iw-ledger">
+          <textarea class="inp" id="i-ledger" placeholder="Ask LEDGER…" rows="1"
+            oninput="autoH(this)" onkeydown="handleKey(event,'ledger')"></textarea>
+        </div>
+        <button class="send-btn" onclick="send('ledger')">▶</button>
+      </div>
+    </div>
+
+    <!-- OVERSEER -->
+    <div class="panel" id="p-overseer">
+      <div class="ov-content">
+        <div class="ov-desc">
+          <strong>▶ RUN THE MACHINE</strong><br><br>
+          Chains all four specialists in sequence:<br>
+          ATLAS builds the strategy → SCRIBE creates the content → HUNTER plans the outreach → LEDGER runs the numbers.<br><br>
+          Output is a complete daily operations package ready to act on immediately.
+        </div>
+        <button class="run-btn" id="ov-btn" onclick="runOverseer()">▶ RUN THE MACHINE</button>
+        <div class="ov-log" id="ov-log">Awaiting initiation…</div>
+        <div class="ov-out" id="ov-out"></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════
+const AGENTS = ['jarvis','atlas','scribe','hunter','ledger'];
+
+let cfg = {
+  url:'', model:'llama3.2:3b', name:'Commander',
+  goal:10000, income:0, date:'', tasks:[], done:[], ctx:''
+};
+let convos = {};          // {agent:[{role,content}]}
+let busy = false;
+let voiceOut = true;
+let recognition = null;
+let audioCtx = null;
+let currentTab = 'jarvis';
+
+// ═══════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════
+function init() {
+  loadCfg();
+  loadConvos();
+  startClock();
+  updateStats();
+  initSpeech();
+  showIOSBanner();
+  boot();
+
+  // Focus styles for JARVIS input
+  const iw = document.getElementById('iw-jarvis');
+  const inp = document.getElementById('i-jarvis');
+  inp.addEventListener('focus', () => iw.classList.add('focus'));
+  inp.addEventListener('blur',  () => iw.classList.remove('focus'));
+}
+
+// ═══════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════
+async function boot() {
+  const el = document.getElementById('boot-log');
+  const seq = [
+    'BOOTING NEURAL CORE…',
+    'LOADING SPECIALIST MODULES…',
+    'SYNCING USER PROFILE…',
+    `WELCOME BACK, ${(cfg.name||'COMMANDER').toUpperCase()}`,
+    'ALL SYSTEMS NOMINAL',
+  ];
+  for (const s of seq) { el.textContent = s; await delay(550); }
+  await delay(350);
+  document.getElementById('boot').classList.add('out');
+  setTimeout(() => {
+    document.getElementById('boot').style.display = 'none';
+    addMsg('jarvis','assistant',
+      `JARVIS online. Good ${tod()}, ${cfg.name}. ` +
+      (cfg.url ? 'API connected.' : 'Tap ⚙ to configure your Ollama endpoint.'));
+  }, 700);
+}
+
+function tod() {
+  const h = new Date().getHours();
+  return h<12?'morning':h<17?'afternoon':'evening';
+}
+const delay = ms => new Promise(r => setTimeout(r, ms));
+
+// ═══════════════════════════════════════════════
+// CONFIG
+// ═══════════════════════════════════════════════
+function loadCfg() {
+  try { Object.assign(cfg, JSON.parse(localStorage.getItem('jv-cfg')||'{}')); } catch(e){}
+  fillCfgForm();
+  updateDot();
+}
+
+function fillCfgForm() {
+  document.getElementById('c-url').value   = cfg.url||'';
+  document.getElementById('c-model').value = cfg.model||'llama3.2:3b';
+  document.getElementById('c-name').value  = cfg.name||'';
+  document.getElementById('c-goal').value  = cfg.goal||'';
+  document.getElementById('c-income').value= cfg.income||'';
+  document.getElementById('c-date').value  = cfg.date||'';
+  document.getElementById('c-tasks').value = (cfg.tasks||[]).join('\n');
+  document.getElementById('c-ctx').value   = cfg.ctx||'';
+}
+
+function saveCfg() {
+  cfg.url    = document.getElementById('c-url').value.trim().replace(/\/$/,'');
+  cfg.model  = document.getElementById('c-model').value.trim()||'llama3.2:3b';
+  cfg.name   = document.getElementById('c-name').value.trim()||'Commander';
+  cfg.goal   = parseFloat(document.getElementById('c-goal').value)||0;
+  cfg.income = parseFloat(document.getElementById('c-income').value)||0;
+  cfg.date   = document.getElementById('c-date').value;
+  cfg.tasks  = document.getElementById('c-tasks').value.split('\n').map(t=>t.trim()).filter(Boolean);
+  cfg.ctx    = document.getElementById('c-ctx').value.trim();
+  localStorage.setItem('jv-cfg', JSON.stringify(cfg));
+  updateStats(); updateDot(); closeCfg(); toast('Saved');
+}
+
+function openCfg()  { document.getElementById('cfg').classList.add('open'); }
+function closeCfg() { document.getElementById('cfg').classList.remove('open'); }
+function updateDot(){ document.getElementById('dot').className = 'dot'+(cfg.url?'':' off'); }
+
+// ═══════════════════════════════════════════════
+// CLOCK & STATS
+// ═══════════════════════════════════════════════
+function startClock() {
+  tick(); setInterval(tick, 1000);
+  setInterval(updateStats, 60000);
+}
+
+function tick() {
+  const n = new Date();
+  document.getElementById('clock').textContent =
+    n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});
+}
+
+function updateStats() {
+  // days
+  if (cfg.date) {
+    const d = new Date(cfg.date) - new Date();
+    if (d > 0) {
+      const days = Math.floor(d/86400000), hrs = Math.floor((d%86400000)/3600000);
+      document.getElementById('s-days').textContent = `${days}d ${hrs}h`;
+    } else { document.getElementById('s-days').textContent = 'TODAY'; }
+  } else { document.getElementById('s-days').textContent = '--'; }
+
+  // prosperity
+  const pct = cfg.goal>0 ? Math.round((cfg.income/cfg.goal)*100) : 0;
+  document.getElementById('s-pct').textContent = pct+'%';
+
+  // tasks
+  const total = (cfg.tasks||[]).length + (cfg.done||[]).length;
+  document.getElementById('s-tasks').textContent = `${(cfg.done||[]).length}/${total}`;
+
+  // income
+  document.getElementById('s-income').textContent = '$'+(cfg.income||0).toLocaleString();
+}
+
+// ═══════════════════════════════════════════════
+// CONVERSATIONS
+// ═══════════════════════════════════════════════
+function loadConvos() {
+  try { convos = JSON.parse(localStorage.getItem('jv-convos')||'{}'); } catch(e){ convos={}; }
+  for (const a of AGENTS) {
+    for (const m of (convos[a]||[])) renderMsg(a, m.role, m.content);
+  }
+}
+
+function saveConvos() {
+  localStorage.setItem('jv-convos', JSON.stringify(convos));
+}
+
+function pushConvo(agent, role, content) {
+  if (!convos[agent]) convos[agent] = [];
+  convos[agent].push({role, content});
+  if (convos[agent].length > 60) convos[agent].splice(0, convos[agent].length-60);
+  saveConvos();
+}
+
+// ═══════════════════════════════════════════════
+// TABS
+// ═══════════════════════════════════════════════
+function switchTab(t) {
+  currentTab = t;
+  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('on', el.dataset.tab===t));
+  document.querySelectorAll('.panel').forEach(el => el.classList.toggle('on', el.id===`p-${t}`));
+}
+
+// ═══════════════════════════════════════════════
+// MESSAGES
+// ═══════════════════════════════════════════════
+function addMsg(agent, role, content) {
+  renderMsg(agent, role, content);
+  pushConvo(agent, role, content);
+}
+
+function renderMsg(agent, role, content) {
+  const c = document.getElementById(`m-${agent}`);
+  if (!c) return;
+  const div = document.createElement('div');
+  div.className = `msg ${role==='user'?'u':'a'}`;
+  div.innerHTML = `<div class="msg-who">${role==='user'?cfg.name.toUpperCase():agent.toUpperCase()}</div>
+    <div class="bubble">${fmt(content)}</div>`;
+  c.appendChild(div);
+  c.scrollTop = c.scrollHeight;
+}
+
+function mkStream(agent) {
+  const c = document.getElementById(`m-${agent}`);
+  if (!c) return null;
+  const div = document.createElement('div');
+  div.className = 'msg a thinking';
+  div.innerHTML = `<div class="msg-who">${agent.toUpperCase()}</div><div class="bubble"><span class="cur"></span></div>`;
+  c.appendChild(div);
+  c.scrollTop = c.scrollHeight;
+  const bubble = div.querySelector('.bubble');
+  const upd = text => { bubble.innerHTML = fmt(text)+'<span class="cur"></span>'; c.scrollTop=c.scrollHeight; };
+  const fin = text => { div.classList.remove('thinking'); bubble.innerHTML = fmt(text); c.scrollTop=c.scrollHeight; };
+  return { upd, fin };
+}
+
+function fmt(t) {
+  return (t||'')
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\n/g,'<br>');
+}
+
+// ═══════════════════════════════════════════════
+// API
+// ═══════════════════════════════════════════════
+function sysPrompt(agent) {
+  const now = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  const tasks = (cfg.tasks||[]).map((t,i)=>`${i+1}. ${t}`).join('\n')||'None';
+  const base = `Date: ${now}
+User: ${cfg.name}
+Income Goal: $${(cfg.goal||0).toLocaleString()}/month
+Current Income: $${(cfg.income||0).toLocaleString()}/month
+Prosperity: ${cfg.goal>0?Math.round((cfg.income/cfg.goal)*100):0}%
+Active Tasks:\n${tasks}
+Completed: ${(cfg.done||[]).join(', ')||'None'}
+Business Context: ${cfg.ctx||'Not set — configure in ⚙ Settings'}`;
+
+  const p = {
+    jarvis:`You are JARVIS, an elite AI assistant. Be concise, direct, and intelligent. Address the user as "${cfg.name}". No filler. Give actionable, grounded advice.
+
+${base}
+
+Commands you handle (respond with structured output):
+• "status" → prosperity summary and key tasks
+• "list" → numbered task list
+• "complete task N" → mark task N done
+• "add task X" → add task
+• "set income X" → update income`,
+
+    atlas:`You are ATLAS, a strategic planning AI. You focus on big-picture strategy, prioritization, and execution. Be tactical and precise. Ground advice in the user's real situation.
+
+${base}`,
+
+    scribe:`You are SCRIBE, a content creation AI. You write compelling copy, social posts, emails, and pitches that convert. Match the user's voice. Be specific to their business.
+
+${base}`,
+
+    hunter:`You are HUNTER, an outreach and sales AI. You identify prospects, craft outreach, and close. Be specific, tactical, and conversion-focused.
+
+${base}`,
+
+    ledger:`You are LEDGER, a financial strategy AI. Track income, project revenue, and optimize pricing. Be precise with numbers. Give concrete milestones.
+
+${base}`,
+  };
+  return p[agent]||p.jarvis;
+}
+
+async function callAPI(agent, messages, onToken) {
+  if (!cfg.url) throw new Error('No API URL. Tap ⚙ to configure.');
+
+  const res = await fetch(`${cfg.url}/api/chat`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model: cfg.model||'llama3.2:3b',
+      messages:[{role:'system',content:sysPrompt(agent)},...messages],
+      stream:true,
+    }),
+  });
+
+  if (!res.ok) {
+    const msg = await res.text().catch(()=>'');
+    throw new Error(`HTTP ${res.status}: ${msg||res.statusText}`);
+  }
+
+  const reader = res.body.getReader();
+  const dec = new TextDecoder();
+  let full = '';
+
+  while (true) {
+    const {done,value} = await reader.read();
+    if (done) break;
+    for (const line of dec.decode(value).split('\n')) {
+      if (!line.trim()) continue;
+      try {
+        const d = JSON.parse(line);
+        if (d.message?.content) { full += d.message.content; onToken(full); }
+        if (d.done) return full;
+      } catch(e){}
+    }
+  }
+  return full;
+}
+
+// ═══════════════════════════════════════════════
+// COMMANDS (JARVIS local)
+// ═══════════════════════════════════════════════
+function cmd(text) {
+  const t = text.toLowerCase().trim();
+
+  if (t==='status') {
+    const pct = cfg.goal>0?Math.round((cfg.income/cfg.goal)*100):0;
+    addMsg('jarvis','assistant',
+      `STATUS REPORT\n\nProsperity: ${pct}% ($${(cfg.income||0).toLocaleString()} / $${(cfg.goal||0).toLocaleString()}/mo)\n`+
+      `Tasks: ${(cfg.done||[]).length} done, ${(cfg.tasks||[]).length} active\n`+
+      ((cfg.tasks||[]).length?'\nActive:\n'+(cfg.tasks||[]).map((t,i)=>`${i+1}. ${t}`).join('\n'):''));
+    sfx('recv'); return true;
+  }
+
+  if (t==='list') {
+    const tasks = cfg.tasks||[];
+    addMsg('jarvis','assistant', tasks.length
+      ? 'ACTIVE TASKS:\n\n'+tasks.map((t,i)=>`${i+1}. ${t}`).join('\n')
+      : 'No active tasks. Add them in ⚙ Settings.');
+    sfx('recv'); return true;
+  }
+
+  const cm = t.match(/^(?:complete|done|finish)\s+task\s+(\d+)$/);
+  if (cm) {
+    const i = parseInt(cm[1])-1;
+    if (i>=0 && i<(cfg.tasks||[]).length) {
+      const task = cfg.tasks.splice(i,1)[0];
+      cfg.done = cfg.done||[];
+      cfg.done.push(task);
+      localStorage.setItem('jv-cfg',JSON.stringify(cfg));
+      updateStats();
+      addMsg('jarvis','assistant',`✓ Completed: "${task}"\n${cfg.tasks.length} tasks remaining.`);
+    } else {
+      addMsg('jarvis','assistant',`Task ${i+1} not found. Type "list" to see tasks.`);
+    }
+    sfx('recv'); return true;
+  }
+
+  const am = text.match(/^add task (.+)$/i);
+  if (am) {
+    cfg.tasks = cfg.tasks||[];
+    cfg.tasks.push(am[1].trim());
+    localStorage.setItem('jv-cfg',JSON.stringify(cfg));
+    updateStats();
+    addMsg('jarvis','assistant',`Added: "${am[1].trim()}"\n${cfg.tasks.length} active tasks.`);
+    sfx('recv'); return true;
+  }
+
+  const im = text.match(/^set income\s+\$?([\d,]+(?:\.\d+)?)/i);
+  if (im) {
+    cfg.income = parseFloat(im[1].replace(/,/g,''));
+    localStorage.setItem('jv-cfg',JSON.stringify(cfg));
+    updateStats();
+    const pct = cfg.goal>0?Math.round((cfg.income/cfg.goal)*100):0;
+    addMsg('jarvis','assistant',`Income updated → $${cfg.income.toLocaleString()}\nProsperity: ${pct}%`);
+    sfx('recv'); return true;
+  }
+
+  return false;
+}
+
+// ═══════════════════════════════════════════════
+// SEND
+// ═══════════════════════════════════════════════
+async function send(agent) {
+  const inp = document.getElementById(`i-${agent}`);
+  const text = inp.value.trim();
+  if (!text || busy) return;
+
+  if (agent==='jarvis' && cmd(text)) { inp.value=''; autoH(inp); return; }
+
+  inp.value=''; autoH(inp);
+  addMsg(agent,'user',text);
+  sfx('send');
+  pushConvo(agent,'user',text);
+
+  busy = true;
+  const sb = document.getElementById(`sb-${agent}`);
+  if (sb) sb.disabled = true;
+
+  const el = mkStream(agent);
+  try {
+    const msgs = (convos[agent]||[]).slice(-20);
+    const full = await callAPI(agent, msgs, t => el?.upd(t));
+    el?.fin(full);
+    pushConvo(agent,'assistant',full);
+    sfx('recv');
+    if (voiceOut && agent==='jarvis') speak(full);
+  } catch(e) {
+    el?.fin(`⚠ ${e.message}`);
+  }
+
+  busy = false;
+  if (sb) sb.disabled = false;
+}
+
+async function qp(agent, prompt) {
+  document.getElementById(`i-${agent}`).value = prompt;
+  await send(agent);
+}
+
+async function runAgent(agent, prompt) {
+  switchTab(agent);
+  pushConvo(agent,'user',prompt);
+  renderMsg(agent,'user',prompt);
+  sfx('send');
+
+  busy = true;
+  const el = mkStream(agent);
+  try {
+    const msgs = (convos[agent]||[]).slice(-10);
+    const full = await callAPI(agent, msgs, t => el?.upd(t));
+    el?.fin(full);
+    pushConvo(agent,'assistant',full);
+    sfx('recv');
+    return full;
+  } catch(e) {
+    el?.fin(`⚠ ${e.message}`);
+    throw e;
+  } finally {
+    busy = false;
+  }
+}
+
+// ═══════════════════════════════════════════════
+// OVERSEER
+// ═══════════════════════════════════════════════
+async function runOverseer() {
+  if (busy) return;
+  if (!cfg.url) { toast('Configure API URL first'); openCfg(); return; }
+
+  const btn = document.getElementById('ov-btn');
+  const log = document.getElementById('ov-log');
+  const out = document.getElementById('ov-out');
+
+  btn.disabled = true;
+  out.innerHTML = '';
+  busy = true;
+
+  const steps = [
+    {agent:'atlas',  label:'ATLAS — STRATEGY',  prompt:'Build a focused action plan for the next 24 hours to maximize progress toward the income goal. Be specific and prioritized.'},
+    {agent:'scribe', label:'SCRIBE — CONTENT',   prompt:'Based on the strategy above, write 3 ready-to-post pieces of content (social posts or email) for today.'},
+    {agent:'hunter', label:'HUNTER — OUTREACH',  prompt:'Based on the strategy, write 2 outreach messages ready to send today. Include who to target and exact copy.'},
+    {agent:'ledger', label:'LEDGER — NUMBERS',   prompt:'Based on the plan, give the revenue breakdown: what needs to happen this week and what is the current trajectory toward goal.'},
+  ];
+
+  const results = {};
+
+  for (const step of steps) {
+    log.textContent = `Running ${step.label}…`;
+    sfx('send');
+
+    const contextPrefix = Object.entries(results)
+      .map(([k,v])=>`[${k.toUpperCase()} OUTPUT]\n${v}`).join('\n\n');
+    const prompt = contextPrefix ? `${contextPrefix}\n\n---\nYour task: ${step.prompt}` : step.prompt;
+
+    const sec = document.createElement('div');
+    sec.className = 'out-sec';
+    sec.innerHTML = `<div class="out-sec-hdr">
+      <span>${step.label}</span>
+      <button class="copy-btn" onclick="cpTxt(this.parentElement.nextElementSibling.textContent)">COPY</button>
+    </div><div class="out-sec-body" id="os-${step.agent}"><span class="cur"></span></div>`;
+    out.appendChild(sec);
+
+    const body = document.getElementById(`os-${step.agent}`);
+
+    try {
+      const res = await fetch(`${cfg.url}/api/chat`,{
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({model:cfg.model,messages:[
+          {role:'system',content:sysPrompt(step.agent)},
+          {role:'user',content:prompt},
+        ],stream:true}),
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+      const reader = res.body.getReader(); const dec = new TextDecoder(); let full='';
+      while (true) {
+        const {done,value} = await reader.read(); if (done) break;
+        for (const line of dec.decode(value).split('\n')) {
+          if (!line.trim()) continue;
+          try { const d=JSON.parse(line); if(d.message?.content){ full+=d.message.content; body.innerHTML=fmt(full)+'<span class="cur"></span>'; body.scrollTop=body.scrollHeight; } } catch(e){}
+        }
+      }
+      body.innerHTML = fmt(full);
+      results[step.agent] = full;
+      sfx('recv');
+    } catch(e) {
+      body.textContent = `Error: ${e.message}`;
+      log.textContent = `Failed at ${step.label}: ${e.message}`;
+      busy = false; btn.disabled = false; return;
+    }
+  }
+
+  log.textContent = '✓ MACHINE RUN COMPLETE — full package ready';
+  toast('Overseer complete');
+  busy = false; btn.disabled = false;
+}
+
+// ═══════════════════════════════════════════════
+// VOICE INPUT
+// ═══════════════════════════════════════════════
+function initSpeech() {
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!SR) return;
+  recognition = new SR();
+  recognition.continuous = false;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  recognition.onresult = e => {
+    const t = Array.from(e.results).map(r=>r[0].transcript).join('');
+    document.getElementById('i-jarvis').value = t;
+    autoH(document.getElementById('i-jarvis'));
+  };
+  recognition.onend = () => {
+    document.getElementById('mic').classList.remove('on');
+    const t = document.getElementById('i-jarvis').value.trim();
+    if (t) setTimeout(()=>send('jarvis'),300);
+  };
+  recognition.onerror = () => document.getElementById('mic').classList.remove('on');
+}
+
+function startMic(e) {
+  e.preventDefault();
+  if (!recognition) { toast('Voice not supported on this browser'); return; }
+  try { recognition.start(); document.getElementById('mic').classList.add('on'); sfx('send'); } catch(e){}
+}
+
+function stopMic(e) {
+  e.preventDefault();
+  if (recognition) try { recognition.stop(); } catch(e){}
+}
+
+// ═══════════════════════════════════════════════
+// VOICE OUTPUT
+// ═══════════════════════════════════════════════
+function toggleVoiceOut() {
+  voiceOut = !voiceOut;
+  document.getElementById('voice-out-btn').style.opacity = voiceOut?'1':'0.4';
+  toast(voiceOut ? 'Voice on' : 'Voice off');
+}
+
+function speak(text) {
+  if (!voiceOut || !window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const clean = text.replace(/<[^>]*>/g,'').replace(/[*_`#]/g,'').substring(0,280);
+  const u = new SpeechSynthesisUtterance(clean);
+  u.rate = 1.1; u.pitch = 0.85;
+  window.speechSynthesis.speak(u);
+}
+
+// ═══════════════════════════════════════════════
+// SOUND FX
+// ═══════════════════════════════════════════════
+function sfx(type) {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    osc.connect(g); g.connect(audioCtx.destination);
+    const t = audioCtx.currentTime;
+    if (type==='send') {
+      osc.frequency.setValueAtTime(900,t);
+      osc.frequency.exponentialRampToValueAtTime(450,t+.09);
+      g.gain.setValueAtTime(.08,t);
+      g.gain.exponentialRampToValueAtTime(.001,t+.09);
+    } else {
+      osc.frequency.setValueAtTime(450,t);
+      osc.frequency.exponentialRampToValueAtTime(700,t+.13);
+      g.gain.setValueAtTime(.06,t);
+      g.gain.exponentialRampToValueAtTime(.001,t+.13);
+    }
+    osc.start(t); osc.stop(t+.15);
+  } catch(e){}
+}
+
+// ═══════════════════════════════════════════════
+// UI HELPERS
+// ═══════════════════════════════════════════════
+function autoH(el) {
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,110)+'px';
+}
+
+function handleKey(e, agent) {
+  if (e.key==='Enter' && !e.shiftKey) { e.preventDefault(); send(agent); }
+}
+
+function toggleCard(agent) {
+  const body = document.getElementById(`ab-${agent}`);
+  const exp  = document.getElementById(`exp-${agent}`);
+  body.classList.toggle('open');
+  exp.classList.toggle('up', body.classList.contains('open'));
+}
+
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'), 2400);
+}
+
+function cpTxt(text) {
+  navigator.clipboard.writeText(text||'').then(()=>toast('Copied!')).catch(()=>toast('Copy failed'));
+}
+
+function showIOSBanner() {
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+  const standalone = window.navigator.standalone;
+  if (isIOS && !standalone) {
+    document.getElementById('ios-banner').classList.add('show');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// GO
+// ═══════════════════════════════════════════════
+init();
+</script>
+</body>
+</html>
