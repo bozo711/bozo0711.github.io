@@ -152,6 +152,13 @@ textarea.inp::placeholder{color:var(--text-d)}
 .ios-banner.show{display:flex}
 .ios-x{margin-left:auto;background:none;border:none;color:var(--text-d);font-size:16px;cursor:pointer}
 
+/* ── NICHE BAR ── */
+.niche-bar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:7px 14px;background:var(--orange-d);border-bottom:1px solid rgba(255,107,0,.3)}
+.niche-label{font-size:8px;letter-spacing:2px;color:rgba(255,107,0,.7);white-space:nowrap;text-transform:uppercase}
+.niche-inp{flex:1;background:none;border:none;outline:none;color:#ffd4a0;font-family:inherit;font-size:12px;letter-spacing:.5px}
+.niche-inp::placeholder{color:rgba(255,180,100,.4)}
+.niche-edit{font-size:10px;color:rgba(255,107,0,.6);background:none;border:1px solid rgba(255,107,0,.3);border-radius:4px;padding:2px 7px;font-family:inherit;cursor:pointer}
+
 /* ── UTILS ── */
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -251,10 +258,16 @@ strong{color:#fff}
 
   <!-- Status strip -->
   <div class="strip">
-    <div class="stat"><div class="stat-l">Time Left</div><div class="stat-v" id="s-days">--</div></div>
+    <div class="stat"><div class="stat-l">Products</div><div class="stat-v" id="s-days">0</div></div>
     <div class="stat"><div class="stat-l">Prosperity</div><div class="stat-v" id="s-pct">0%</div></div>
-    <div class="stat"><div class="stat-l">Tasks</div><div class="stat-v" id="s-tasks">0/0</div></div>
+    <div class="stat"><div class="stat-l">Goal</div><div class="stat-v" id="s-tasks">$0</div></div>
     <div class="stat"><div class="stat-l">Income</div><div class="stat-v" id="s-income">$0</div></div>
+  </div>
+
+  <!-- Niche bar -->
+  <div class="niche-bar">
+    <span class="niche-label">Niche</span>
+    <input class="niche-inp" id="niche-inp" placeholder="Type a niche or idea… e.g. dark psychology, fitness, crypto" oninput="saveNiche()">
   </div>
 
   <!-- Tabs -->
@@ -264,7 +277,7 @@ strong{color:#fff}
     <button class="tab" data-tab="scribe" onclick="switchTab('scribe')">SCRIBE</button>
     <button class="tab" data-tab="hunter" onclick="switchTab('hunter')">HUNTER</button>
     <button class="tab" data-tab="ledger" onclick="switchTab('ledger')">LEDGER</button>
-    <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">OVERSEER</button>
+    <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
   </div>
 
   <!-- Content -->
@@ -274,12 +287,11 @@ strong{color:#fff}
     <div class="panel on" id="p-jarvis">
       <div class="msgs" id="m-jarvis"></div>
       <div class="qrow">
-        <button class="qbtn" onclick="qp('jarvis','Plan my day and prioritize my tasks')">Plan Day</button>
-        <button class="qbtn" onclick="qp('jarvis','Motivate me right now. I need to push through')">Motivate</button>
-        <button class="qbtn" onclick="qp('jarvis','Review my progress. Be honest')">Review</button>
-        <button class="qbtn" onclick="qp('jarvis','What is the single highest-leverage move I can make today?')">Focus</button>
+        <button class="qbtn" onclick="qpNiche('jarvis','Give me 5 hot digital product ideas I can create and sell on Gumroad today in the niche of: ')">Product Ideas</button>
+        <button class="qbtn" onclick="qpNiche('jarvis','What is the fastest way to make my first $100 online selling digital products in: ')">First $100</button>
+        <button class="qbtn" onclick="qp('jarvis','What is the single most important thing I should do right now to move forward?')">What Now</button>
+        <button class="qbtn" onclick="qp('jarvis','Motivate me. I need to push through right now.')">Motivate</button>
         <button class="qbtn" onclick="cmd('status')">Status</button>
-        <button class="qbtn" onclick="cmd('list')">List Tasks</button>
       </div>
       <div class="inp-area">
         <button class="mic-btn" id="mic"
@@ -297,23 +309,23 @@ strong{color:#fff}
     <div class="panel" id="p-atlas">
       <div class="agent-card">
         <div class="agent-hdr" onclick="toggleCard('atlas')">
-          <div><div class="agent-nm">ATLAS</div><div class="agent-role">Strategy &amp; Planning</div></div>
+          <div><div class="agent-nm">ATLAS</div><div class="agent-role">Product Research</div></div>
           <span class="agent-exp up" id="exp-atlas">▼</span>
         </div>
         <div class="agent-body open" id="ab-atlas">
-          <div class="agent-desc">Analyzes your position and builds strategic plans. Big picture — what to do, in what order, and why.</div>
+          <div class="agent-desc">Finds what digital products will actually sell. Gives you real titles, price points, and a launch plan — not theory.</div>
           <div class="act-btns">
-            <button class="abtn" onclick="runAgent('atlas','Build a focused 30-day sprint plan based on my goals and current tasks. Be specific and prioritized.')">30-Day Sprint</button>
-            <button class="abtn" onclick="runAgent('atlas','Analyze my current situation and identify the single biggest bottleneck holding back my income.')">Find Bottleneck</button>
-            <button class="abtn" onclick="runAgent('atlas','What is the highest-leverage move I can make this week to accelerate income?')">High Leverage</button>
-            <button class="abtn" onclick="runAgent('atlas','Do a SWOT analysis of my current business situation.')">SWOT</button>
+            <button class="abtn" onclick="runAgentNiche('atlas','Give me 7 specific digital product ideas that sell well on Gumroad in this niche: NICHE. For each one include: exact product title, format (ebook/prompt pack/template/guide), recommended price ($7-$47), and why it sells. Be specific.')">Hot Product Ideas</button>
+            <button class="abtn" onclick="runAgentNiche('atlas','Validate this as a Gumroad product niche: NICHE. Tell me: demand level, competition level, best product format, best price point, and the #1 product to create first. Give real data and reasoning.')">Validate Niche</button>
+            <button class="abtn" onclick="runAgentNiche('atlas','Build me a 30-day launch plan to go from zero to my first Gumroad sale in the niche: NICHE. Include: Week 1 product creation, Week 2 setup, Week 3-4 promotion. Day-by-day for Week 1.')">30-Day Launch Plan</button>
+            <button class="abtn" onclick="runAgentNiche('atlas','What are the top 5 best-selling digital product niches on Gumroad right now? Rank them by: demand, competition, ease of creation, and income potential. Then tell me which one fits someone starting from zero.')">Top Niches</button>
           </div>
         </div>
       </div>
       <div class="msgs" id="m-atlas"></div>
       <div class="inp-area">
         <div class="inp-wrap" id="iw-atlas">
-          <textarea class="inp" id="i-atlas" placeholder="Ask ATLAS…" rows="1"
+          <textarea class="inp" id="i-atlas" placeholder="Ask ATLAS about any niche or product idea…" rows="1"
             oninput="autoH(this)" onkeydown="handleKey(event,'atlas')"></textarea>
         </div>
         <button class="send-btn" onclick="send('atlas')">▶</button>
@@ -324,23 +336,23 @@ strong{color:#fff}
     <div class="panel" id="p-scribe">
       <div class="agent-card">
         <div class="agent-hdr" onclick="toggleCard('scribe')">
-          <div><div class="agent-nm">SCRIBE</div><div class="agent-role">Content Creation</div></div>
+          <div><div class="agent-nm">SCRIBE</div><div class="agent-role">Product Creator</div></div>
           <span class="agent-exp up" id="exp-scribe">▼</span>
         </div>
         <div class="agent-body open" id="ab-scribe">
-          <div class="agent-desc">Drafts content that converts — social posts, emails, pitches. Built for your voice and audience.</div>
+          <div class="agent-desc">Writes the actual product — not an outline, the real content people pay for. Copy it into a doc, export as PDF, upload to Gumroad.</div>
           <div class="act-btns">
-            <button class="abtn" onclick="runAgent('scribe','Write 3 high-engagement social media posts for today based on my business.')">Social Posts</button>
-            <button class="abtn" onclick="runAgent('scribe','Write a cold outreach email that gets replies, tailored to my specific business and offer.')">Cold Email</button>
-            <button class="abtn" onclick="runAgent('scribe','Write a compelling pitch/offer for what I sell. Make it irresistible.')">Pitch Draft</button>
-            <button class="abtn" onclick="runAgent('scribe','Create a 7-day content calendar with specific post ideas for each day.')">7-Day Calendar</button>
+            <button class="abtn" onclick="runAgentNiche('scribe','Write a complete, high-value mini ebook (1500-2000 words) about NICHE that I can sell on Gumroad for $9-$17. Include: a strong title, introduction, 5-7 chapters with real actionable content, and a conclusion. Write the full content — not an outline.')">Write Ebook</button>
+            <button class="abtn" onclick="runAgentNiche('scribe','Create a pack of 30 powerful, specific ChatGPT prompts for NICHE that I can sell on Gumroad for $7-$12. For each prompt write: the prompt title, the exact prompt text, and a one-line description of what it does. Make them genuinely useful.')">Prompt Pack (30)</button>
+            <button class="abtn" onclick="runAgentNiche('scribe','Write a complete practical guide (1000-1500 words) about NICHE with a catchy title, clear steps, and real value. Format it so I can paste it into a Google Doc and sell it on Gumroad for $7-$15.')">Quick Guide</button>
+            <button class="abtn" onclick="runAgentNiche('scribe','Create a high-value cheat sheet / reference toolkit for NICHE. Include: key principles, frameworks, checklists, and quick-reference tips. Should be dense with value — something people keep and refer back to. Price point: $5-$10.')">Cheat Sheet</button>
           </div>
         </div>
       </div>
       <div class="msgs" id="m-scribe"></div>
       <div class="inp-area">
         <div class="inp-wrap" id="iw-scribe">
-          <textarea class="inp" id="i-scribe" placeholder="Ask SCRIBE…" rows="1"
+          <textarea class="inp" id="i-scribe" placeholder="Tell SCRIBE what to create…" rows="1"
             oninput="autoH(this)" onkeydown="handleKey(event,'scribe')"></textarea>
         </div>
         <button class="send-btn" onclick="send('scribe')">▶</button>
@@ -351,23 +363,23 @@ strong{color:#fff}
     <div class="panel" id="p-hunter">
       <div class="agent-card">
         <div class="agent-hdr" onclick="toggleCard('hunter')">
-          <div><div class="agent-nm">HUNTER</div><div class="agent-role">Outreach &amp; Sales</div></div>
+          <div><div class="agent-nm">HUNTER</div><div class="agent-role">Launch &amp; Sell</div></div>
           <span class="agent-exp up" id="exp-hunter">▼</span>
         </div>
         <div class="agent-body open" id="ab-hunter">
-          <div class="agent-desc">Finds prospects and closes deals. Scripts, objection handlers, and follow-up sequences that convert.</div>
+          <div class="agent-desc">Writes your Gumroad listing, launch posts, and promo content. Everything ready to copy-paste and publish.</div>
           <div class="act-btns">
-            <button class="abtn" onclick="runAgent('hunter','Give me 10 specific ideal prospects and exactly where to find them for my business.')">Find Prospects</button>
-            <button class="abtn" onclick="runAgent('hunter','Write a DM outreach script for cold prospects on social media that actually gets responses.')">DM Script</button>
-            <button class="abtn" onclick="runAgent('hunter','Give me the top 5 objections to my offer and a powerful response to each one.')">Objection Handlers</button>
-            <button class="abtn" onclick="runAgent('hunter','Write a 5-step follow-up sequence for leads who ghosted after showing initial interest.')">Follow-up Sequence</button>
+            <button class="abtn" onclick="runAgentNiche('hunter','Write a complete Gumroad product listing for a digital product about NICHE. Include: 1) Magnetic product title, 2) Hook paragraph (2-3 sentences that grab attention), 3) What\'s inside (5-7 bullet points), 4) Who it\'s for, 5) Price justification, 6) Call to action. Make it convert.')">Gumroad Listing</button>
+            <button class="abtn" onclick="runAgentNiche('hunter','Write 5 ready-to-post social media launch posts to promote a digital product about NICHE on Gumroad. Mix formats: 1 hook post, 1 value post, 1 story post, 1 proof/results post, 1 direct sales post. Each post ready to copy and paste.')">5 Launch Posts</button>
+            <button class="abtn" onclick="runAgentNiche('hunter','Write a TikTok/Reels script (60 seconds) to promote a digital product about NICHE. Include: hook (first 3 seconds), value delivery, soft pitch, CTA. Write it word for word so I can read it on camera.')">TikTok Script</button>
+            <button class="abtn" onclick="runAgentNiche('hunter','Write a viral Twitter/X thread (8-10 tweets) that provides real value about NICHE and naturally leads people to want my Gumroad product. Make the first tweet a strong hook. Each tweet numbered.')">Twitter Thread</button>
           </div>
         </div>
       </div>
       <div class="msgs" id="m-hunter"></div>
       <div class="inp-area">
         <div class="inp-wrap" id="iw-hunter">
-          <textarea class="inp" id="i-hunter" placeholder="Ask HUNTER…" rows="1"
+          <textarea class="inp" id="i-hunter" placeholder="Ask HUNTER to write listings or launch content…" rows="1"
             oninput="autoH(this)" onkeydown="handleKey(event,'hunter')"></textarea>
         </div>
         <button class="send-btn" onclick="send('hunter')">▶</button>
@@ -378,23 +390,23 @@ strong{color:#fff}
     <div class="panel" id="p-ledger">
       <div class="agent-card">
         <div class="agent-hdr" onclick="toggleCard('ledger')">
-          <div><div class="agent-nm">LEDGER</div><div class="agent-role">Finance &amp; Tracking</div></div>
+          <div><div class="agent-nm">LEDGER</div><div class="agent-role">Revenue &amp; Pricing</div></div>
           <span class="agent-exp up" id="exp-ledger">▼</span>
         </div>
         <div class="agent-body open" id="ab-ledger">
-          <div class="agent-desc">Tracks money, projects cash flow, and gives you the numbers you need to hit your targets.</div>
+          <div class="agent-desc">Real numbers — pricing, revenue projections, and the exact sales needed to hit your income goal.</div>
           <div class="act-btns">
-            <button class="abtn" onclick="runAgent('ledger','Based on my income goal and current income, what do I need to achieve each week to hit the target?')">Revenue Projection</button>
-            <button class="abtn" onclick="runAgent('ledger','Am I on track to hit my income goal? Analyze my current pace and tell me exactly what I need to do.')">Check Pace</button>
-            <button class="abtn" onclick="runAgent('ledger','What are the fastest ways to generate income from my current position? Give me a ranked list.')">Fast Revenue</button>
-            <button class="abtn" onclick="runAgent('ledger','What should I price my offer at and what pricing structure maximizes revenue for my business?')">Pricing Strategy</button>
+            <button class="abtn" onclick="runAgentNiche('ledger','What is the best price for a digital product about NICHE on Gumroad? Give me: ideal price point, why, what the market typically charges, and a tiered pricing strategy (basic/premium/bundle). Include revenue projections at 10/50/100 sales.')">Price My Product</button>
+            <button class="abtn" onclick="runAgent('ledger',`My income goal is $${cfg.goal||0}/month. I sell digital products on Gumroad. Break down exactly how many products at what price points I need to sell per day/week/month to hit that goal. Give me 3 scenarios: low price ($9), mid price ($17), high price ($37).`)">Hit My Goal</button>
+            <button class="abtn" onclick="runAgentNiche('ledger','How do I scale a Gumroad digital product business in the niche of NICHE from $0 to $1000/month and then to $5000/month? Give me the exact product ladder, pricing, and promotion strategy at each stage.')">Scale to $5K</button>
+            <button class="abtn" onclick="runAgentNiche('ledger','What are the best upsell and bundle strategies for digital products about NICHE on Gumroad? Give me specific product combinations, price points, and how to structure the offers.')">Bundle Strategy</button>
           </div>
         </div>
       </div>
       <div class="msgs" id="m-ledger"></div>
       <div class="inp-area">
         <div class="inp-wrap" id="iw-ledger">
-          <textarea class="inp" id="i-ledger" placeholder="Ask LEDGER…" rows="1"
+          <textarea class="inp" id="i-ledger" placeholder="Ask LEDGER about pricing or revenue…" rows="1"
             oninput="autoH(this)" onkeydown="handleKey(event,'ledger')"></textarea>
         </div>
         <button class="send-btn" onclick="send('ledger')">▶</button>
@@ -405,13 +417,14 @@ strong{color:#fff}
     <div class="panel" id="p-overseer">
       <div class="ov-content">
         <div class="ov-desc">
-          <strong>▶ RUN THE MACHINE</strong><br><br>
-          Chains all four specialists in sequence:<br>
-          ATLAS builds the strategy → SCRIBE creates the content → HUNTER plans the outreach → LEDGER runs the numbers.<br><br>
-          Output is a complete daily operations package ready to act on immediately.
+          <strong>▶ BUILD THE EMPIRE</strong><br><br>
+          Enter a niche in the bar above — then hit the button.<br><br>
+          The team runs in sequence:<br>
+          <strong>ATLAS</strong> picks the best product → <strong>SCRIBE</strong> writes the actual product content → <strong>HUNTER</strong> writes your Gumroad listing + 3 launch posts → <strong>LEDGER</strong> sets your pricing and revenue target.<br><br>
+          At the end you have a real, complete, sellable product ready to upload.
         </div>
-        <button class="run-btn" id="ov-btn" onclick="runOverseer()">▶ RUN THE MACHINE</button>
-        <div class="ov-log" id="ov-log">Awaiting initiation…</div>
+        <button class="run-btn" id="ov-btn" onclick="runOverseer()">▶ BUILD THIS PRODUCT</button>
+        <div class="ov-log" id="ov-log">Enter a niche above, then tap Build…</div>
         <div class="ov-out" id="ov-out"></div>
       </div>
     </div>
@@ -424,6 +437,7 @@ strong{color:#fff}
 // STATE
 // ═══════════════════════════════════════════════
 const AGENTS = ['jarvis','atlas','scribe','hunter','ledger'];
+let activeNiche = '';
 
 let cfg = {
   provider:'groq', apikey:'', url:'', model:'llama-3.1-8b-instant',
@@ -439,8 +453,36 @@ let currentTab = 'jarvis';
 // ═══════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════
+function getNiche() {
+  return activeNiche || document.getElementById('niche-inp')?.value?.trim() || 'digital products';
+}
+
+function saveNiche() {
+  activeNiche = document.getElementById('niche-inp')?.value?.trim() || '';
+  localStorage.setItem('jv-niche', activeNiche);
+}
+
+function loadNiche() {
+  activeNiche = localStorage.getItem('jv-niche') || '';
+  const el = document.getElementById('niche-inp');
+  if (el) el.value = activeNiche;
+}
+
+function qpNiche(agent, prompt) {
+  const n = getNiche();
+  if (!n || n === 'digital products') { toast('Type your niche in the bar above first'); document.getElementById('niche-inp')?.focus(); return; }
+  qp(agent, prompt + n);
+}
+
+function runAgentNiche(agent, prompt) {
+  const n = getNiche();
+  if (!n || n === 'digital products') { toast('Type your niche in the bar above first'); document.getElementById('niche-inp')?.focus(); return; }
+  runAgent(agent, prompt.replace(/NICHE/g, n));
+}
+
 function init() {
   loadCfg();
+  loadNiche();
   loadConvos();
   startClock();
   updateStats();
@@ -474,7 +516,9 @@ async function boot() {
     document.getElementById('boot').style.display = 'none';
     addMsg('jarvis','assistant',
       `JARVIS online. Good ${tod()}, ${cfg.name}. ` +
-      ((cfg.provider==='ollama'?cfg.url:cfg.apikey) ? 'API connected.' : 'Tap ⚙ to add your API key.'));
+      ((cfg.provider==='ollama'?cfg.url:cfg.apikey)
+        ? `API connected. Type a niche in the bar above and tap BUILD to create your first product.`
+        : 'Tap ⚙ to add your Groq API key, then type a niche and hit BUILD.'));
   }, 700);
 }
 
@@ -565,24 +609,14 @@ function tick() {
 }
 
 function updateStats() {
-  // days
-  if (cfg.date) {
-    const d = new Date(cfg.date) - new Date();
-    if (d > 0) {
-      const days = Math.floor(d/86400000), hrs = Math.floor((d%86400000)/3600000);
-      document.getElementById('s-days').textContent = `${days}d ${hrs}h`;
-    } else { document.getElementById('s-days').textContent = 'TODAY'; }
-  } else { document.getElementById('s-days').textContent = '--'; }
+  const products = (cfg.done||[]).length;
+  document.getElementById('s-days').textContent = products;
 
-  // prosperity
   const pct = cfg.goal>0 ? Math.round((cfg.income/cfg.goal)*100) : 0;
   document.getElementById('s-pct').textContent = pct+'%';
 
-  // tasks
-  const total = (cfg.tasks||[]).length + (cfg.done||[]).length;
-  document.getElementById('s-tasks').textContent = `${(cfg.done||[]).length}/${total}`;
+  document.getElementById('s-tasks').textContent = '$'+(cfg.goal||0).toLocaleString();
 
-  // income
   document.getElementById('s-income').textContent = '$'+(cfg.income||0).toLocaleString();
 }
 
@@ -663,41 +697,39 @@ function fmt(t) {
 // ═══════════════════════════════════════════════
 function sysPrompt(agent) {
   const now = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-  const tasks = (cfg.tasks||[]).map((t,i)=>`${i+1}. ${t}`).join('\n')||'None';
+  const niche = getNiche();
   const base = `Date: ${now}
 User: ${cfg.name}
+Current Niche: ${niche}
 Income Goal: $${(cfg.goal||0).toLocaleString()}/month
 Current Income: $${(cfg.income||0).toLocaleString()}/month
-Prosperity: ${cfg.goal>0?Math.round((cfg.income/cfg.goal)*100):0}%
-Active Tasks:\n${tasks}
-Completed: ${(cfg.done||[]).join(', ')||'None'}
-Business Context: ${cfg.ctx||'Not set — configure in ⚙ Settings'}`;
+Products Launched: ${(cfg.done||[]).length}
+Business Context: ${cfg.ctx||'Building a digital product business selling on Gumroad'}`;
 
   const p = {
-    jarvis:`You are JARVIS, an elite AI assistant. Be concise, direct, and intelligent. Address the user as "${cfg.name}". No filler. Give actionable, grounded advice.
+    jarvis:`You are JARVIS, a sharp AI operations commander. You help build real digital product businesses that make real money on Gumroad. You are direct, specific, and never give generic advice. When the user asks for ideas, give specific product titles and price points. When they ask what to do next, give them the single clearest next action. Address the user as "${cfg.name}".
 
 ${base}
 
-Commands you handle (respond with structured output):
-• "status" → prosperity summary and key tasks
-• "list" → numbered task list
-• "complete task N" → mark task N done
-• "add task X" → add task
-• "set income X" → update income`,
+Commands:
+• "status" → income and products summary
+• "list" → list launched products
+• "add product X" → record a launched product
+• "set income X" → update current income`,
 
-    atlas:`You are ATLAS, a strategic planning AI. You focus on big-picture strategy, prioritization, and execution. Be tactical and precise. Ground advice in the user's real situation.
-
-${base}`,
-
-    scribe:`You are SCRIBE, a content creation AI. You write compelling copy, social posts, emails, and pitches that convert. Match the user's voice. Be specific to their business.
+    atlas:`You are ATLAS, a digital product research and strategy AI. Your job: find what sells, validate niches, and build launch plans. You know Gumroad inside out — what formats sell (ebooks, prompt packs, templates, guides, checklists), what price points work ($7-$47), and what topics have demand. You give specific product titles, not generic advice. You always output ready-to-act information.
 
 ${base}`,
 
-    hunter:`You are HUNTER, an outreach and sales AI. You identify prospects, craft outreach, and close. Be specific, tactical, and conversion-focused.
+    scribe:`You are SCRIBE, a digital product creation AI. You write complete, sellable digital products — NOT outlines, NOT descriptions, the ACTUAL content people pay for. When asked to write an ebook, write the full ebook. When asked to create a prompt pack, write every prompt. When asked to write a guide, write the complete guide. Make it genuinely valuable. Format clearly so the user can paste it into a Google Doc, export as PDF, and sell it on Gumroad today.
 
 ${base}`,
 
-    ledger:`You are LEDGER, a financial strategy AI. Track income, project revenue, and optimize pricing. Be precise with numbers. Give concrete milestones.
+    hunter:`You are HUNTER, a digital product launch and sales AI. You write Gumroad listings that convert, social media posts that drive clicks, TikTok/Reels scripts, and Twitter threads. Everything you produce is ready to copy-paste and publish — no placeholders, no [your product here], real finished copy. Your Gumroad listings follow this structure: magnetic title → hook paragraph → what's inside bullets → who it's for → price justification → CTA.
+
+${base}`,
+
+    ledger:`You are LEDGER, a digital product revenue AI. You give real numbers. You know Gumroad's fee structure (~10% + $0.30/sale). When pricing, give specific recommendations with revenue projections at 10/50/100/500 sales. When building to an income goal, break it down to daily/weekly sales targets. You help build product ladders (low-ticket → mid-ticket → bundle) to maximize revenue per customer.
 
 ${base}`,
   };
@@ -756,44 +788,30 @@ function cmd(text) {
 
   if (t==='status') {
     const pct = cfg.goal>0?Math.round((cfg.income/cfg.goal)*100):0;
+    const products = cfg.done||[];
     addMsg('jarvis','assistant',
-      `STATUS REPORT\n\nProsperity: ${pct}% ($${(cfg.income||0).toLocaleString()} / $${(cfg.goal||0).toLocaleString()}/mo)\n`+
-      `Tasks: ${(cfg.done||[]).length} done, ${(cfg.tasks||[]).length} active\n`+
-      ((cfg.tasks||[]).length?'\nActive:\n'+(cfg.tasks||[]).map((t,i)=>`${i+1}. ${t}`).join('\n'):''));
+      `STATUS REPORT\n\nIncome: $${(cfg.income||0).toLocaleString()} / $${(cfg.goal||0).toLocaleString()}/mo (${pct}%)\n`+
+      `Products launched: ${products.length}\n`+
+      `Active niche: ${getNiche()}\n`+
+      (products.length ? '\nLaunched:\n'+products.map((p,i)=>`${i+1}. ${p}`).join('\n') : '\nNo products launched yet. Type a niche in the bar above and tap BUILD.'));
     sfx('recv'); return true;
   }
 
   if (t==='list') {
-    const tasks = cfg.tasks||[];
-    addMsg('jarvis','assistant', tasks.length
-      ? 'ACTIVE TASKS:\n\n'+tasks.map((t,i)=>`${i+1}. ${t}`).join('\n')
-      : 'No active tasks. Add them in ⚙ Settings.');
+    const products = cfg.done||[];
+    addMsg('jarvis','assistant', products.length
+      ? 'LAUNCHED PRODUCTS:\n\n'+products.map((p,i)=>`${i+1}. ${p}`).join('\n')
+      : 'No products launched yet. Type a niche in the bar above and tap BUILD.');
     sfx('recv'); return true;
   }
 
-  const cm = t.match(/^(?:complete|done|finish)\s+task\s+(\d+)$/);
-  if (cm) {
-    const i = parseInt(cm[1])-1;
-    if (i>=0 && i<(cfg.tasks||[]).length) {
-      const task = cfg.tasks.splice(i,1)[0];
-      cfg.done = cfg.done||[];
-      cfg.done.push(task);
-      localStorage.setItem('jv-cfg',JSON.stringify(cfg));
-      updateStats();
-      addMsg('jarvis','assistant',`✓ Completed: "${task}"\n${cfg.tasks.length} tasks remaining.`);
-    } else {
-      addMsg('jarvis','assistant',`Task ${i+1} not found. Type "list" to see tasks.`);
-    }
-    sfx('recv'); return true;
-  }
-
-  const am = text.match(/^add task (.+)$/i);
+  const am = text.match(/^add product (.+)$/i);
   if (am) {
-    cfg.tasks = cfg.tasks||[];
-    cfg.tasks.push(am[1].trim());
+    cfg.done = cfg.done||[];
+    cfg.done.push(am[1].trim());
     localStorage.setItem('jv-cfg',JSON.stringify(cfg));
     updateStats();
-    addMsg('jarvis','assistant',`Added: "${am[1].trim()}"\n${cfg.tasks.length} active tasks.`);
+    addMsg('jarvis','assistant',`Product recorded: "${am[1].trim()}"\nTotal launched: ${cfg.done.length}`);
     sfx('recv'); return true;
   }
 
@@ -878,7 +896,10 @@ async function runAgent(agent, prompt) {
 // ═══════════════════════════════════════════════
 async function runOverseer() {
   if (busy) return;
-  if (!cfg.url) { toast('Configure API URL first'); openCfg(); return; }
+  const niche = getNiche();
+  if (!niche || niche === 'digital products') { toast('Type your niche in the bar above first'); document.getElementById('niche-inp')?.focus(); return; }
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add your API key in ⚙ first'); openCfg(); return; }
 
   const btn = document.getElementById('ov-btn');
   const log = document.getElementById('ov-log');
@@ -889,10 +910,26 @@ async function runOverseer() {
   busy = true;
 
   const steps = [
-    {agent:'atlas',  label:'ATLAS — STRATEGY',  prompt:'Build a focused action plan for the next 24 hours to maximize progress toward the income goal. Be specific and prioritized.'},
-    {agent:'scribe', label:'SCRIBE — CONTENT',   prompt:'Based on the strategy above, write 3 ready-to-post pieces of content (social posts or email) for today.'},
-    {agent:'hunter', label:'HUNTER — OUTREACH',  prompt:'Based on the strategy, write 2 outreach messages ready to send today. Include who to target and exact copy.'},
-    {agent:'ledger', label:'LEDGER — NUMBERS',   prompt:'Based on the plan, give the revenue breakdown: what needs to happen this week and what is the current trajectory toward goal.'},
+    {
+      agent:'atlas',
+      label:'ATLAS — PRODUCT PICK',
+      prompt:`Pick the single best digital product to create and sell on Gumroad in the niche: "${niche}". Give me: 1) Exact product title, 2) Format (ebook/prompt pack/guide/template), 3) Price point and why, 4) Who buys it and why they pay. Be specific and decisive — one product, no alternatives.`
+    },
+    {
+      agent:'scribe',
+      label:'SCRIBE — PRODUCT CONTENT',
+      prompt:`Based on the product ATLAS picked above, write the complete product content. Write the FULL thing — not an outline, the real content someone pays for. If it's an ebook, write the full ebook. If it's a prompt pack, write every prompt. If it's a guide, write the complete guide. This is the actual product the user will sell. Niche: "${niche}".`
+    },
+    {
+      agent:'hunter',
+      label:'HUNTER — GUMROAD LISTING + POSTS',
+      prompt:`Based on the product created above for the niche "${niche}", write: 1) A complete Gumroad product listing (title, hook, bullets, CTA), 2) Three ready-to-post social media launch posts. Everything copy-paste ready. No placeholders.`
+    },
+    {
+      agent:'ledger',
+      label:'LEDGER — PRICING + REVENUE',
+      prompt:`For the digital product created above in the niche "${niche}": 1) Confirm or adjust the price with reasoning, 2) Show revenue projections at 10/25/50/100 sales after Gumroad fees, 3) Tell me exactly how many sales per day/week I need to hit $${(cfg.goal||1000).toLocaleString()}/month, 4) Suggest one upsell or bundle to increase revenue per customer.`
+    },
   ];
 
   const results = {};
@@ -909,15 +946,16 @@ async function runOverseer() {
     sec.className = 'out-sec';
     sec.innerHTML = `<div class="out-sec-hdr">
       <span>${step.label}</span>
-      <button class="copy-btn" onclick="cpTxt(this.parentElement.nextElementSibling.textContent)">COPY</button>
+      <button class="copy-btn" onclick="cpTxt(this.nextElementSibling?.nextElementSibling?.textContent||'')">COPY</button>
     </div><div class="out-sec-body" id="os-${step.agent}"><span class="cur"></span></div>`;
     out.appendChild(sec);
+    out.scrollTop = out.scrollHeight;
 
     const body = document.getElementById(`os-${step.agent}`);
 
     try {
       const full = await callAPI(step.agent, [{role:'user',content:prompt}], t => {
-        body.innerHTML = fmt(t)+'<span class="cur"></span>'; body.scrollTop=body.scrollHeight;
+        body.innerHTML = fmt(t)+'<span class="cur"></span>'; body.parentElement?.scrollIntoView({block:'end'});
       });
       body.innerHTML = fmt(full);
       results[step.agent] = full;
@@ -929,8 +967,8 @@ async function runOverseer() {
     }
   }
 
-  log.textContent = '✓ MACHINE RUN COMPLETE — full package ready';
-  toast('Overseer complete');
+  log.textContent = `✓ COMPLETE — "${niche}" product built. Copy SCRIBE output → paste into Google Docs → export PDF → upload to Gumroad.`;
+  toast('Product built! Check each section.');
   busy = false; btn.disabled = false;
 }
 
