@@ -182,13 +182,27 @@ strong{color:#fff}
     <div class="cfg-sec">
       <div class="cfg-sec-title">API Connection</div>
       <div class="field">
+        <label>Provider</label>
+        <select id="c-provider" onchange="toggleProvider()">
+          <option value="groq">Groq (free cloud — works anywhere)</option>
+          <option value="openai">OpenAI (ChatGPT API)</option>
+          <option value="ollama">Ollama (home machine)</option>
+        </select>
+      </div>
+      <div class="field" id="f-apikey">
+        <label>API Key</label>
+        <input type="password" id="c-apikey" placeholder="gsk_… or sk-…">
+        <div class="hint" id="h-apikey">Get a free Groq key at <strong>console.groq.com</strong> → API Keys → Create key.</div>
+      </div>
+      <div class="field" id="f-url" style="display:none">
         <label>Ollama URL</label>
         <input type="url" id="c-url" placeholder="http://192.168.1.x:11434">
-        <div class="hint">Your home machine IP or ngrok URL running Ollama.<br>Set <code>OLLAMA_ORIGINS=https://bozo0711.github.io</code> on your machine.</div>
+        <div class="hint">Your home machine IP or ngrok URL running Ollama.</div>
       </div>
       <div class="field">
         <label>Model</label>
-        <input type="text" id="c-model" placeholder="llama3.2:3b">
+        <input type="text" id="c-model" placeholder="llama-3.1-8b-instant">
+        <div class="hint" id="h-model">Groq free models: <code>llama-3.1-8b-instant</code> (fast) · <code>llama-3.3-70b-versatile</code> (smarter)</div>
       </div>
     </div>
     <div class="cfg-sec">
@@ -412,8 +426,8 @@ strong{color:#fff}
 const AGENTS = ['jarvis','atlas','scribe','hunter','ledger'];
 
 let cfg = {
-  url:'', model:'llama3.2:3b', name:'Commander',
-  goal:10000, income:0, date:'', tasks:[], done:[], ctx:''
+  provider:'groq', apikey:'', url:'', model:'llama-3.1-8b-instant',
+  name:'Commander', goal:10000, income:0, date:'', tasks:[], done:[], ctx:''
 };
 let convos = {};          // {agent:[{role,content}]}
 let busy = false;
@@ -460,7 +474,7 @@ async function boot() {
     document.getElementById('boot').style.display = 'none';
     addMsg('jarvis','assistant',
       `JARVIS online. Good ${tod()}, ${cfg.name}. ` +
-      (cfg.url ? 'API connected.' : 'Tap ⚙ to configure your Ollama endpoint.'));
+      ((cfg.provider==='ollama'?cfg.url:cfg.apikey) ? 'API connected.' : 'Tap ⚙ to add your API key.'));
   }, 700);
 }
 
@@ -480,32 +494,61 @@ function loadCfg() {
 }
 
 function fillCfgForm() {
-  document.getElementById('c-url').value   = cfg.url||'';
-  document.getElementById('c-model').value = cfg.model||'llama3.2:3b';
-  document.getElementById('c-name').value  = cfg.name||'';
-  document.getElementById('c-goal').value  = cfg.goal||'';
-  document.getElementById('c-income').value= cfg.income||'';
-  document.getElementById('c-date').value  = cfg.date||'';
-  document.getElementById('c-tasks').value = (cfg.tasks||[]).join('\n');
-  document.getElementById('c-ctx').value   = cfg.ctx||'';
+  document.getElementById('c-provider').value = cfg.provider||'groq';
+  document.getElementById('c-apikey').value   = cfg.apikey||'';
+  document.getElementById('c-url').value      = cfg.url||'';
+  document.getElementById('c-model').value    = cfg.model||'llama-3.1-8b-instant';
+  document.getElementById('c-name').value     = cfg.name||'';
+  document.getElementById('c-goal').value     = cfg.goal||'';
+  document.getElementById('c-income').value   = cfg.income||'';
+  document.getElementById('c-date').value     = cfg.date||'';
+  document.getElementById('c-tasks').value    = (cfg.tasks||[]).join('\n');
+  document.getElementById('c-ctx').value      = cfg.ctx||'';
+  toggleProvider();
+}
+
+function toggleProvider() {
+  const p = document.getElementById('c-provider').value;
+  document.getElementById('f-apikey').style.display = p==='ollama' ? 'none' : '';
+  document.getElementById('f-url').style.display    = p==='ollama' ? '' : 'none';
+  const hints = {
+    groq:   'Get a free Groq key at <strong>console.groq.com</strong> → API Keys → Create key.',
+    openai: 'Get a key at <strong>platform.openai.com</strong> → API keys.',
+  };
+  const mhints = {
+    groq:   'Groq free models: <code>llama-3.1-8b-instant</code> (fast) · <code>llama-3.3-70b-versatile</code> (smarter)',
+    openai: 'OpenAI models: <code>gpt-4o-mini</code> (cheap) · <code>gpt-4o</code> (best)',
+    ollama: 'Your local model, e.g. <code>llama3.2:3b</code>',
+  };
+  const hk = document.getElementById('h-apikey');
+  const hm = document.getElementById('h-model');
+  if (hk) hk.innerHTML = hints[p]||'';
+  if (hm) hm.innerHTML = mhints[p]||'';
+  document.getElementById('c-model').placeholder =
+    p==='groq' ? 'llama-3.1-8b-instant' : p==='openai' ? 'gpt-4o-mini' : 'llama3.2:3b';
 }
 
 function saveCfg() {
-  cfg.url    = document.getElementById('c-url').value.trim().replace(/\/$/,'');
-  cfg.model  = document.getElementById('c-model').value.trim()||'llama3.2:3b';
-  cfg.name   = document.getElementById('c-name').value.trim()||'Commander';
-  cfg.goal   = parseFloat(document.getElementById('c-goal').value)||0;
-  cfg.income = parseFloat(document.getElementById('c-income').value)||0;
-  cfg.date   = document.getElementById('c-date').value;
-  cfg.tasks  = document.getElementById('c-tasks').value.split('\n').map(t=>t.trim()).filter(Boolean);
-  cfg.ctx    = document.getElementById('c-ctx').value.trim();
+  cfg.provider = document.getElementById('c-provider').value;
+  cfg.apikey   = document.getElementById('c-apikey').value.trim();
+  cfg.url      = document.getElementById('c-url').value.trim().replace(/\/$/,'');
+  cfg.model    = document.getElementById('c-model').value.trim()||'llama-3.1-8b-instant';
+  cfg.name     = document.getElementById('c-name').value.trim()||'Commander';
+  cfg.goal     = parseFloat(document.getElementById('c-goal').value)||0;
+  cfg.income   = parseFloat(document.getElementById('c-income').value)||0;
+  cfg.date     = document.getElementById('c-date').value;
+  cfg.tasks    = document.getElementById('c-tasks').value.split('\n').map(t=>t.trim()).filter(Boolean);
+  cfg.ctx      = document.getElementById('c-ctx').value.trim();
   localStorage.setItem('jv-cfg', JSON.stringify(cfg));
   updateStats(); updateDot(); closeCfg(); toast('Saved');
 }
 
 function openCfg()  { document.getElementById('cfg').classList.add('open'); }
 function closeCfg() { document.getElementById('cfg').classList.remove('open'); }
-function updateDot(){ document.getElementById('dot').className = 'dot'+(cfg.url?'':' off'); }
+function updateDot(){
+  const ok = cfg.provider==='ollama' ? !!cfg.url : !!cfg.apikey;
+  document.getElementById('dot').className = 'dot'+(ok?'':' off');
+}
 
 // ═══════════════════════════════════════════════
 // CLOCK & STATS
@@ -662,37 +705,44 @@ ${base}`,
 }
 
 async function callAPI(agent, messages, onToken) {
-  if (!cfg.url) throw new Error('No API URL. Tap ⚙ to configure.');
+  const p = cfg.provider || 'groq';
 
-  const res = await fetch(`${cfg.url}/api/chat`, {
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({
-      model: cfg.model||'llama3.2:3b',
-      messages:[{role:'system',content:sysPrompt(agent)},...messages],
-      stream:true,
-    }),
-  });
-
-  if (!res.ok) {
-    const msg = await res.text().catch(()=>'');
-    throw new Error(`HTTP ${res.status}: ${msg||res.statusText}`);
+  if (p === 'ollama') {
+    if (!cfg.url) throw new Error('No Ollama URL. Tap ⚙ to configure.');
+    const res = await fetch(`${cfg.url}/api/chat`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:cfg.model,messages:[{role:'system',content:sysPrompt(agent)},...messages],stream:true}),
+    });
+    if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`HTTP ${res.status}: ${t||res.statusText}`); }
+    const reader=res.body.getReader(); const dec=new TextDecoder(); let full='';
+    while(true){
+      const{done,value}=await reader.read(); if(done)break;
+      for(const line of dec.decode(value).split('\n')){
+        if(!line.trim())continue;
+        try{const d=JSON.parse(line);if(d.message?.content){full+=d.message.content;onToken(full);}if(d.done)return full;}catch(e){}
+      }
+    }
+    return full;
   }
 
-  const reader = res.body.getReader();
-  const dec = new TextDecoder();
-  let full = '';
-
-  while (true) {
-    const {done,value} = await reader.read();
-    if (done) break;
-    for (const line of dec.decode(value).split('\n')) {
-      if (!line.trim()) continue;
-      try {
-        const d = JSON.parse(line);
-        if (d.message?.content) { full += d.message.content; onToken(full); }
-        if (d.done) return full;
-      } catch(e){}
+  // OpenAI-compatible (Groq or OpenAI)
+  if (!cfg.apikey) throw new Error('No API key. Tap ⚙ to add your key.');
+  const base = p==='openai' ? 'https://api.openai.com' : 'https://api.groq.com/openai';
+  const res = await fetch(`${base}/v1/chat/completions`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${cfg.apikey}`},
+    body:JSON.stringify({model:cfg.model||'llama-3.1-8b-instant',messages:[{role:'system',content:sysPrompt(agent)},...messages],stream:true}),
+  });
+  if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`HTTP ${res.status}: ${t||res.statusText}`); }
+  const reader=res.body.getReader(); const dec=new TextDecoder(); let full='';
+  while(true){
+    const{done,value}=await reader.read(); if(done)break;
+    for(const line of dec.decode(value).split('\n')){
+      if(!line.startsWith('data:'))continue;
+      const raw=line.slice(5).trim();
+      if(raw==='[DONE]')return full;
+      try{const d=JSON.parse(raw);const tok=d.choices?.[0]?.delta?.content;if(tok){full+=tok;onToken(full);}}catch(e){}
     }
   }
   return full;
@@ -866,23 +916,9 @@ async function runOverseer() {
     const body = document.getElementById(`os-${step.agent}`);
 
     try {
-      const res = await fetch(`${cfg.url}/api/chat`,{
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({model:cfg.model,messages:[
-          {role:'system',content:sysPrompt(step.agent)},
-          {role:'user',content:prompt},
-        ],stream:true}),
+      const full = await callAPI(step.agent, [{role:'user',content:prompt}], t => {
+        body.innerHTML = fmt(t)+'<span class="cur"></span>'; body.scrollTop=body.scrollHeight;
       });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-      const reader = res.body.getReader(); const dec = new TextDecoder(); let full='';
-      while (true) {
-        const {done,value} = await reader.read(); if (done) break;
-        for (const line of dec.decode(value).split('\n')) {
-          if (!line.trim()) continue;
-          try { const d=JSON.parse(line); if(d.message?.content){ full+=d.message.content; body.innerHTML=fmt(full)+'<span class="cur"></span>'; body.scrollTop=body.scrollHeight; } } catch(e){}
-        }
-      }
       body.innerHTML = fmt(full);
       results[step.agent] = full;
       sfx('recv');
