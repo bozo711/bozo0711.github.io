@@ -283,6 +283,77 @@ textarea.inp::placeholder{color:var(--text-d)}
 .vcard-link:hover{color:var(--red)}
 .vcard-del{background:none;border:none;color:rgba(150,50,50,.4);font-size:13px;cursor:pointer;padding:0 2px;margin-left:6px}
 
+/* ── CONTENT CALENDAR ── */
+.cal-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.cal-gen-bar{display:flex;gap:8px;align-items:center;background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:12px;border-left:2px solid var(--red)}
+.cal-gen-select{flex:1;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;-webkit-appearance:none}
+.cal-gen-btn{padding:10px 14px;background:linear-gradient(135deg,var(--red),#4a0018);border:none;border-radius:7px;color:#fff;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.cal-gen-btn:disabled{opacity:.4;cursor:default}
+.cal-day{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);overflow:hidden}
+.cal-day-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:linear-gradient(90deg,rgba(100,0,0,.2),transparent);border-bottom:1px solid rgba(100,0,0,.15)}
+.cal-day-lbl{font-size:9px;font-weight:bold;letter-spacing:3px;color:var(--red);text-transform:uppercase}
+.cal-day-date{font-size:9px;color:var(--text-d);letter-spacing:1px}
+.cal-posts{display:flex;flex-direction:column;gap:6px;padding:9px 13px}
+.cal-post{display:flex;align-items:flex-start;gap:8px;padding:7px 9px;background:var(--red-d);border:1px solid rgba(100,0,0,.2);border-radius:7px}
+.cal-post.done .cal-post-text{opacity:.45;text-decoration:line-through}
+.cal-post-text{flex:1;font-size:11px;color:var(--text);line-height:1.5}
+.cal-post-platform{font-size:8px;color:var(--gold);letter-spacing:1px;margin-top:2px}
+.cal-check{width:18px;height:18px;border-radius:4px;border:1px solid var(--red-b);background:none;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;transition:all .15s;margin-top:1px}
+.cal-check.done{background:var(--red);border-color:var(--red)}
+.cal-post-del{background:none;border:none;color:var(--text-d);font-size:11px;cursor:pointer;flex-shrink:0;padding:0 2px;margin-top:1px}
+.cal-add-bar{display:flex;gap:7px;background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:10px 12px;align-items:flex-end}
+.cal-add-inp{flex:1;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;resize:none;min-height:36px;max-height:80px;-webkit-appearance:none}
+.cal-add-inp:focus{border-color:var(--red)}
+.cal-add-btn{padding:9px 12px;background:var(--red-d);border:1px solid var(--red-b);border-radius:7px;color:var(--red);font-family:inherit;font-size:10px;letter-spacing:1px;cursor:pointer;white-space:nowrap}
+
+/* ── TIKTOK SCRIPT BANK ── */
+.tt-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.tt-gen-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:2px solid var(--red)}
+.tt-gen-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:9px}
+.tt-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.tt-type-btn{padding:8px 6px;background:var(--red-d);border:1px solid var(--red-b);border-radius:6px;color:#cc7766;font-family:inherit;font-size:9px;letter-spacing:1px;cursor:pointer;text-align:center;transition:all .15s}
+.tt-type-btn.sel{background:rgba(120,0,0,.4);border-color:var(--red);color:var(--red)}
+.tt-type-btn:active{background:var(--red);color:#fff}
+.tt-gen-run{width:100%;padding:12px;background:linear-gradient(135deg,rgba(120,0,0,.3),rgba(184,134,11,.12));border:1px solid var(--red);border-radius:var(--r);color:var(--red);font-family:inherit;font-size:11px;font-weight:bold;letter-spacing:3px;cursor:pointer;transition:all .15s}
+.tt-gen-run:disabled{opacity:.4;cursor:default}
+.tt-scripts{display:flex;flex-direction:column;gap:10px}
+.tt-script{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);overflow:hidden}
+.tt-script-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:linear-gradient(90deg,rgba(100,0,0,.2),transparent)}
+.tt-script-type{font-size:8px;letter-spacing:2px;color:var(--red);text-transform:uppercase}
+.tt-script-date{font-size:8px;color:var(--text-d);letter-spacing:1px}
+.tt-script-body{padding:11px 13px;font-size:12px;color:var(--text);line-height:1.65;white-space:pre-wrap;max-height:200px;overflow-y:auto}
+.tt-script-actions{display:flex;gap:7px;padding:7px 13px 10px;border-top:1px solid rgba(100,0,0,.1)}
+.tt-script-del{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:4px 9px;cursor:pointer;margin-left:auto}
+.tt-empty{text-align:center;color:var(--text-d);font-size:11px;padding:28px 0;letter-spacing:2px;text-transform:uppercase}
+
+/* ── EMAIL LIST BUILDER ── */
+.em-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.em-sub-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.em-stat{background:var(--red-d);border:1px solid var(--red-b);border-radius:8px;padding:12px;text-align:center}
+.em-stat-v{font-size:22px;font-weight:bold;color:var(--gold);text-shadow:0 0 8px rgba(184,134,11,.3)}
+.em-stat-l{font-size:7px;letter-spacing:2px;color:var(--text-d);text-transform:uppercase;margin-top:2px}
+.em-add-sub{display:flex;gap:8px;align-items:center}
+.em-sub-inp{flex:1;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:8px;color:var(--text);font-family:inherit;font-size:13px;padding:9px 12px;outline:none;-webkit-appearance:none}
+.em-sub-inp:focus{border-color:var(--red)}
+.em-sub-add-btn{padding:10px 14px;background:linear-gradient(135deg,#006600,#004400);border:1px solid #228822;border-radius:8px;color:#aaffaa;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer;white-space:nowrap}
+.em-gen-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:2px solid var(--red)}
+.em-gen-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:9px}
+.em-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}
+.em-type-btn{padding:8px 6px;background:var(--red-d);border:1px solid var(--red-b);border-radius:6px;color:#cc7766;font-family:inherit;font-size:9px;letter-spacing:1px;cursor:pointer;text-align:center;transition:all .15s}
+.em-type-btn.sel{background:rgba(120,0,0,.4);border-color:var(--red);color:var(--red)}
+.em-type-btn:active{background:var(--red);color:#fff}
+.em-gen-run{width:100%;padding:12px;background:linear-gradient(135deg,rgba(120,0,0,.3),rgba(184,134,11,.12));border:1px solid var(--red);border-radius:var(--r);color:var(--red);font-family:inherit;font-size:11px;font-weight:bold;letter-spacing:3px;cursor:pointer;transition:all .15s}
+.em-gen-run:disabled{opacity:.4;cursor:default}
+.em-kits{display:flex;flex-direction:column;gap:10px}
+.em-kit{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);overflow:hidden}
+.em-kit-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:linear-gradient(90deg,rgba(100,0,0,.2),transparent)}
+.em-kit-type{font-size:8px;letter-spacing:2px;color:var(--red);text-transform:uppercase}
+.em-kit-date{font-size:8px;color:var(--text-d);letter-spacing:1px}
+.em-kit-body{padding:11px 13px;font-size:12px;color:var(--text);line-height:1.65;white-space:pre-wrap;max-height:200px;overflow-y:auto}
+.em-kit-actions{display:flex;gap:7px;padding:7px 13px 10px;border-top:1px solid rgba(100,0,0,.1)}
+.em-kit-del{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:4px 9px;cursor:pointer;margin-left:auto}
+.em-empty{text-align:center;color:var(--text-d);font-size:11px;padding:28px 0;letter-spacing:2px;text-transform:uppercase}
+
 /* ── UTILS ── */
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -408,6 +479,9 @@ strong{color:#e8d4b0}
     <button class="tab" data-tab="vault" onclick="switchTab('vault')">VAULT</button>
     <button class="tab" data-tab="sales" onclick="switchTab('sales')">SALES</button>
     <button class="tab" data-tab="warroom" onclick="switchTab('warroom')">WAR ROOM</button>
+    <button class="tab" data-tab="calendar" onclick="switchTab('calendar')">CALENDAR</button>
+    <button class="tab" data-tab="tiktok" onclick="switchTab('tiktok')">TIKTOK</button>
+    <button class="tab" data-tab="email" onclick="switchTab('email')">EMAIL</button>
     <button class="tab" data-tab="ideas" onclick="switchTab('ideas')">IDEAS</button>
     <button class="tab" data-tab="auto" onclick="switchTab('auto')">AUTO</button>
     <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
@@ -653,6 +727,75 @@ strong{color:#e8d4b0}
       </div>
     </div>
 
+    <!-- CONTENT CALENDAR -->
+    <div class="panel" id="p-calendar">
+      <div class="cal-content">
+        <div class="cal-gen-bar">
+          <select class="cal-gen-select" id="cal-days-select">
+            <option value="7">Generate 7-Day Calendar</option>
+            <option value="14">Generate 14-Day Calendar</option>
+            <option value="30">Generate 30-Day Calendar</option>
+          </select>
+          <button class="cal-gen-btn" id="cal-gen-btn" onclick="genCalendar()">GENERATE</button>
+        </div>
+        <div class="cal-add-bar">
+          <textarea class="cal-add-inp" id="cal-add-inp" placeholder="Add a post manually (e.g. TikTok: 3 dark psychology tricks…)" rows="1" oninput="autoH(this)"></textarea>
+          <button class="cal-add-btn" onclick="addCalPost()">+ ADD</button>
+        </div>
+        <div id="cal-list"><div class="tt-empty">No posts scheduled yet.<br>Generate a calendar or add posts above.</div></div>
+      </div>
+    </div>
+
+    <!-- TIKTOK SCRIPT BANK -->
+    <div class="panel" id="p-tiktok">
+      <div class="tt-content">
+        <div class="tt-gen-card">
+          <div class="tt-gen-title">Generate TikTok Script</div>
+          <div class="tt-type-grid">
+            <button class="tt-type-btn sel" data-type="educational" onclick="selTTType(this)">Educational</button>
+            <button class="tt-type-btn" data-type="story" onclick="selTTType(this)">Story Time</button>
+            <button class="tt-type-btn" data-type="promo" onclick="selTTType(this)">Promo / Sales</button>
+            <button class="tt-type-btn" data-type="hook" onclick="selTTType(this)">Hook Pack (5)</button>
+          </div>
+          <button class="tt-gen-run" id="tt-gen-btn" onclick="genTTScript()">▶ WRITE SCRIPT</button>
+          <div id="tt-gen-out" style="margin-top:10px;display:none;background:rgba(0,0,0,.4);border:1px solid rgba(100,0,0,.25);border-radius:8px;padding:10px;font-size:11px;color:var(--text);line-height:1.6;white-space:pre-wrap;max-height:180px;overflow-y:auto"></div>
+        </div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:2px 0">Saved Scripts</div>
+        <div class="tt-scripts" id="tt-scripts-list">
+          <div class="tt-empty" id="tt-empty">No scripts saved yet.<br>Generate one above.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMAIL LIST BUILDER -->
+    <div class="panel" id="p-email">
+      <div class="em-content">
+        <div class="em-sub-stats">
+          <div class="em-stat"><div class="em-stat-v" id="em-sub-count">0</div><div class="em-stat-l">Subscribers</div></div>
+          <div class="em-stat"><div class="em-stat-v" id="em-kit-count">0</div><div class="em-stat-l">Email Kits</div></div>
+        </div>
+        <div class="em-add-sub">
+          <input class="em-sub-inp" id="em-sub-inp" placeholder="Add subscriber email…" type="email" onkeydown="if(event.key==='Enter')addSubscriber()">
+          <button class="em-sub-add-btn" onclick="addSubscriber()">+ ADD</button>
+        </div>
+        <div class="em-gen-card">
+          <div class="em-gen-title">Generate Email Kit</div>
+          <div class="em-type-grid">
+            <button class="em-type-btn sel" data-type="welcome" onclick="selEMType(this)">Welcome Sequence</button>
+            <button class="em-type-btn" data-type="leadmagnet" onclick="selEMType(this)">Lead Magnet</button>
+            <button class="em-type-btn" data-type="launch" onclick="selEMType(this)">Launch Emails</button>
+            <button class="em-type-btn" data-type="nurture" onclick="selEMType(this)">Nurture Series</button>
+          </div>
+          <button class="em-gen-run" id="em-gen-btn" onclick="genEmailKit()">▶ WRITE EMAIL KIT</button>
+          <div id="em-gen-out" style="margin-top:10px;display:none;background:rgba(0,0,0,.4);border:1px solid rgba(100,0,0,.25);border-radius:8px;padding:10px;font-size:11px;color:var(--text);line-height:1.6;white-space:pre-wrap;max-height:180px;overflow-y:auto"></div>
+        </div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:2px 0">Saved Email Kits</div>
+        <div class="em-kits" id="em-kits-list">
+          <div class="em-empty" id="em-empty">No email kits saved yet.<br>Generate one above.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- IDEA BANK -->
     <div class="panel" id="p-ideas">
       <div class="ideas-content">
@@ -756,6 +899,9 @@ function init() {
   loadStreak();
   loadWarRoom();
   loadFreedom();
+  loadCalendar();
+  loadTTScripts();
+  loadEmail();
   startClock();
   updateStats();
   initSpeech();
@@ -1839,6 +1985,285 @@ function renderIdeas() {
         <button class="build-idea-btn" onclick="buildIdea(${JSON.stringify(idea.text)})">▶ BUILD IT</button>
         <button class="del-idea-btn" onclick="delIdea(${i})">DELETE</button>
         <span class="idea-date">${new Date(idea.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// CONTENT CALENDAR
+// ═══════════════════════════════════════════════
+let calPosts = [];
+
+function loadCalendar() {
+  try { calPosts = JSON.parse(localStorage.getItem('jv-cal')||'[]'); } catch(e){ calPosts=[]; }
+  renderCalendar();
+}
+
+function saveCalData() { localStorage.setItem('jv-cal', JSON.stringify(calPosts)); }
+
+function addCalPost(text, platform) {
+  const t = text || document.getElementById('cal-add-inp')?.value?.trim();
+  if (!t) { toast('Enter post content'); return; }
+  calPosts.unshift({ text: t, platform: platform||'Any', date: Date.now(), done: false, id: Date.now()+Math.random() });
+  saveCalData();
+  if (!text) { const el = document.getElementById('cal-add-inp'); if(el){el.value='';autoH(el);} }
+  renderCalendar();
+  sfx('recv');
+  toast('Post added');
+}
+
+function toggleCalPost(id) {
+  const p = calPosts.find(p=>p.id===id);
+  if (p) { p.done = !p.done; saveCalData(); renderCalendar(); }
+}
+
+function delCalPost(id) {
+  calPosts = calPosts.filter(p=>p.id!==id);
+  saveCalData();
+  renderCalendar();
+}
+
+function renderCalendar() {
+  const list = document.getElementById('cal-list');
+  if (!list) return;
+  if (!calPosts.length) {
+    list.innerHTML = '<div class="tt-empty">No posts scheduled yet.<br>Generate a calendar or add posts above.</div>';
+    return;
+  }
+  const buckets = {};
+  calPosts.forEach(p => {
+    const d = new Date(p.date).toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+    if (!buckets[d]) buckets[d] = [];
+    buckets[d].push(p);
+  });
+  list.innerHTML = Object.entries(buckets).map(([day, posts]) => `
+    <div class="cal-day">
+      <div class="cal-day-hdr">
+        <span class="cal-day-lbl">${day.split(',')[0]}</span>
+        <span class="cal-day-date">${day.split(',').slice(1).join(',').trim()}</span>
+      </div>
+      <div class="cal-posts">
+        ${posts.map(p=>`
+          <div class="cal-post${p.done?' done':''}">
+            <div class="cal-check${p.done?' done':''}" onclick="toggleCalPost(${p.id})">${p.done?'✓':''}</div>
+            <div style="flex:1;min-width:0">
+              <div class="cal-post-text">${fmt(p.text)}</div>
+              <div class="cal-post-platform">${p.platform||'Any'}</div>
+            </div>
+            <button class="cal-post-del" onclick="delCalPost(${p.id})">✕</button>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+async function genCalendar() {
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const niche = getNiche();
+  const days = parseInt(document.getElementById('cal-days-select')?.value)||7;
+  const btn = document.getElementById('cal-gen-btn');
+  btn.disabled = true; btn.textContent = 'WORKING…';
+  try {
+    const prompt = `Create a ${days}-day content calendar for a digital product business in the niche: "${niche}".
+For each day write 2 posts. Use this exact format for each post:
+[DAY N] [PLATFORM] Post text here.
+Where PLATFORM is one of: TikTok, Instagram, Twitter/X, YouTube Shorts.
+Make each post specific to ${niche} — real hooks, real value, real calls to action. Include variety: educational, story, promotional, engagement.`;
+    const full = await callAPI('scribe', [{role:'user',content:prompt}], ()=>{});
+    // Parse lines in format [DAY N] [PLATFORM] text
+    const lines = full.split('\n').filter(l=>l.trim());
+    let addedCount = 0;
+    const today = Date.now();
+    lines.forEach(line => {
+      const m = line.match(/\[DAY\s*(\d+)\]\s*\[([^\]]+)\]\s*(.+)/i);
+      if (m) {
+        const dayOffset = (parseInt(m[1])-1) * 86400000;
+        calPosts.push({ text: m[3].trim(), platform: m[2].trim(), date: today+dayOffset, done: false, id: Date.now()+Math.random() });
+        addedCount++;
+      }
+    });
+    if (!addedCount) {
+      lines.filter(l=>l.length>25).slice(0,days*2).forEach((line,i) => {
+        calPosts.push({ text: line.replace(/^[-*•▸\d.]+\s*/,''), platform: 'Any', date: today+i*3600000*12, done: false, id: Date.now()+Math.random() });
+      });
+    }
+    saveCalData(); renderCalendar(); sfx('recv'); toast(`${days}-day calendar generated!`);
+  } catch(e) { toast('Error: '+e.message); }
+  btn.disabled = false; btn.textContent = 'GENERATE';
+}
+
+// ═══════════════════════════════════════════════
+// TIKTOK SCRIPT BANK
+// ═══════════════════════════════════════════════
+let ttScripts = [];
+let ttSelectedType = 'educational';
+
+function loadTTScripts() {
+  try { ttScripts = JSON.parse(localStorage.getItem('jv-tt')||'[]'); } catch(e){ ttScripts=[]; }
+  renderTTScripts();
+}
+
+function saveTTData() { localStorage.setItem('jv-tt', JSON.stringify(ttScripts)); }
+
+function selTTType(btn) {
+  document.querySelectorAll('.tt-type-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  ttSelectedType = btn.dataset.type;
+}
+
+async function genTTScript() {
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const niche = getNiche();
+  const btn = document.getElementById('tt-gen-btn');
+  const outEl = document.getElementById('tt-gen-out');
+  btn.disabled = true; btn.textContent = '▶ WRITING…';
+  outEl.style.display = 'block';
+  outEl.innerHTML = '<span class="cur"></span>';
+
+  const prompts = {
+    educational:`Write a 60-second TikTok script (educational) about "${niche}".\n\nFormat:\nHOOK (0-3s): [Strong opening line that stops the scroll]\nPROBLEM (3-10s): [Relate to their pain]\nVALUE (10-50s): [3 specific, actionable tips]\nCTA (50-60s): [Direct them to your product link]\n\nWrite word for word. Conversational, punchy, specific to ${niche}.`,
+    story:`Write a 60-second TikTok story script about "${niche}".\n\nFormat:\nHOOK (0-3s): [Curiosity-driven story opener]\nSTORY (3-45s): [Personal arc with tension and resolution related to ${niche}]\nLESSON (45-55s): [The takeaway]\nCTA (55-60s): [Soft pitch to your product]\n\nRaw, real, relatable. Word for word.`,
+    promo:`Write a 30-second TikTok promo script for a digital product about "${niche}" on Gumroad.\n\nFormat:\nHOOK (0-3s): [Attention-grabbing opener]\nPAIN (3-10s): [Their problem]\nSOLUTION (10-20s): [What your product does]\nPROOF (20-25s): [Quick result or social proof]\nCTA (25-30s): [Link in bio, urgency]\n\nDirect, high-energy, no fluff.`,
+    hook:`Write 5 different 3-second TikTok hooks for the niche: "${niche}".\n\nEach hook must stop someone mid-scroll. Format:\n1. [Hook]\n2. [Hook]\n3. [Hook]\n4. [Hook]\n5. [Hook]\n\nPunchy, curiosity-driven, specific to ${niche}. No generic hooks.`
+  };
+
+  const labels = { educational:'Educational', story:'Story Time', promo:'Promo/Sales', hook:'Hook Pack' };
+
+  try {
+    const full = await callAPI('hunter', [{role:'user',content:prompts[ttSelectedType]}], t=>{
+      outEl.innerHTML = fmt(t)+'<span class="cur"></span>';
+    });
+    outEl.innerHTML = fmt(full);
+    ttScripts.unshift({ type: labels[ttSelectedType], text: full, niche, date: Date.now(), id: Date.now() });
+    saveTTData(); renderTTScripts(); sfx('recv'); toast('Script saved!');
+  } catch(e) { outEl.textContent = 'Error: '+e.message; }
+  btn.disabled = false; btn.textContent = '▶ WRITE SCRIPT';
+}
+
+function delTTScript(id) {
+  ttScripts = ttScripts.filter(s=>s.id!==id);
+  saveTTData(); renderTTScripts();
+}
+
+function renderTTScripts() {
+  const list = document.getElementById('tt-scripts-list');
+  const empty = document.getElementById('tt-empty');
+  if (!list) return;
+  if (!ttScripts.length) { if(empty)empty.style.display=''; list.querySelectorAll('.tt-script').forEach(e=>e.remove()); return; }
+  if (empty) empty.style.display='none';
+  list.querySelectorAll('.tt-script').forEach(e=>e.remove());
+  ttScripts.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'tt-script';
+    card.innerHTML = `
+      <div class="tt-script-hdr">
+        <span class="tt-script-type">${s.type}</span>
+        <span class="tt-script-date">${new Date(s.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+      </div>
+      <div class="tt-script-body">${fmt(s.text)}</div>
+      <div class="tt-script-actions">
+        <button class="copy-btn" onclick="cpTxt(this.closest('.tt-script').querySelector('.tt-script-body').innerText)">COPY</button>
+        <button class="tt-script-del" onclick="delTTScript(${s.id})">DELETE</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// EMAIL LIST BUILDER
+// ═══════════════════════════════════════════════
+let subscribers = [];
+let emailKits = [];
+let emSelectedType = 'welcome';
+
+function loadEmail() {
+  try { subscribers = JSON.parse(localStorage.getItem('jv-subs')||'[]'); } catch(e){ subscribers=[]; }
+  try { emailKits = JSON.parse(localStorage.getItem('jv-emkits')||'[]'); } catch(e){ emailKits=[]; }
+  renderEmailStats(); renderEmailKits();
+}
+
+function saveSubsData() { localStorage.setItem('jv-subs', JSON.stringify(subscribers)); }
+function saveKitsData() { localStorage.setItem('jv-emkits', JSON.stringify(emailKits)); }
+
+function addSubscriber() {
+  const inp = document.getElementById('em-sub-inp');
+  const email = inp.value.trim();
+  if (!email) { toast('Enter an email'); return; }
+  if (subscribers.includes(email)) { toast('Already saved'); return; }
+  subscribers.unshift(email);
+  saveSubsData(); inp.value = '';
+  renderEmailStats(); sfx('recv'); toast('Subscriber added');
+}
+
+function selEMType(btn) {
+  document.querySelectorAll('.em-type-btn').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  emSelectedType = btn.dataset.type;
+}
+
+async function genEmailKit() {
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const niche = getNiche();
+  const btn = document.getElementById('em-gen-btn');
+  const outEl = document.getElementById('em-gen-out');
+  btn.disabled = true; btn.textContent = '▶ WRITING…';
+  outEl.style.display = 'block';
+  outEl.innerHTML = '<span class="cur"></span>';
+
+  const prompts = {
+    welcome:`Write a 3-email welcome sequence for someone who just subscribed to a newsletter about "${niche}".\n\nEmail 1 (Immediate): Subject line + warm welcome, deliver on the promise, set expectations.\nEmail 2 (Day 2): Most valuable free tip about ${niche}. Build trust.\nEmail 3 (Day 4): Soft pitch to a Gumroad product. Value-first, then the offer.\n\nWrite each email fully — subject line, body, CTA. Personal, not corporate. Specific to ${niche}.`,
+    leadmagnet:`Create a lead magnet kit for the niche: "${niche}". Include:\n1. Lead magnet title (something people give their email for)\n2. The actual lead magnet content (short guide, checklist, or framework — full content, not outline)\n3. Opt-in page headline and subheadline\n4. Confirmation email (after they subscribe)\n\nMake the lead magnet genuinely valuable — they should think "I can't believe this is free."`,
+    launch:`Write a 3-email product launch sequence for a digital product about "${niche}" on Gumroad.\n\nEmail 1 (Announcement — 3 days before): Subject + teaser, build anticipation.\nEmail 2 (Launch Day): Subject + full pitch — what's inside, price, CTA to Gumroad link.\nEmail 3 (Final Day): Subject + urgency closer — last chance copy.\n\nAll copy-paste ready. Real subject lines. Specific to ${niche}.`,
+    nurture:`Write a 5-part email nurture series for people interested in "${niche}". Goal: build trust, deliver value, warm them up to buy a digital product.\n\nEmail 1: A controversial or surprising truth about ${niche}\nEmail 2: A quick win they can implement today\nEmail 3: A case study or success story in ${niche}\nEmail 4: Answering the #1 objection people have\nEmail 5: Soft pitch — introduce your product as the natural next step\n\nFull email content for each. Conversational. Specific.`
+  };
+
+  const labels = { welcome:'Welcome Sequence', leadmagnet:'Lead Magnet Kit', launch:'Launch Emails', nurture:'Nurture Series' };
+
+  try {
+    const full = await callAPI('hunter', [{role:'user',content:prompts[emSelectedType]}], t=>{
+      outEl.innerHTML = fmt(t)+'<span class="cur"></span>';
+    });
+    outEl.innerHTML = fmt(full);
+    emailKits.unshift({ type: labels[emSelectedType], text: full, niche, date: Date.now(), id: Date.now() });
+    saveKitsData(); renderEmailStats(); renderEmailKits(); sfx('recv'); toast('Email kit saved!');
+  } catch(e) { outEl.textContent = 'Error: '+e.message; }
+  btn.disabled = false; btn.textContent = '▶ WRITE EMAIL KIT';
+}
+
+function delEmailKit(id) {
+  emailKits = emailKits.filter(k=>k.id!==id);
+  saveKitsData(); renderEmailStats(); renderEmailKits();
+}
+
+function renderEmailStats() {
+  const sc = document.getElementById('em-sub-count');
+  const kc = document.getElementById('em-kit-count');
+  if (sc) sc.textContent = subscribers.length;
+  if (kc) kc.textContent = emailKits.length;
+}
+
+function renderEmailKits() {
+  const list = document.getElementById('em-kits-list');
+  const empty = document.getElementById('em-empty');
+  if (!list) return;
+  if (!emailKits.length) { if(empty)empty.style.display=''; list.querySelectorAll('.em-kit').forEach(e=>e.remove()); return; }
+  if (empty) empty.style.display='none';
+  list.querySelectorAll('.em-kit').forEach(e=>e.remove());
+  emailKits.forEach(k => {
+    const card = document.createElement('div');
+    card.className = 'em-kit';
+    card.innerHTML = `
+      <div class="em-kit-hdr">
+        <span class="em-kit-type">${k.type}</span>
+        <span class="em-kit-date">${new Date(k.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+      </div>
+      <div class="em-kit-body">${fmt(k.text)}</div>
+      <div class="em-kit-actions">
+        <button class="copy-btn" onclick="cpTxt(this.closest('.em-kit').querySelector('.em-kit-body').innerText)">COPY</button>
+        <button class="em-kit-del" onclick="delEmailKit(${k.id})">DELETE</button>
       </div>`;
     list.appendChild(card);
   });
