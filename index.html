@@ -152,6 +152,48 @@ textarea.inp::placeholder{color:var(--text-d)}
 .ios-banner.show{display:flex}
 .ios-x{margin-left:auto;background:none;border:none;color:var(--text-d);font-size:16px;cursor:pointer}
 
+/* ── SALES TRACKER ── */
+.sales-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.sale-hero{background:var(--cyan-d);border:1px solid var(--cyan-b);border-radius:var(--r);padding:18px;text-align:center}
+.sale-total{font-size:36px;font-weight:bold;color:var(--cyan);text-shadow:0 0 18px var(--cyan);letter-spacing:2px}
+.sale-label{font-size:9px;letter-spacing:3px;color:var(--text-d);text-transform:uppercase;margin-top:4px}
+.sale-progress-wrap{margin-top:12px;background:rgba(0,212,255,.08);border-radius:20px;height:8px;overflow:hidden}
+.sale-progress-bar{height:100%;background:linear-gradient(90deg,var(--cyan),var(--green));border-radius:20px;transition:width .5s ease;min-width:4px}
+.sale-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.sale-stat{background:var(--panel);border:1px solid var(--cyan-b);border-radius:10px;padding:10px;text-align:center}
+.sale-stat-v{font-size:18px;font-weight:bold;color:var(--cyan)}
+.sale-stat-l{font-size:8px;letter-spacing:1.5px;color:var(--text-d);text-transform:uppercase;margin-top:2px}
+.log-sale-area{display:flex;gap:8px;align-items:center}
+.sale-amt{flex:1;background:rgba(0,212,255,.04);border:1px solid var(--cyan-b);border-radius:10px;color:var(--text);font-family:inherit;font-size:16px;padding:10px 13px;outline:none;-webkit-appearance:none}
+.sale-amt:focus{border-color:var(--cyan)}
+.log-btn{padding:11px 18px;background:var(--green);border:none;border-radius:10px;color:#000;font-family:inherit;font-size:12px;font-weight:bold;letter-spacing:2px;cursor:pointer;white-space:nowrap;transition:transform .15s}
+.log-btn:active{transform:scale(.95)}
+.sale-history{background:var(--panel);border:1px solid var(--cyan-b);border-radius:var(--r);overflow:hidden}
+.sale-history-hdr{padding:9px 13px;font-size:9px;letter-spacing:3px;color:var(--cyan);border-bottom:1px solid var(--cyan-b)}
+.sale-item{display:flex;justify-content:space-between;align-items:center;padding:9px 13px;border-bottom:1px solid rgba(0,212,255,.07);font-size:12px}
+.sale-item:last-child{border-bottom:none}
+.sale-item-amt{color:var(--green);font-weight:bold}
+.sale-item-date{color:var(--text-d);font-size:10px}
+.sale-del{background:none;border:none;color:var(--text-d);font-size:14px;cursor:pointer;padding:0 4px}
+
+/* ── IDEA BANK ── */
+.ideas-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.idea-capture{display:flex;gap:8px;align-items:flex-end}
+.idea-inp{flex:1;background:rgba(0,212,255,.04);border:1px solid var(--cyan-b);border-radius:10px;color:var(--text);font-family:inherit;font-size:13px;padding:10px 12px;outline:none;resize:none;min-height:42px;max-height:100px;-webkit-appearance:none}
+.idea-inp:focus{border-color:var(--cyan)}
+.idea-save{padding:11px 16px;background:var(--cyan);border:none;border-radius:10px;color:var(--bg);font-family:inherit;font-size:12px;font-weight:bold;cursor:pointer;white-space:nowrap;transition:transform .15s}
+.idea-save:active{transform:scale(.95)}
+.idea-list{display:flex;flex-direction:column;gap:8px}
+.idea-card{background:var(--panel);border:1px solid var(--cyan-b);border-radius:var(--r);padding:12px 13px}
+.idea-text{font-size:13px;color:var(--text);line-height:1.5;margin-bottom:9px}
+.idea-actions{display:flex;gap:7px;align-items:center}
+.idea-date{font-size:9px;color:var(--text-d);margin-left:auto}
+.build-idea-btn{padding:5px 12px;background:var(--orange-d);border:1px solid rgba(255,107,0,.35);border-radius:6px;color:#ffd4a0;font-family:inherit;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .15s}
+.build-idea-btn:active{background:var(--orange);color:#000}
+.del-idea-btn{padding:5px 10px;background:none;border:1px solid rgba(255,50,50,.2);border-radius:6px;color:rgba(255,50,50,.5);font-family:inherit;font-size:10px;cursor:pointer}
+.del-idea-btn:active{color:var(--red)}
+.ideas-empty{text-align:center;color:var(--text-d);font-size:12px;padding:30px 0;letter-spacing:1px}
+
 /* ── NICHE BAR ── */
 .niche-bar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:7px 14px;background:var(--orange-d);border-bottom:1px solid rgba(255,107,0,.3)}
 .niche-label{font-size:8px;letter-spacing:2px;color:rgba(255,107,0,.7);white-space:nowrap;text-transform:uppercase}
@@ -277,6 +319,8 @@ strong{color:#fff}
     <button class="tab" data-tab="scribe" onclick="switchTab('scribe')">SCRIBE</button>
     <button class="tab" data-tab="hunter" onclick="switchTab('hunter')">HUNTER</button>
     <button class="tab" data-tab="ledger" onclick="switchTab('ledger')">LEDGER</button>
+    <button class="tab" data-tab="sales" onclick="switchTab('sales')">SALES</button>
+    <button class="tab" data-tab="ideas" onclick="switchTab('ideas')">IDEAS</button>
     <button class="tab" data-tab="auto" onclick="switchTab('auto')">AUTO</button>
     <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
   </div>
@@ -414,6 +458,50 @@ strong{color:#fff}
       </div>
     </div>
 
+    <!-- SALES TRACKER -->
+    <div class="panel" id="p-sales">
+      <div class="sales-content">
+        <div class="sale-hero">
+          <div class="sale-total" id="st-total">$0.00</div>
+          <div class="sale-label">Total Revenue</div>
+          <div class="sale-progress-wrap">
+            <div class="sale-progress-bar" id="st-bar" style="width:0%"></div>
+          </div>
+          <div style="font-size:9px;color:var(--text-d);margin-top:5px;letter-spacing:1px">
+            <span id="st-pct">0%</span> of $<span id="st-goal-lbl">0</span>/mo goal
+          </div>
+        </div>
+        <div class="sale-stats">
+          <div class="sale-stat"><div class="sale-stat-v" id="st-today">$0</div><div class="sale-stat-l">Today</div></div>
+          <div class="sale-stat"><div class="sale-stat-v" id="st-week">$0</div><div class="sale-stat-l">This Week</div></div>
+          <div class="sale-stat"><div class="sale-stat-v" id="st-count">0</div><div class="sale-stat-l">Sales</div></div>
+        </div>
+        <div class="log-sale-area">
+          <span style="font-size:13px;color:var(--text-d)">$</span>
+          <input class="sale-amt" id="sale-amt-inp" type="number" placeholder="Amount (e.g. 9)" min="0" step="0.01">
+          <input class="sale-amt" id="sale-prod-inp" type="text" placeholder="Product (optional)" style="flex:1.5">
+          <button class="log-btn" onclick="logSale()">LOG SALE</button>
+        </div>
+        <div class="sale-history">
+          <div class="sale-history-hdr">RECENT SALES</div>
+          <div id="sale-history-list"><div class="ideas-empty">No sales logged yet.<br>Make your first one.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- IDEA BANK -->
+    <div class="panel" id="p-ideas">
+      <div class="ideas-content">
+        <div class="idea-capture">
+          <textarea class="idea-inp" id="idea-inp" placeholder="Type a product idea, niche, or business idea…" rows="2" oninput="autoH(this)"></textarea>
+          <button class="idea-save" onclick="saveIdea()">SAVE</button>
+        </div>
+        <div class="idea-list" id="idea-list">
+          <div class="ideas-empty" id="ideas-empty">No ideas saved yet.<br>Start capturing them above.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- AUTO -->
     <div class="panel" id="p-auto">
       <div class="ov-content">
@@ -498,6 +586,8 @@ function init() {
   loadCfg();
   loadNiche();
   loadConvos();
+  loadSales();
+  loadIdeas();
   startClock();
   updateStats();
   initSpeech();
@@ -1182,6 +1272,143 @@ function showIOSBanner() {
   if (isIOS && !standalone) {
     document.getElementById('ios-banner').classList.add('show');
   }
+}
+
+// ═══════════════════════════════════════════════
+// SALES TRACKER
+// ═══════════════════════════════════════════════
+let sales = [];
+
+function loadSales() {
+  try { sales = JSON.parse(localStorage.getItem('jv-sales')||'[]'); } catch(e){ sales=[]; }
+  renderSales();
+}
+
+function saveSalesData() { localStorage.setItem('jv-sales', JSON.stringify(sales)); }
+
+function logSale() {
+  const amt = parseFloat(document.getElementById('sale-amt-inp').value);
+  const prod = document.getElementById('sale-prod-inp').value.trim();
+  if (!amt || amt <= 0) { toast('Enter a sale amount'); return; }
+  sales.unshift({ amt, prod: prod||'Product', date: Date.now() });
+  saveSalesData();
+  document.getElementById('sale-amt-inp').value = '';
+  document.getElementById('sale-prod-inp').value = '';
+  renderSales();
+  sfx('recv');
+  toast(`+$${amt.toFixed(2)} logged!`);
+  // update income stat
+  const totalRevenue = sales.reduce((s,x)=>s+x.amt,0);
+  cfg.income = Math.round(totalRevenue * 100) / 100;
+  localStorage.setItem('jv-cfg', JSON.stringify(cfg));
+  updateStats();
+}
+
+function delSale(i) {
+  sales.splice(i,1);
+  saveSalesData();
+  renderSales();
+  const totalRevenue = sales.reduce((s,x)=>s+x.amt,0);
+  cfg.income = Math.round(totalRevenue * 100) / 100;
+  localStorage.setItem('jv-cfg', JSON.stringify(cfg));
+  updateStats();
+}
+
+function renderSales() {
+  const total = sales.reduce((s,x)=>s+x.amt,0);
+  const now = new Date(); const today = now.toDateString();
+  const weekAgo = Date.now() - 7*86400000;
+  const todayAmt  = sales.filter(s=>new Date(s.date).toDateString()===today).reduce((a,s)=>a+s.amt,0);
+  const weekAmt   = sales.filter(s=>s.date>=weekAgo).reduce((a,s)=>a+s.amt,0);
+  const goal = cfg.goal||0;
+  const pct = goal>0 ? Math.min(100,Math.round((total/goal)*100)) : 0;
+
+  document.getElementById('st-total').textContent = '$'+total.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  document.getElementById('st-bar').style.width = pct+'%';
+  document.getElementById('st-pct').textContent = pct+'%';
+  document.getElementById('st-goal-lbl').textContent = (goal||0).toLocaleString();
+  document.getElementById('st-today').textContent = '$'+todayAmt.toFixed(2);
+  document.getElementById('st-week').textContent = '$'+weekAmt.toFixed(2);
+  document.getElementById('st-count').textContent = sales.length;
+
+  const list = document.getElementById('sale-history-list');
+  if (!sales.length) {
+    list.innerHTML = '<div class="ideas-empty">No sales logged yet.<br>Make your first one.</div>';
+    return;
+  }
+  list.innerHTML = sales.slice(0,30).map((s,i)=>`
+    <div class="sale-item">
+      <div>
+        <div style="font-size:12px;color:var(--text)">${s.prod}</div>
+        <div class="sale-item-date">${new Date(s.date).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <span class="sale-item-amt">+$${s.amt.toFixed(2)}</span>
+        <button class="sale-del" onclick="delSale(${i})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════════════
+// IDEA BANK
+// ═══════════════════════════════════════════════
+let ideas = [];
+
+function loadIdeas() {
+  try { ideas = JSON.parse(localStorage.getItem('jv-ideas')||'[]'); } catch(e){ ideas=[]; }
+  renderIdeas();
+}
+
+function saveIdeasData() { localStorage.setItem('jv-ideas', JSON.stringify(ideas)); }
+
+function saveIdea() {
+  const el = document.getElementById('idea-inp');
+  const text = el.value.trim();
+  if (!text) { toast('Type an idea first'); return; }
+  ideas.unshift({ text, date: Date.now() });
+  saveIdeasData();
+  el.value = '';
+  autoH(el);
+  renderIdeas();
+  sfx('recv');
+  toast('Idea saved!');
+}
+
+function delIdea(i) {
+  ideas.splice(i,1);
+  saveIdeasData();
+  renderIdeas();
+}
+
+function buildIdea(text) {
+  const ni = document.getElementById('niche-inp');
+  if (ni) { ni.value = text; activeNiche = text; saveNiche(); }
+  switchTab('overseer');
+  toast('Niche set — tap BUILD THIS PRODUCT');
+}
+
+function renderIdeas() {
+  const list = document.getElementById('idea-list');
+  const empty = document.getElementById('ideas-empty');
+  if (!ideas.length) {
+    if (empty) empty.style.display='';
+    list.querySelectorAll('.idea-card').forEach(e=>e.remove());
+    return;
+  }
+  if (empty) empty.style.display='none';
+  list.querySelectorAll('.idea-card').forEach(e=>e.remove());
+  ideas.forEach((idea,i)=>{
+    const card = document.createElement('div');
+    card.className = 'idea-card';
+    card.innerHTML = `
+      <div class="idea-text">${fmt(idea.text)}</div>
+      <div class="idea-actions">
+        <button class="build-idea-btn" onclick="buildIdea(${JSON.stringify(idea.text)})">▶ BUILD IT</button>
+        <button class="del-idea-btn" onclick="delIdea(${i})">DELETE</button>
+        <span class="idea-date">${new Date(idea.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+      </div>`;
+    list.appendChild(card);
+  });
 }
 
 // ═══════════════════════════════════════════════
