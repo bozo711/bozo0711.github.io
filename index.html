@@ -598,6 +598,42 @@ textarea.inp::placeholder{color:var(--text-d)}
 ::-webkit-scrollbar-thumb{background:var(--red-b);border-radius:2px}
 code{background:rgba(120,0,0,.12);padding:1px 4px;border-radius:3px;font-size:11px;color:#cc8866}
 strong{color:#e8d4b0}
+/* ── CODE TAB ── */
+.code-panel{display:flex;flex-direction:column;height:100%;gap:10px}
+.code-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.code-lang-sel{background:rgba(0,20,0,.8);border:1px solid #003300;border-radius:6px;color:#00cc44;font-family:inherit;font-size:10px;padding:5px 8px;letter-spacing:1px}
+.code-filename{background:rgba(0,15,0,.7);border:1px solid #002200;border-radius:6px;color:#00aa33;font-family:'Courier New',monospace;font-size:10px;padding:5px 8px;flex:1;min-width:80px}
+.code-filename::placeholder{color:rgba(0,150,50,.4)}
+.code-toolbar-btn{background:rgba(0,20,0,.6);border:1px solid #002800;border-radius:5px;color:#009933;font-family:inherit;font-size:9px;padding:4px 9px;cursor:pointer;letter-spacing:1px;transition:all .15s}
+.code-toolbar-btn:hover{background:rgba(0,60,0,.5);border-color:#004400}
+.code-editor{flex:1;min-height:150px;max-height:240px;background:rgba(0,8,0,.95);border:1px solid #002800;border-radius:8px;color:#00dd55;font-family:'Courier New',monospace;font-size:12px;padding:12px;resize:vertical;line-height:1.55;letter-spacing:.3px;outline:none}
+.code-editor:focus{border-color:#005500;box-shadow:0 0 0 1px rgba(0,80,0,.3)}
+.code-editor::placeholder{color:rgba(0,120,40,.35)}
+.code-proposal{background:rgba(0,12,0,.97);border:1px solid #004400;border-radius:10px;padding:13px;display:none}
+.code-proposal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.code-proposal-label{font-size:9px;letter-spacing:2px;font-weight:bold}
+.code-proposal-label.big{color:#ff6600}
+.code-proposal-label.small{color:#00cc44}
+.code-proposal-preview{background:rgba(0,0,0,.7);border:1px solid #002800;border-radius:6px;padding:10px;font-family:'Courier New',monospace;font-size:11px;color:#00bb44;white-space:pre-wrap;max-height:130px;overflow-y:auto;margin-bottom:10px;line-height:1.5}
+.code-proposal-actions{display:flex;gap:8px}
+.code-approve-btn{flex:1;padding:8px;background:linear-gradient(135deg,rgba(0,80,0,.4),rgba(0,120,0,.2));border:1px solid #004400;border-radius:7px;color:#00cc44;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer;transition:all .15s}
+.code-approve-btn:hover{background:linear-gradient(135deg,rgba(0,100,0,.5),rgba(0,140,0,.3))}
+.code-reject-btn{flex:1;padding:8px;background:rgba(80,0,0,.2);border:1px solid rgba(100,0,0,.4);border-radius:7px;color:var(--live);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer}
+.code-msgs{flex:1;min-height:100px;max-height:220px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;padding:4px 0}
+.code-msg{padding:10px 12px;border-radius:8px;font-size:11px;line-height:1.6;max-width:95%}
+.code-msg.user{background:linear-gradient(135deg,rgba(100,0,28,.18),rgba(90,0,20,.1));border:1px solid var(--red-b);align-self:flex-end;color:var(--text)}
+.code-msg.ai{background:rgba(0,15,0,.7);border:1px solid #002800;align-self:flex-start;color:#cceecc}
+.code-msg.thinking{opacity:.6}
+.code-block{background:rgba(0,5,0,.9);border:1px solid #002800;border-radius:6px;padding:10px;font-family:'Courier New',monospace;font-size:11px;color:#00ee66;white-space:pre-wrap;margin:4px 0;overflow-x:auto;line-height:1.5}
+.code-quick-row{display:flex;gap:5px;flex-wrap:wrap}
+.code-qbtn{background:rgba(0,15,0,.6);border:1px solid #002500;border-radius:5px;color:#009933;font-family:inherit;font-size:9px;padding:5px 8px;cursor:pointer;letter-spacing:.5px;transition:all .15s}
+.code-qbtn:hover{background:rgba(0,40,0,.5);border-color:#003800;color:#00cc44}
+.code-input-row{display:flex;gap:7px;align-items:flex-end}
+.code-inp{flex:1;background:rgba(0,10,0,.8);border:1px solid #002800;border-radius:8px;color:#00cc44;font-family:inherit;font-size:12px;padding:9px 12px;resize:none;outline:none;line-height:1.4;max-height:90px}
+.code-inp:focus{border-color:#004400;box-shadow:0 0 0 1px rgba(0,70,0,.3)}
+.code-inp::placeholder{color:rgba(0,120,40,.4)}
+.code-send-btn{background:linear-gradient(135deg,rgba(0,80,0,.5),rgba(0,50,0,.3));border:1px solid #004400;border-radius:8px;color:#00cc44;font-size:18px;width:42px;height:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.code-send-btn:hover{background:rgba(0,100,0,.5)}
 </style>
 </head>
 <body>
@@ -733,6 +769,7 @@ strong{color:#e8d4b0}
     <button class="tab" data-tab="ideas" onclick="switchTab('ideas')">IDEAS</button>
     <button class="tab" data-tab="auto" onclick="switchTab('auto')">AUTO</button>
     <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
+    <button class="tab" data-tab="code" onclick="switchTab('code')">CODE</button>
   </div>
 
   <!-- Content -->
@@ -1322,6 +1359,54 @@ strong{color:#e8d4b0}
       </div>
     </div>
 
+    <!-- CODE -->
+    <div class="panel" id="p-code">
+      <div class="code-panel">
+        <div class="code-toolbar">
+          <select class="code-lang-sel" id="code-lang" onchange="saveCodeState()">
+            <option value="javascript">JS</option>
+            <option value="python">Python</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+            <option value="typescript">TypeScript</option>
+            <option value="jsx">React/JSX</option>
+            <option value="sql">SQL</option>
+            <option value="bash">Bash</option>
+            <option value="json">JSON</option>
+          </select>
+          <input class="code-filename" id="code-filename" placeholder="filename.js" oninput="saveCodeState()">
+          <button class="code-toolbar-btn" onclick="copyCode()">COPY</button>
+          <button class="code-toolbar-btn" onclick="clearCode()">CLEAR</button>
+        </div>
+        <textarea class="code-editor" id="code-editor" placeholder="// Paste your code here, or ask JARVIS to write something..." oninput="saveCodeState()"></textarea>
+        <div class="code-proposal" id="code-proposal">
+          <div class="code-proposal-hdr">
+            <span class="code-proposal-label" id="code-proposal-label">BIG CHANGE</span>
+            <span style="font-size:9px;color:var(--text-d);letter-spacing:1px">Review before applying</span>
+          </div>
+          <div class="code-proposal-preview" id="code-proposal-preview"></div>
+          <div class="code-proposal-actions">
+            <button class="code-approve-btn" onclick="approveCodeChange()">✓ APPROVE &amp; APPLY</button>
+            <button class="code-reject-btn" onclick="rejectCodeChange()">✕ REJECT</button>
+          </div>
+        </div>
+        <div class="code-msgs" id="code-msgs"></div>
+        <div class="code-quick-row">
+          <button class="code-qbtn" onclick="codeCmd('Review this code. Find bugs, issues, and anything that could be improved.')">Review</button>
+          <button class="code-qbtn" onclick="codeCmd('Debug this code. Identify the errors and fix them.')">Debug</button>
+          <button class="code-qbtn" onclick="codeCmd('Add clear, concise comments to this code explaining what each section does.')">Comments</button>
+          <button class="code-qbtn" onclick="codeCmd('Optimize this code for performance and readability.')">Optimize</button>
+          <button class="code-qbtn" onclick="codeCmd('Write comprehensive unit tests for this code.')">Tests</button>
+          <button class="code-qbtn" onclick="codeCmd('Explain this code like I am a beginner. What does it do and how does it work?')">Explain</button>
+          <button class="code-qbtn" onclick="codeCmd('Refactor this code to be cleaner and more maintainable.')">Refactor</button>
+        </div>
+        <div class="code-input-row">
+          <textarea class="code-inp" id="code-inp" rows="1" placeholder="Ask JARVIS to write, fix, or explain code…" onkeydown="handleCodeKey(event)" oninput="autoGrow(this)"></textarea>
+          <button class="code-send-btn" onclick="sendCode()">↑</button>
+        </div>
+      </div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /app -->
 
@@ -1394,6 +1479,7 @@ function init() {
   loadBrain();
   loadTasks2();
   loadLaunchPad();
+  loadCodeState();
   startClock();
   updateStats();
   initSpeech();
@@ -1563,6 +1649,7 @@ function switchTab(t) {
   if (t === 'empire') renderEmpire();
   if (t === 'analytics') renderAnalytics();
   if (t === 'launch') renderLaunches();
+  if (t === 'code') renderCodeMsgs();
 }
 
 // ═══════════════════════════════════════════════
@@ -1599,12 +1686,21 @@ function mkStream(agent) {
 }
 
 function fmt(t) {
-  return (t||'')
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+  if (!t) return '';
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const md = s => esc(s)
+    .replace(/\*\*(.*?)\*\*/gs,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/gs,'<em>$1</em>')
     .replace(/`([^`]+)`/g,'<code>$1</code>')
     .replace(/\n/g,'<br>');
+  const parts = t.split(/(```[\s\S]*?```)/g);
+  return parts.map((seg, i) => {
+    if (i % 2 === 1) {
+      const m = seg.match(/```(\w*)\n?([\s\S]*?)```/);
+      if (m) return `<div class="code-block">${esc(m[2].replace(/\n$/,''))}</div>`;
+    }
+    return md(seg);
+  }).join('');
 }
 
 // ═══════════════════════════════════════════════
@@ -1682,6 +1778,47 @@ async function callAPI(agent, messages, onToken) {
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':`Bearer ${cfg.apikey}`},
     body:JSON.stringify({model:cfg.model||'llama-3.1-8b-instant',messages:[{role:'system',content:sysPrompt(agent)},...messages],stream:true}),
+  });
+  if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`HTTP ${res.status}: ${t||res.statusText}`); }
+  const reader=res.body.getReader(); const dec=new TextDecoder(); let full='';
+  while(true){
+    const{done,value}=await reader.read(); if(done)break;
+    for(const line of dec.decode(value).split('\n')){
+      if(!line.startsWith('data:'))continue;
+      const raw=line.slice(5).trim();
+      if(raw==='[DONE]')return full;
+      try{const d=JSON.parse(raw);const tok=d.choices?.[0]?.delta?.content;if(tok){full+=tok;onToken(full);}}catch(e){}
+    }
+  }
+  return full;
+}
+
+async function callAPIWithPrompt(sysP, messages, onToken) {
+  const p = cfg.provider || 'groq';
+  if (p === 'ollama') {
+    if (!cfg.url) throw new Error('No Ollama URL. Tap ⚙ to configure.');
+    const res = await fetch(`${cfg.url}/api/chat`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:cfg.model,messages:[{role:'system',content:sysP},...messages],stream:true}),
+    });
+    if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`HTTP ${res.status}: ${t||res.statusText}`); }
+    const reader=res.body.getReader(); const dec=new TextDecoder(); let full='';
+    while(true){
+      const{done,value}=await reader.read(); if(done)break;
+      for(const line of dec.decode(value).split('\n')){
+        if(!line.trim())continue;
+        try{const d=JSON.parse(line);if(d.message?.content){full+=d.message.content;onToken(full);}if(d.done)return full;}catch(e){}
+      }
+    }
+    return full;
+  }
+  if (!cfg.apikey) throw new Error('No API key. Tap ⚙ to add your key.');
+  const base = p==='openai' ? 'https://api.openai.com' : 'https://api.groq.com/openai';
+  const res = await fetch(`${base}/v1/chat/completions`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json','Authorization':`Bearer ${cfg.apikey}`},
+    body:JSON.stringify({model:cfg.model||'llama-3.1-8b-instant',messages:[{role:'system',content:sysP},...messages],stream:true}),
   });
   if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`HTTP ${res.status}: ${t||res.statusText}`); }
   const reader=res.body.getReader(); const dec=new TextDecoder(); let full='';
@@ -3622,6 +3759,176 @@ function renderEmailKits() {
       </div>`;
     list.appendChild(card);
   });
+}
+
+// ═══════════════════════════════════════════════
+// CODE
+// ═══════════════════════════════════════════════
+let codeConvo = [];
+let pendingCodeChange = null;
+
+function sysPromptCode() {
+  const {code, lang, file} = getCodeContext();
+  return `You are JARVIS CODE, an expert software engineer. You write clean, production-ready code.
+
+When you want to modify the user's code, use these prefixes on the very first line of your response:
+- [BIG CHANGE] — for large rewrites, new files, or structural changes. The user must approve before it applies.
+- [SMALL CHANGE] — for minor fixes, typo corrections, or one-liners. Applies with one click.
+- No prefix — for explanations, questions, or reviews that don't touch the code.
+
+After the prefix, always provide the full updated code in a fenced code block.
+
+Current file: ${file || 'untitled'}
+Language: ${lang}
+${code ? `\nCurrent code:\n\`\`\`${lang}\n${code}\n\`\`\`` : '\nNo code in editor yet.'}
+
+Never use placeholders like "// rest of code here". Always provide complete, working code.`;
+}
+
+function loadCodeState() {
+  try {
+    const s = JSON.parse(localStorage.getItem('jv-code')||'{}');
+    const ed = document.getElementById('code-editor');
+    const fn = document.getElementById('code-filename');
+    const lg = document.getElementById('code-lang');
+    if (ed && s.code !== undefined) ed.value = s.code;
+    if (fn && s.filename) fn.value = s.filename;
+    if (lg && s.lang) lg.value = s.lang;
+    codeConvo = s.convo || [];
+  } catch(e) { codeConvo = []; }
+}
+
+function saveCodeState() {
+  const {code, lang, file} = getCodeContext();
+  try {
+    localStorage.setItem('jv-code', JSON.stringify({code, lang, filename:file, convo:codeConvo.slice(-30)}));
+  } catch(e) {}
+}
+
+function getCodeContext() {
+  const ed = document.getElementById('code-editor');
+  const fn = document.getElementById('code-filename');
+  const lg = document.getElementById('code-lang');
+  return {
+    code: ed ? ed.value : '',
+    lang: lg ? lg.value : 'javascript',
+    file: fn ? fn.value : ''
+  };
+}
+
+function renderCodeMsgs() {
+  const c = document.getElementById('code-msgs');
+  if (!c) return;
+  c.innerHTML = '';
+  codeConvo.forEach(m => {
+    const div = document.createElement('div');
+    div.className = 'code-msg ' + (m.role === 'user' ? 'user' : 'ai');
+    div.innerHTML = fmt(m.content);
+    c.appendChild(div);
+  });
+  c.scrollTop = c.scrollHeight;
+}
+
+function mkCodeStream() {
+  const c = document.getElementById('code-msgs');
+  const div = document.createElement('div');
+  div.className = 'code-msg ai thinking';
+  div.innerHTML = '<span class="cur"></span>';
+  c.appendChild(div);
+  c.scrollTop = c.scrollHeight;
+  const upd = text => { div.innerHTML = fmt(text)+'<span class="cur"></span>'; c.scrollTop=c.scrollHeight; };
+  const fin = text => { div.classList.remove('thinking'); div.innerHTML = fmt(text); c.scrollTop=c.scrollHeight; };
+  return { upd, fin };
+}
+
+function extractFirstCodeBlock(text) {
+  const m = text.match(/```[\w]*\n?([\s\S]*?)```/);
+  return m ? m[1].replace(/\n$/, '') : null;
+}
+
+function handleCodeResponse(text) {
+  const isBig = text.trimStart().startsWith('[BIG CHANGE]');
+  const isSmall = text.trimStart().startsWith('[SMALL CHANGE]');
+  if (!isBig && !isSmall) return;
+  const code = extractFirstCodeBlock(text);
+  if (!code) return;
+  pendingCodeChange = { code, type: isBig ? 'big' : 'small' };
+  const prop = document.getElementById('code-proposal');
+  const lbl = document.getElementById('code-proposal-label');
+  const prev = document.getElementById('code-proposal-preview');
+  if (!prop) return;
+  lbl.textContent = isBig ? '⚠ BIG CHANGE — REQUIRES APPROVAL' : '✦ SMALL CHANGE';
+  lbl.className = 'code-proposal-label ' + (isBig ? 'big' : 'small');
+  prev.textContent = code.length > 600 ? code.slice(0,600)+'…' : code;
+  prop.style.display = 'block';
+  prop.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+
+function approveCodeChange() {
+  if (!pendingCodeChange) return;
+  const ed = document.getElementById('code-editor');
+  if (ed) ed.value = pendingCodeChange.code;
+  saveCodeState();
+  dismissProposal();
+  sfx('send');
+}
+
+function rejectCodeChange() { dismissProposal(); }
+
+function dismissProposal() {
+  pendingCodeChange = null;
+  const prop = document.getElementById('code-proposal');
+  if (prop) prop.style.display = 'none';
+}
+
+async function sendCode() {
+  const inp = document.getElementById('code-inp');
+  const text = (inp ? inp.value : '').trim();
+  if (!text || busy) return;
+  inp.value = ''; inp.style.height = 'auto';
+  dismissProposal();
+  const userDiv = document.createElement('div');
+  userDiv.className = 'code-msg user';
+  userDiv.textContent = text;
+  const msgs_el = document.getElementById('code-msgs');
+  msgs_el.appendChild(userDiv);
+  msgs_el.scrollTop = 99999;
+  codeConvo.push({role:'user', content:text});
+  const msgs = codeConvo.map(m=>({role:m.role, content:m.content}));
+  const {upd, fin} = mkCodeStream();
+  busy = true;
+  try {
+    const full = await callAPIWithPrompt(sysPromptCode(), msgs, upd);
+    fin(full);
+    codeConvo.push({role:'assistant', content:full});
+    handleCodeResponse(full);
+    saveCodeState();
+    sfx('recv');
+  } catch(e) {
+    fin('Error: '+e.message);
+  }
+  busy = false;
+}
+
+async function codeCmd(prompt) {
+  const inp = document.getElementById('code-inp');
+  if (inp) { inp.value = prompt; }
+  await sendCode();
+}
+
+function copyCode() {
+  const ed = document.getElementById('code-editor');
+  if (!ed || !ed.value) return;
+  navigator.clipboard.writeText(ed.value).then(()=>sfx('send')).catch(()=>{});
+}
+
+function clearCode() {
+  const ed = document.getElementById('code-editor');
+  if (ed) { ed.value = ''; saveCodeState(); }
+}
+
+function handleCodeKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendCode(); }
 }
 
 // ═══════════════════════════════════════════════
