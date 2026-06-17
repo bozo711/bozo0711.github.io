@@ -277,6 +277,7 @@ strong{color:#fff}
     <button class="tab" data-tab="scribe" onclick="switchTab('scribe')">SCRIBE</button>
     <button class="tab" data-tab="hunter" onclick="switchTab('hunter')">HUNTER</button>
     <button class="tab" data-tab="ledger" onclick="switchTab('ledger')">LEDGER</button>
+    <button class="tab" data-tab="auto" onclick="switchTab('auto')">AUTO</button>
     <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
   </div>
 
@@ -410,6 +411,19 @@ strong{color:#fff}
             oninput="autoH(this)" onkeydown="handleKey(event,'ledger')"></textarea>
         </div>
         <button class="send-btn" onclick="send('ledger')">▶</button>
+      </div>
+    </div>
+
+    <!-- AUTO -->
+    <div class="panel" id="p-auto">
+      <div class="ov-content">
+        <div class="ov-desc">
+          <strong>AUTO — Daily Operations</strong><br><br>
+          JARVIS runs all five agents every day automatically. Tap <strong>RUN TODAY'S OPS</strong> and each agent executes its job in sequence — strategy, content, outreach, finance, competitor intel — and hands you a complete daily package ready to act on.
+        </div>
+        <button class="run-btn" id="auto-btn" onclick="runAuto()">▶ RUN TODAY'S OPS</button>
+        <div class="ov-log" id="auto-log">Tap above to run your daily autonomous operations…</div>
+        <div class="ov-out" id="auto-out"></div>
       </div>
     </div>
 
@@ -894,6 +908,89 @@ async function runAgent(agent, prompt) {
 // ═══════════════════════════════════════════════
 // OVERSEER
 // ═══════════════════════════════════════════════
+async function runAuto() {
+  if (busy) return;
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add your API key in ⚙ first'); openCfg(); return; }
+
+  const niche = getNiche();
+  const btn = document.getElementById('auto-btn');
+  const log = document.getElementById('auto-log');
+  const out = document.getElementById('auto-out');
+  const today = new Date().toLocaleDateString('en-US',{weekday:'long',month:'short',day:'numeric'});
+
+  btn.disabled = true;
+  out.innerHTML = '';
+  busy = true;
+
+  const steps = [
+    {
+      agent:'atlas',
+      label:'ATLAS — DAILY STRATEGY',
+      prompt:`Today is ${today}. Based on my digital product business (niche: ${niche}, income goal: $${(cfg.goal||0).toLocaleString()}/mo, current: $${(cfg.income||0).toLocaleString()}/mo), give me today's 3 highest-priority actions to move the business forward. For each: what to do, why it matters today, and how long it should take. Be specific — no generic advice.`
+    },
+    {
+      agent:'scribe',
+      label:'SCRIBE — TODAY\'S CONTENT',
+      prompt:`Today is ${today}. Based on the strategy above and my niche (${niche}), write 3 pieces of content ready to post right now:\n1. A short-form social post (Instagram/X) — hook + value + CTA\n2. A longer educational post or thread opener\n3. A story/behind-the-scenes post\nAll copy-paste ready. No placeholders.`
+    },
+    {
+      agent:'hunter',
+      label:'HUNTER — TODAY\'S OUTREACH',
+      prompt:`Today is ${today}. Based on the strategy above and my niche (${niche}), write 3 outreach messages ready to send right now:\n1. A cold DM to a potential buyer (Instagram/X)\n2. A follow-up message for someone who showed interest\n3. A collaboration pitch to someone in my niche\nAll copy-paste ready with specific targeting instructions.`
+    },
+    {
+      agent:'ledger',
+      label:'LEDGER — DAILY NUMBERS',
+      prompt:`Today is ${today}. My income goal is $${(cfg.goal||0).toLocaleString()}/month. Current income: $${(cfg.income||0).toLocaleString()}/month. Niche: ${niche}.\nGive me:\n1. Exactly how many Gumroad sales I need today to stay on pace\n2. My current trajectory (on track / behind / ahead)\n3. One specific revenue action for today\n4. Weekly milestone I should hit by Sunday`
+    },
+    {
+      agent:'atlas',
+      label:'INTEL — COMPETITOR MOVES',
+      prompt:`Today is ${today}. I'm in the "${niche}" digital product niche selling on Gumroad.\nGive me:\n1. What competitors in this niche are likely doing right now to get sales\n2. One gap or opportunity in this niche I can exploit today\n3. A trending angle or hook in this niche I should use in my content this week`
+    },
+  ];
+
+  const results = {};
+
+  for (const step of steps) {
+    log.textContent = `Running ${step.label}…`;
+    sfx('send');
+
+    const contextPrefix = Object.entries(results).slice(-2)
+      .map(([k,v])=>`[${k.toUpperCase()} OUTPUT]\n${v.substring(0,600)}…`).join('\n\n');
+    const prompt = contextPrefix ? `${contextPrefix}\n\n---\n${step.prompt}` : step.prompt;
+
+    const sec = document.createElement('div');
+    sec.className = 'out-sec';
+    sec.innerHTML = `<div class="out-sec-hdr">
+      <span>${step.label}</span>
+      <button class="copy-btn" onclick="cpTxt(this.closest('.out-sec').querySelector('.out-sec-body').textContent)">COPY</button>
+    </div><div class="out-sec-body" id="ao-${step.label.replace(/\W+/g,'-')}"><span class="cur"></span></div>`;
+    out.appendChild(sec);
+    sec.scrollIntoView({block:'end'});
+
+    const body = sec.querySelector('.out-sec-body');
+    try {
+      const full = await callAPI(step.agent, [{role:'user',content:prompt}], t => {
+        body.innerHTML = fmt(t)+'<span class="cur"></span>';
+        sec.scrollIntoView({block:'end'});
+      });
+      body.innerHTML = fmt(full);
+      results[step.label] = full;
+      sfx('recv');
+    } catch(e) {
+      body.textContent = `Error: ${e.message}`;
+      log.textContent = `Failed at ${step.label}: ${e.message}`;
+      busy = false; btn.disabled = false; return;
+    }
+  }
+
+  log.textContent = `✓ ${today} ops complete — strategy set, content ready, outreach written, numbers tracked.`;
+  toast('Daily ops done!');
+  busy = false; btn.disabled = false;
+}
+
 async function runOverseer() {
   if (busy) return;
   const niche = getNiche();
