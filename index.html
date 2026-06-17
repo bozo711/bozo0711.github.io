@@ -484,6 +484,114 @@ textarea.inp::placeholder{color:var(--text-d)}
 .empire-assess-btn:disabled{opacity:.4;cursor:default;box-shadow:none}
 .empire-assess-out{background:rgba(0,0,0,.5);border:1px solid rgba(138,104,0,.2);border-radius:var(--r);padding:13px;font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap;max-height:300px;overflow-y:auto}
 
+/* ── BRAIN ── */
+.brain-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.brain-add-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:2px solid var(--red)}
+.brain-add-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:9px}
+.brain-fields{display:flex;flex-direction:column;gap:7px}
+.brain-cat-sel,.brain-fact-inp{width:100%;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;-webkit-appearance:none}
+.brain-fact-inp{resize:none;min-height:64px}
+.brain-fact-inp:focus,.brain-cat-sel:focus{border-color:var(--red)}
+.brain-add-btn{width:100%;padding:10px;background:linear-gradient(135deg,var(--red),#4a0018);border:none;border-radius:7px;color:#fff;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer}
+.brain-filter-row{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.brain-filter-row::-webkit-scrollbar{display:none}
+.brain-filter-btn{flex-shrink:0;padding:5px 12px;background:var(--red-d);border:1px solid var(--red-b);border-radius:12px;color:var(--text-d);font-family:inherit;font-size:9px;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.brain-filter-btn.on{color:var(--red);border-color:var(--red);background:rgba(100,0,0,.2)}
+.brain-list{display:flex;flex-direction:column;gap:8px}
+.brain-fact{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:11px 13px;border-left:3px solid var(--red)}
+.brain-fact-hdr{display:flex;align-items:center;gap:7px;margin-bottom:6px}
+.brain-fact-cat{font-size:8px;letter-spacing:1.5px;padding:2px 8px;border-radius:8px;border:1px solid;text-transform:uppercase}
+.brain-fact-date{font-size:8px;color:var(--text-d);margin-left:auto}
+.brain-fact-del{background:none;border:none;color:var(--text-d);font-size:12px;cursor:pointer;padding:0 2px}
+.brain-fact-text{font-size:12px;color:var(--text);line-height:1.6}
+.brain-empty{text-align:center;color:var(--text-d);font-size:11px;padding:28px 0;letter-spacing:2px;text-transform:uppercase}
+
+/* ── TASKS ── */
+.tasks-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.task-add-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:2px solid var(--red)}
+.task-add-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:9px}
+.task-add-row{display:flex;flex-direction:column;gap:7px}
+.task-inp{width:100%;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:13px;padding:9px 11px;outline:none;-webkit-appearance:none}
+.task-inp:focus{border-color:var(--red)}
+.task-inp-row{display:flex;gap:7px}
+.task-priority-sel,.task-date-inp{flex:1;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;-webkit-appearance:none;min-width:0}
+.task-add-btn{padding:10px 16px;background:linear-gradient(135deg,var(--red),#4a0018);border:none;border-radius:7px;color:#fff;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.task-filter-row{display:flex;gap:6px}
+.task-filter-btn{padding:5px 14px;background:var(--red-d);border:1px solid var(--red-b);border-radius:12px;color:var(--text-d);font-family:inherit;font-size:9px;letter-spacing:1.5px;cursor:pointer;white-space:nowrap;transition:all .15s}
+.task-filter-btn.on{color:var(--red);border-color:var(--red);background:rgba(100,0,0,.2)}
+.tasks-list{display:flex;flex-direction:column;gap:7px}
+.task-item{display:flex;align-items:flex-start;gap:9px;padding:10px 12px;background:var(--panel);border:1px solid var(--red-b);border-radius:9px;transition:opacity .2s}
+.task-item.done{opacity:.4}
+.task-check{width:20px;height:20px;border-radius:4px;border:1px solid var(--red-b);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;cursor:pointer;transition:all .15s;margin-top:1px}
+.task-check.done{background:var(--red);border-color:var(--red)}
+.task-body{flex:1;min-width:0}
+.task-text{font-size:13px;color:var(--text);line-height:1.45;margin-bottom:5px;word-break:break-word}
+.task-item.done .task-text{text-decoration:line-through}
+.task-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.task-priority-badge{font-size:7px;letter-spacing:1.5px;padding:2px 7px;border-radius:8px;border:1px solid;text-transform:uppercase}
+.task-due{font-size:9px;color:var(--text-d);letter-spacing:.5px}
+.task-due.overdue{color:var(--red)}
+.task-del{background:none;border:none;color:var(--text-d);font-size:12px;cursor:pointer;padding:0 2px;flex-shrink:0;margin-top:2px}
+.tasks-empty{text-align:center;color:var(--text-d);font-size:11px;padding:28px 0;letter-spacing:2px;text-transform:uppercase}
+
+/* ── ANALYTICS ── */
+.analytics-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.an-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.an-stat{background:var(--panel);border:1px solid var(--red-b);border-radius:8px;padding:12px;text-align:center}
+.an-stat-v{font-size:20px;font-weight:bold;color:var(--gold);text-shadow:0 0 8px rgba(138,104,0,.3)}
+.an-stat-l{font-size:7px;letter-spacing:2px;color:var(--text-d);text-transform:uppercase;margin-top:2px}
+.an-section{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:12px;border-left:2px solid var(--red)}
+.an-section-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:10px}
+.an-prod-list{display:flex;flex-direction:column;gap:7px}
+.an-prod-row{display:flex;align-items:center;gap:8px}
+.an-prod-name{font-size:11px;color:var(--text);width:85px;flex-shrink:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.an-prod-bar-wrap{flex:1;background:rgba(100,0,0,.1);border-radius:4px;height:8px;overflow:hidden;border:1px solid rgba(100,0,0,.15)}
+.an-prod-bar{height:100%;background:linear-gradient(90deg,var(--red),rgba(120,0,40,.6));border-radius:4px;min-width:3px;transition:width .4s ease}
+.an-prod-stats{display:flex;gap:6px;flex-shrink:0;align-items:center}
+.an-prod-rev{font-size:11px;color:var(--gold);font-weight:bold;min-width:36px;text-align:right}
+.an-prod-count{font-size:9px;color:var(--text-d)}
+.an-day-chart{display:flex;align-items:flex-end;gap:5px;height:68px}
+.an-day-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.an-day-bar{width:100%;border-radius:3px 3px 0 0;background:var(--red-d);border:1px solid var(--red-b);min-height:4px;transition:height .4s ease}
+.an-day-bar.best{background:linear-gradient(to top,var(--red),rgba(120,0,40,.6));border-color:var(--red);box-shadow:0 0 6px rgba(100,0,30,.4)}
+.an-day-lbl{font-size:8px;color:var(--text-d);letter-spacing:.5px}
+.an-day-lbl.best{color:var(--red)}
+.an-proj-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:12px;border-left:2px solid var(--gold)}
+.an-proj-title{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:10px;opacity:.8}
+.an-proj-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid rgba(100,0,0,.08);font-size:12px;color:var(--text-d)}
+.an-proj-row:last-child{border-bottom:none}
+
+/* ── LAUNCH PAD ── */
+.launch-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.launch-add-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:2px solid var(--red)}
+.launch-add-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:9px}
+.launch-fields{display:flex;flex-direction:column;gap:7px}
+.launch-inp{width:100%;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;-webkit-appearance:none}
+.launch-inp:focus{border-color:var(--red)}
+.launch-row{display:flex;gap:7px}
+.launch-sel,.launch-date-inp{flex:1;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;-webkit-appearance:none;min-width:0}
+.launch-add-btn{width:100%;padding:11px;background:linear-gradient(135deg,var(--red),#4a0018);border:none;border-radius:7px;color:#fff;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer}
+.launches-list{display:flex;flex-direction:column;gap:10px}
+.launch-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);overflow:hidden}
+.launch-card-hdr{display:flex;align-items:flex-start;justify-content:space-between;padding:12px 13px;background:linear-gradient(90deg,rgba(100,0,0,.2),transparent)}
+.launch-card-name{font-size:13px;font-weight:bold;color:var(--text)}
+.launch-card-platform{font-size:9px;color:var(--text-d);letter-spacing:1px;margin-top:2px}
+.launch-countdown{font-size:20px;font-weight:bold;color:var(--gold);text-shadow:0 0 10px rgba(138,104,0,.5);letter-spacing:2px;white-space:nowrap;text-align:right}
+.launch-countdown.urgent{color:var(--red);text-shadow:0 0 10px var(--red);animation:tp 2s infinite}
+.launch-countdown.live{color:#88bb44;text-shadow:0 0 10px rgba(136,187,68,.5);animation:none}
+.launch-progress{padding:0 13px 8px}
+.launch-checklist{max-height:200px;overflow-y:auto;padding:4px 13px 8px}
+.launch-check-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid rgba(100,0,0,.07)}
+.launch-check-item:last-child{border-bottom:none}
+.launch-check-item.done .launch-check-text{opacity:.4;text-decoration:line-through}
+.launch-check-box{width:16px;height:16px;border-radius:3px;border:1px solid var(--red-b);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;cursor:pointer;margin-top:1px;transition:all .15s}
+.launch-check-box.done{background:var(--red);border-color:var(--red)}
+.launch-check-text{font-size:11px;color:var(--text);line-height:1.5}
+.launch-plan-btn{width:100%;padding:10px;background:linear-gradient(135deg,rgba(120,0,0,.3),rgba(184,134,11,.1));border:1px solid var(--red);border-radius:8px;color:var(--red);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer;transition:opacity .15s}
+.launch-plan-btn:disabled{opacity:.4;cursor:default}
+.launch-card-actions{display:flex;gap:7px;padding:7px 13px 10px;border-top:1px solid rgba(100,0,0,.1)}
+.launch-del-btn{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:4px 9px;cursor:pointer;margin-left:auto}
+
 /* ── UTILS ── */
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -618,6 +726,10 @@ strong{color:#e8d4b0}
     <button class="tab" data-tab="trends" onclick="switchTab('trends')">TRENDS</button>
     <button class="tab" data-tab="proof" onclick="switchTab('proof')">PROOF</button>
     <button class="tab" data-tab="empire" onclick="switchTab('empire')">EMPIRE</button>
+    <button class="tab" data-tab="brain" onclick="switchTab('brain')">BRAIN</button>
+    <button class="tab" data-tab="tasks" onclick="switchTab('tasks')">TASKS</button>
+    <button class="tab" data-tab="analytics" onclick="switchTab('analytics')">ANALYTICS</button>
+    <button class="tab" data-tab="launch" onclick="switchTab('launch')">LAUNCH</button>
     <button class="tab" data-tab="ideas" onclick="switchTab('ideas')">IDEAS</button>
     <button class="tab" data-tab="auto" onclick="switchTab('auto')">AUTO</button>
     <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
@@ -1057,6 +1169,117 @@ strong{color:#e8d4b0}
       </div>
     </div>
 
+    <!-- BRAIN -->
+    <div class="panel" id="p-brain">
+      <div class="brain-content">
+        <div class="brain-add-card">
+          <div class="brain-add-title">Add to JARVIS Brain — <span style="font-size:8px;color:var(--text-d);letter-spacing:1px;font-weight:normal"><span id="brain-count">0</span> facts</span></div>
+          <div class="brain-fields">
+            <select class="brain-cat-sel" id="brain-cat-sel">
+              <option value="Business">Business</option>
+              <option value="Products">Products</option>
+              <option value="Strategy">Strategy</option>
+              <option value="Personal">Personal</option>
+              <option value="Lessons">Lessons</option>
+            </select>
+            <textarea class="brain-fact-inp" id="brain-fact-inp" placeholder="Tell JARVIS something it should always know…&#10;e.g. My Gumroad URL is gumroad.com/x&#10;e.g. My best seller made $340 in week 1&#10;e.g. I tried Facebook ads — zero conversions" oninput="autoH(this)"></textarea>
+            <button class="brain-add-btn" onclick="addBrainFact()">+ SAVE TO BRAIN</button>
+          </div>
+          <div style="margin-top:9px;font-size:9px;color:var(--text-d);letter-spacing:1px;line-height:1.6">JARVIS automatically injects all brain facts into every conversation — agents will always know this context.</div>
+        </div>
+        <div class="brain-filter-row">
+          <button class="brain-filter-btn on" data-filter="all" onclick="setBrainFilter('all')">ALL</button>
+          <button class="brain-filter-btn" data-filter="Business" onclick="setBrainFilter('Business')">BUSINESS</button>
+          <button class="brain-filter-btn" data-filter="Products" onclick="setBrainFilter('Products')">PRODUCTS</button>
+          <button class="brain-filter-btn" data-filter="Strategy" onclick="setBrainFilter('Strategy')">STRATEGY</button>
+          <button class="brain-filter-btn" data-filter="Personal" onclick="setBrainFilter('Personal')">PERSONAL</button>
+          <button class="brain-filter-btn" data-filter="Lessons" onclick="setBrainFilter('Lessons')">LESSONS</button>
+        </div>
+        <div class="brain-list" id="brain-list">
+          <div class="brain-empty">Brain is empty.<br>Add facts above — JARVIS will use them in every conversation.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TASKS -->
+    <div class="panel" id="p-tasks">
+      <div class="tasks-content">
+        <div class="task-add-card">
+          <div class="task-add-title">Add Task</div>
+          <div class="task-add-row">
+            <input class="task-inp" id="task2-inp" placeholder="What needs to get done…" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();addTask2();}">
+            <div class="task-inp-row">
+              <select class="task-priority-sel" id="task2-priority">
+                <option value="critical">🔴 Critical</option>
+                <option value="high">🟡 High</option>
+                <option value="normal" selected>🟢 Normal</option>
+              </select>
+              <input class="task-date-inp" id="task2-due" type="date">
+              <button class="task-add-btn" onclick="addTask2()">ADD</button>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <div class="task-filter-row">
+            <button class="task-filter-btn on" data-filter="pending" onclick="setTaskFilter2('pending')">PENDING</button>
+            <button class="task-filter-btn" data-filter="all" onclick="setTaskFilter2('all')">ALL</button>
+            <button class="task-filter-btn" data-filter="done" onclick="setTaskFilter2('done')">DONE</button>
+          </div>
+          <div id="tasks2-stats" style="font-size:10px;color:var(--text-d);letter-spacing:1px;white-space:nowrap"></div>
+        </div>
+        <div class="tasks-list" id="tasks2-list">
+          <div class="tasks-empty">No tasks yet.<br>Add your first one above.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANALYTICS -->
+    <div class="panel" id="p-analytics">
+      <div class="analytics-content">
+        <div class="an-stats" id="an-stats"></div>
+        <div class="an-section">
+          <div class="an-section-title">Revenue by Product</div>
+          <div class="an-prod-list" id="an-products"></div>
+        </div>
+        <div class="an-section">
+          <div class="an-section-title">Best Days to Sell</div>
+          <div class="an-day-chart" id="an-days"></div>
+        </div>
+        <div class="an-proj-card">
+          <div class="an-proj-title">30-Day Projection vs Goal</div>
+          <div id="an-projection"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LAUNCH PAD -->
+    <div class="panel" id="p-launch">
+      <div class="launch-content">
+        <div class="launch-add-card">
+          <div class="launch-add-title">Schedule a Product Launch</div>
+          <div class="launch-fields">
+            <input class="launch-inp" id="launch-product-inp" placeholder="Product name…">
+            <div class="launch-row">
+              <select class="launch-sel" id="launch-platform-sel">
+                <option value="Gumroad">Gumroad</option>
+                <option value="Etsy">Etsy</option>
+                <option value="Payhip">Payhip</option>
+                <option value="Ko-fi">Ko-fi</option>
+                <option value="Amazon KDP">Amazon KDP</option>
+                <option value="Shopify">Shopify</option>
+              </select>
+              <input class="launch-date-inp" id="launch-date-inp" type="date">
+            </div>
+            <button class="launch-add-btn" onclick="addLaunch()">🚀 SCHEDULE LAUNCH</button>
+          </div>
+        </div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:2px 0">Active Launches</div>
+        <div class="launches-list" id="launches-list">
+          <div class="tt-empty">No launches scheduled.<br>Add a product above to start your countdown.</div>
+        </div>
+      </div>
+    </div>
+
     <!-- IDEA BANK -->
     <div class="panel" id="p-ideas">
       <div class="ideas-content">
@@ -1168,6 +1391,9 @@ function init() {
   loadScans();
   loadTrends();
   loadProof();
+  loadBrain();
+  loadTasks2();
+  loadLaunchPad();
   startClock();
   updateStats();
   initSpeech();
@@ -1335,6 +1561,8 @@ function switchTab(t) {
   if (t === 'bundle') renderBundlePicker();
   if (t === 'expand') renderPlatformGrid();
   if (t === 'empire') renderEmpire();
+  if (t === 'analytics') renderAnalytics();
+  if (t === 'launch') renderLaunches();
 }
 
 // ═══════════════════════════════════════════════
@@ -1385,13 +1613,15 @@ function fmt(t) {
 function sysPrompt(agent) {
   const now = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   const niche = getNiche();
+  const brainFacts = (brain||[]).slice(0,25).map(b=>`[${b.category}] ${b.fact}`).join('\n');
+  const activeTasks = (tasks2||[]).filter(t=>!t.done).slice(0,8).map(t=>`[${t.priority.toUpperCase()}] ${t.text}`).join('\n');
   const base = `Date: ${now}
 User: ${cfg.name}
 Current Niche: ${niche}
 Income Goal: $${(cfg.goal||0).toLocaleString()}/month
 Current Income: $${(cfg.income||0).toLocaleString()}/month
 Products Launched: ${(cfg.done||[]).length}
-Business Context: ${cfg.ctx||'Building a digital product business selling on Gumroad'}`;
+Business Context: ${cfg.ctx||'Building a digital product business selling on Gumroad'}${brainFacts?'\n\nKnowledge Base:\n'+brainFacts:''}${activeTasks?'\n\nPending Tasks:\n'+activeTasks:''}`;
 
   const p = {
     jarvis:`You are JARVIS, a sharp AI operations commander. You help build real digital product businesses that make real money on Gumroad. You are direct, specific, and never give generic advice. When the user asks for ideas, give specific product titles and price points. When they ask what to do next, give them the single clearest next action. Address the user as "${cfg.name}".
@@ -2761,6 +2991,358 @@ async function runEmpireAssess() {
     sfx('recv');
   } catch(e) { outEl.textContent = 'Error: '+e.message; }
   btn.disabled = false; btn.textContent = '👑 ASSESS MY EMPIRE';
+}
+
+// ═══════════════════════════════════════════════
+// BRAIN — PERSISTENT MEMORY
+// ═══════════════════════════════════════════════
+let brain = [];
+let brainFilter = 'all';
+
+const BRAIN_CAT_STYLE = {
+  Business:  {color:'var(--red)',   border:'var(--red)',            bg:'var(--red-d)'},
+  Products:  {color:'var(--gold)',  border:'rgba(138,104,0,.5)',    bg:'var(--gold-d)'},
+  Strategy:  {color:'#9966dd',      border:'rgba(153,102,221,.4)',  bg:'rgba(153,102,221,.08)'},
+  Personal:  {color:'#44bb88',      border:'rgba(68,187,136,.4)',   bg:'rgba(68,187,136,.07)'},
+  Lessons:   {color:'#dd8833',      border:'rgba(221,136,51,.4)',   bg:'rgba(221,136,51,.08)'},
+};
+
+function loadBrain() {
+  try { brain = JSON.parse(localStorage.getItem('jv-brain')||'[]'); } catch(e){ brain=[]; }
+  renderBrain();
+}
+
+function saveBrainData() { localStorage.setItem('jv-brain', JSON.stringify(brain)); }
+
+function addBrainFact() {
+  const cat = document.getElementById('brain-cat-sel').value;
+  const text = document.getElementById('brain-fact-inp').value.trim();
+  if (!text) { toast('Enter a fact first'); return; }
+  brain.unshift({ id: Date.now(), category: cat, fact: text, date: Date.now() });
+  saveBrainData();
+  const el = document.getElementById('brain-fact-inp');
+  el.value = ''; el.style.height = 'auto';
+  renderBrain(); sfx('recv'); toast('Saved to JARVIS brain');
+}
+
+function delBrainFact(id) {
+  brain = brain.filter(b=>b.id!==id);
+  saveBrainData(); renderBrain();
+}
+
+function setBrainFilter(filter) {
+  brainFilter = filter;
+  document.querySelectorAll('.brain-filter-btn').forEach(b=>b.classList.toggle('on', b.dataset.filter===filter));
+  renderBrain();
+}
+
+function renderBrain() {
+  const list = document.getElementById('brain-list');
+  const cnt = document.getElementById('brain-count');
+  if (!list) return;
+  if (cnt) cnt.textContent = brain.length;
+  const filtered = brainFilter==='all' ? brain : brain.filter(b=>b.category===brainFilter);
+  if (!filtered.length) {
+    list.innerHTML = `<div class="brain-empty">${brainFilter==='all'?'Brain is empty.<br>Add facts above.':'No facts in this category.'}</div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(b => {
+    const s = BRAIN_CAT_STYLE[b.category]||BRAIN_CAT_STYLE.Business;
+    return `<div class="brain-fact" style="border-left-color:${s.color}">
+      <div class="brain-fact-hdr">
+        <span class="brain-fact-cat" style="color:${s.color};border-color:${s.border};background:${s.bg}">${b.category}</span>
+        <span class="brain-fact-date">${new Date(b.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+        <button class="brain-fact-del" onclick="delBrainFact(${b.id})">✕</button>
+      </div>
+      <div class="brain-fact-text">${fmt(b.fact)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// TASKS — MISSION CONTROL
+// ═══════════════════════════════════════════════
+let tasks2 = [];
+let taskFilter2 = 'pending';
+
+const PRIORITY_STYLE = {
+  critical: {color:'var(--red)',  border:'var(--red-b)',         bg:'var(--red-d)'},
+  high:     {color:'var(--gold)', border:'rgba(138,104,0,.4)',   bg:'var(--gold-d)'},
+  normal:   {color:'var(--text-d)',border:'rgba(100,100,100,.2)',bg:'rgba(100,100,100,.06)'},
+};
+const PRIORITY_ORDER = {critical:0, high:1, normal:2};
+
+function loadTasks2() {
+  try { tasks2 = JSON.parse(localStorage.getItem('jv-tasks2')||'[]'); } catch(e){ tasks2=[]; }
+  renderTasks2();
+}
+
+function saveTasks2Data() { localStorage.setItem('jv-tasks2', JSON.stringify(tasks2)); }
+
+function addTask2() {
+  const text = document.getElementById('task2-inp').value.trim();
+  const priority = document.getElementById('task2-priority').value;
+  const due = document.getElementById('task2-due').value;
+  if (!text) { toast('Enter a task'); return; }
+  tasks2.unshift({ id: Date.now(), text, priority, due: due||null, done: false, date: Date.now() });
+  saveTasks2Data();
+  document.getElementById('task2-inp').value = '';
+  document.getElementById('task2-due').value = '';
+  renderTasks2(); sfx('recv'); toast('Task added');
+}
+
+function toggleTask2(id) {
+  const t = tasks2.find(t=>t.id===id);
+  if (t) { t.done = !t.done; saveTasks2Data(); renderTasks2(); if(!t.done) sfx('send'); else sfx('recv'); }
+}
+
+function delTask2(id) {
+  tasks2 = tasks2.filter(t=>t.id!==id);
+  saveTasks2Data(); renderTasks2();
+}
+
+function setTaskFilter2(filter) {
+  taskFilter2 = filter;
+  document.querySelectorAll('.task-filter-btn').forEach(b=>b.classList.toggle('on', b.dataset.filter===filter));
+  renderTasks2();
+}
+
+function renderTasks2() {
+  const list = document.getElementById('tasks2-list');
+  if (!list) return;
+  const pending = tasks2.filter(t=>!t.done).length;
+  const done = tasks2.filter(t=>t.done).length;
+  const statsEl = document.getElementById('tasks2-stats');
+  if (statsEl) statsEl.innerHTML =
+    `<span style="color:var(--red)">${pending} pending</span>&nbsp;·&nbsp;<span style="color:#88bb44">${done} done</span>`;
+
+  let filtered = tasks2;
+  if (taskFilter2==='pending') filtered = tasks2.filter(t=>!t.done);
+  if (taskFilter2==='done')    filtered = tasks2.filter(t=>t.done);
+  filtered = [...filtered].sort((a,b)=>{
+    if (a.done !== b.done) return a.done?1:-1;
+    return (PRIORITY_ORDER[a.priority]||2)-(PRIORITY_ORDER[b.priority]||2);
+  });
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="tasks-empty">${taskFilter2==='done'?'No completed tasks.':taskFilter2==='pending'?'No pending tasks — you\'re clear.':'No tasks yet.'}</div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(t => {
+    const ps = PRIORITY_STYLE[t.priority]||PRIORITY_STYLE.normal;
+    const overdue = t.due && !t.done && new Date(t.due+'T00:00') < new Date();
+    return `<div class="task-item${t.done?' done':''}">
+      <div class="task-check${t.done?' done':''}" onclick="toggleTask2(${t.id})">${t.done?'✓':''}</div>
+      <div class="task-body">
+        <div class="task-text">${fmt(t.text)}</div>
+        <div class="task-meta">
+          <span class="task-priority-badge" style="color:${ps.color};border-color:${ps.border};background:${ps.bg}">${t.priority}</span>
+          ${t.due?`<span class="task-due${overdue?' overdue':''}">${overdue?'OVERDUE · ':''}${new Date(t.due+'T00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>`:''}
+        </div>
+      </div>
+      <button class="task-del" onclick="delTask2(${t.id})">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════
+// ANALYTICS — REVENUE INTELLIGENCE
+// ═══════════════════════════════════════════════
+function renderAnalytics() {
+  const statsEl = document.getElementById('an-stats');
+  if (!statsEl) return;
+
+  const totalRev = (sales||[]).reduce((a,s)=>a+s.amt,0);
+  const avgSale  = sales.length ? totalRev/sales.length : 0;
+  const thirtyAgo = Date.now() - 30*86400000;
+  const rev30 = (sales||[]).filter(s=>s.date>=thirtyAgo).reduce((a,s)=>a+s.amt,0);
+
+  const byProduct = {};
+  (sales||[]).forEach(s=>{
+    const k = s.prod||'Unknown';
+    if (!byProduct[k]) byProduct[k] = {count:0,revenue:0};
+    byProduct[k].count++; byProduct[k].revenue+=s.amt;
+  });
+  const sortedProds = Object.entries(byProduct).sort((a,b)=>b[1].revenue-a[1].revenue);
+
+  const byDay = [0,0,0,0,0,0,0];
+  (sales||[]).forEach(s=>{ byDay[new Date(s.date).getDay()]+=s.amt; });
+  const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const bestDayIdx = byDay.indexOf(Math.max(...byDay));
+
+  statsEl.innerHTML = [
+    {v:'$'+avgSale.toFixed(2), l:'Avg Sale'},
+    {v:'$'+rev30.toFixed(0),   l:'Last 30 Days'},
+    {v:sales.length,           l:'Total Sales'},
+    {v:sales.length>0?dayNames[bestDayIdx]:'—', l:'Best Day'},
+  ].map(s=>`<div class="an-stat"><div class="an-stat-v">${s.v}</div><div class="an-stat-l">${s.l}</div></div>`).join('');
+
+  const prodEl = document.getElementById('an-products');
+  if (prodEl) {
+    if (!sortedProds.length) {
+      prodEl.innerHTML = '<div class="tt-empty">No sales yet.<br>Log your first sale in SALES.</div>';
+    } else {
+      const maxR = sortedProds[0][1].revenue||1;
+      prodEl.innerHTML = sortedProds.slice(0,8).map(([name,d])=>`
+        <div class="an-prod-row">
+          <div class="an-prod-name" title="${name}">${name}</div>
+          <div class="an-prod-bar-wrap"><div class="an-prod-bar" style="width:${Math.max(4,(d.revenue/maxR)*100)}%"></div></div>
+          <div class="an-prod-stats">
+            <span class="an-prod-rev">$${d.revenue.toFixed(0)}</span>
+            <span class="an-prod-count">${d.count}×</span>
+          </div>
+        </div>`).join('');
+    }
+  }
+
+  const dayEl = document.getElementById('an-days');
+  if (dayEl) {
+    const maxD = Math.max(...byDay,1);
+    dayEl.innerHTML = byDay.map((amt,i)=>`
+      <div class="an-day-bar-wrap">
+        <div class="an-day-bar${i===bestDayIdx?' best':''}" style="height:${Math.max(4,Math.round((amt/maxD)*62))}px" title="$${amt.toFixed(2)}"></div>
+        <span class="an-day-lbl${i===bestDayIdx?' best':''}">${dayNames[i]}</span>
+      </div>`).join('');
+  }
+
+  const projEl = document.getElementById('an-projection');
+  if (projEl) {
+    const goal = cfg.goal||0;
+    const gap  = Math.max(0, goal-rev30);
+    const onTrack = rev30>=goal;
+    const salesNeeded = avgSale>0 ? Math.ceil(gap/avgSale) : 0;
+    projEl.innerHTML = [
+      ['30-day revenue', `<span style="color:var(--gold)">$${rev30.toFixed(2)}</span>`],
+      ['Monthly goal',   `<span style="color:var(--gold)">$${(goal||0).toLocaleString()}</span>`],
+      ['Gap to close',   `<span style="color:${onTrack?'#88bb44':'var(--red)'}">${onTrack?'ON TRACK ✓':'$'+gap.toFixed(2)}</span>`],
+      ...(!onTrack&&salesNeeded>0?[['Sales needed',`<span style="color:var(--gold)">${salesNeeded} @ avg $${avgSale.toFixed(0)}</span>`]]:[]),
+    ].map(([l,v])=>`<div class="an-proj-row"><span>${l}</span>${v}</div>`).join('');
+  }
+}
+
+// ═══════════════════════════════════════════════
+// LAUNCH PAD
+// ═══════════════════════════════════════════════
+let launches = [];
+
+function loadLaunchPad() {
+  try { launches = JSON.parse(localStorage.getItem('jv-launches')||'[]'); } catch(e){ launches=[]; }
+  renderLaunches();
+}
+
+function saveLaunchData() { localStorage.setItem('jv-launches', JSON.stringify(launches)); }
+
+function addLaunch() {
+  const name = document.getElementById('launch-product-inp').value.trim();
+  const date = document.getElementById('launch-date-inp').value;
+  const platform = document.getElementById('launch-platform-sel').value;
+  if (!name) { toast('Enter a product name'); return; }
+  if (!date) { toast('Set a launch date'); return; }
+  launches.unshift({ id:Date.now(), name, launchDate:new Date(date).getTime(), platform, checklist:[], plan:'', date:Date.now() });
+  saveLaunchData();
+  document.getElementById('launch-product-inp').value='';
+  document.getElementById('launch-date-inp').value='';
+  renderLaunches(); sfx('recv'); toast('Launch scheduled!');
+}
+
+function getLaunchCountdown(launchDate) {
+  const diff = launchDate - Date.now();
+  if (diff <= 0) return { text:'🟢 LIVE', cls:'live' };
+  const days = Math.floor(diff/86400000);
+  const hrs  = Math.floor((diff%86400000)/3600000);
+  if (days > 0) return { text:`${days}d ${hrs}h`, cls:days<=3?'urgent':'' };
+  const mins = Math.floor((diff%3600000)/60000);
+  return { text:`${hrs}h ${mins}m`, cls:'urgent' };
+}
+
+function toggleLaunchCheck(launchId, idx) {
+  const l = launches.find(l=>l.id===launchId);
+  if (!l) return;
+  l.checklist[idx].done = !l.checklist[idx].done;
+  saveLaunchData(); renderLaunches();
+}
+
+function delLaunch(id) {
+  launches = launches.filter(l=>l.id!==id);
+  saveLaunchData(); renderLaunches();
+}
+
+async function genLaunchPlan(id) {
+  const launch = launches.find(l=>l.id===id);
+  if (!launch) return;
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const daysUntil = Math.max(1, Math.ceil((launch.launchDate-Date.now())/86400000));
+  const niche = getNiche();
+  const btn = document.getElementById(`lp-btn-${id}`);
+  if (btn) { btn.disabled=true; btn.textContent='GENERATING…'; }
+  const prompt = `Create a ${daysUntil}-day pre-launch action plan for this digital product launch:
+Product: "${launch.name}"
+Platform: ${launch.platform}
+Launch date: ${new Date(launch.launchDate).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}
+Niche: ${niche}
+
+Write a numbered checklist of specific pre-launch actions. Format each item on its own line starting with a number and period (e.g. "1. Do X"). Cover: product finalization, listing setup, content/warm-up posts, email or social announcement, launch day actions. Be specific to ${niche} and ${launch.platform}. Around ${Math.min(20,daysUntil*2)} items total.`;
+  try {
+    const full = await callAPI('atlas', [{role:'user',content:prompt}], ()=>{});
+    launch.plan = full;
+    const items = full.split('\n').filter(l=>l.trim().match(/^\d+\./));
+    launch.checklist = (items.length>=3 ? items : full.split('\n').filter(l=>l.trim().length>15).slice(0,20))
+      .map(t=>({ text:t.replace(/^\d+\.\s*/,'').replace(/^[-•*]\s*/,'').trim(), done:false }))
+      .filter(t=>t.text.length>5);
+    saveLaunchData(); renderLaunches(); sfx('recv'); toast('Launch plan ready!');
+  } catch(e) { toast('Error: '+e.message); if(btn){btn.disabled=false;btn.textContent='▶ GENERATE PLAN';} return; }
+  if (btn) { btn.disabled=false; btn.textContent='▶ REGENERATE PLAN'; }
+}
+
+function renderLaunches() {
+  const list = document.getElementById('launches-list');
+  if (!list) return;
+  if (!launches.length) {
+    list.innerHTML = '<div class="tt-empty">No launches scheduled.<br>Add a product above to start your countdown.</div>';
+    return;
+  }
+  list.innerHTML = launches.map(l => {
+    const cd = getLaunchCountdown(l.launchDate);
+    const done = l.checklist.filter(c=>c.done).length;
+    const total = l.checklist.length;
+    const pct = total ? Math.round((done/total)*100) : 0;
+    const hasPlan = total > 0;
+    return `<div class="launch-card">
+      <div class="launch-card-hdr">
+        <div>
+          <div class="launch-card-name">${l.name}</div>
+          <div class="launch-card-platform">${l.platform} · ${new Date(l.launchDate).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+        </div>
+        <div class="launch-countdown ${cd.cls}">${cd.text}</div>
+      </div>
+      ${hasPlan?`
+        <div class="launch-progress">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px">
+            <span style="font-size:8px;color:var(--text-d);letter-spacing:1px">CHECKLIST</span>
+            <span style="font-size:9px;color:var(--gold)">${done}/${total} · ${pct}%</span>
+          </div>
+          <div style="background:rgba(100,0,0,.15);border-radius:10px;height:4px;overflow:hidden;border:1px solid var(--red-b)">
+            <div style="height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:10px;width:${pct}%;min-width:3px;transition:width .4s"></div>
+          </div>
+        </div>
+        <div class="launch-checklist">
+          ${l.checklist.slice(0,10).map((item,i)=>`
+            <div class="launch-check-item${item.done?' done':''}">
+              <div class="launch-check-box${item.done?' done':''}" onclick="toggleLaunchCheck(${l.id},${i})">${item.done?'✓':''}</div>
+              <span class="launch-check-text">${item.text}</span>
+            </div>`).join('')}
+          ${l.checklist.length>10?`<div style="font-size:9px;color:var(--text-d);padding:4px 0">+${l.checklist.length-10} more…</div>`:''}
+        </div>` : `
+        <div style="padding:8px 13px 4px">
+          <button class="launch-plan-btn" id="lp-btn-${l.id}" onclick="genLaunchPlan(${l.id})">▶ GENERATE LAUNCH PLAN</button>
+        </div>`}
+      <div class="launch-card-actions">
+        ${hasPlan?`<button class="launch-plan-btn" id="lp-btn-${l.id}" onclick="genLaunchPlan(${l.id})" style="flex:1;padding:6px">↺ REGEN</button>`:''}
+        <button class="launch-del-btn" onclick="delLaunch(${l.id})">DELETE</button>
+      </div>
+    </div>`;
+  }).join('');
 }
 
 // ═══════════════════════════════════════════════
