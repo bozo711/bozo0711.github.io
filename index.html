@@ -354,6 +354,136 @@ textarea.inp::placeholder{color:var(--text-d)}
 .em-kit-del{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:4px 9px;cursor:pointer;margin-left:auto}
 .em-empty{text-align:center;color:var(--text-d);font-size:11px;padding:28px 0;letter-spacing:2px;text-transform:uppercase}
 
+/* ── BUNDLE BUILDER ── */
+.bundle-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.bundle-select-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:12px;border-left:2px solid var(--red)}
+.bundle-select-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:9px}
+.bundle-product-pick{display:flex;flex-direction:column;gap:6px;margin-bottom:10px;max-height:150px;overflow-y:auto}
+.bundle-pick-item{display:flex;align-items:center;gap:9px;padding:7px 9px;background:var(--red-d);border:1px solid rgba(100,0,0,.2);border-radius:6px;cursor:pointer;transition:all .15s}
+.bundle-pick-item.sel{background:rgba(100,0,0,.3);border-color:var(--red)}
+.bundle-pick-check{width:16px;height:16px;border-radius:3px;border:1px solid var(--red-b);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;transition:all .15s}
+.bundle-pick-check.sel{background:var(--red);border-color:var(--red)}
+.bundle-pick-name{flex:1;font-size:12px;color:var(--text)}
+.bundle-pick-price{font-size:11px;color:var(--gold)}
+.bundle-fields{display:flex;gap:7px;margin-bottom:10px}
+.bundle-inp{flex:1;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;-webkit-appearance:none;min-width:0}
+.bundle-inp:focus{border-color:var(--red)}
+.bundle-inp-sm{flex:0 0 68px}
+.bundle-gen-btn{width:100%;padding:12px;background:linear-gradient(135deg,rgba(120,0,0,.3),rgba(184,134,11,.12));border:1px solid var(--red);border-radius:var(--r);color:var(--red);font-family:inherit;font-size:11px;font-weight:bold;letter-spacing:3px;cursor:pointer;transition:opacity .15s}
+.bundle-gen-btn:disabled{opacity:.4;cursor:default}
+.bundles-list{display:flex;flex-direction:column;gap:10px}
+.bundle-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);overflow:hidden}
+.bundle-card-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 13px;background:linear-gradient(90deg,rgba(100,0,0,.2),transparent)}
+.bundle-card-name{font-size:13px;font-weight:bold;color:var(--text)}
+.bundle-card-price{font-size:15px;color:var(--gold);font-weight:bold;text-shadow:0 0 8px rgba(138,104,0,.4)}
+.bundle-card-body{padding:9px 13px;font-size:11px;color:var(--text-d);line-height:1.6;white-space:pre-wrap;max-height:150px;overflow-y:auto}
+.bundle-card-actions{display:flex;gap:7px;padding:7px 13px 10px;border-top:1px solid rgba(100,0,0,.1)}
+.bundle-card-del{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:4px 9px;cursor:pointer;margin-left:auto}
+
+/* ── PLATFORM EXPANDER ── */
+.expand-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.platform-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.platform-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:11px;cursor:pointer;transition:all .15s}
+.platform-card.active{border-color:var(--red);background:rgba(100,0,0,.1)}
+.platform-card-icon{font-size:20px;margin-bottom:4px}
+.platform-card-name{font-size:11px;font-weight:bold;color:var(--text);letter-spacing:1px}
+.platform-card-desc{font-size:9px;color:var(--text-d);margin-top:2px;line-height:1.4}
+.platform-badge{font-size:8px;letter-spacing:1.5px;margin-top:6px;padding:2px 7px;border-radius:8px;border:1px solid;display:inline-block}
+.platform-badge.active{color:#88bb44;border-color:rgba(136,187,68,.4);background:rgba(136,187,68,.06)}
+.platform-badge.inactive{color:var(--text-d);border-color:rgba(100,0,0,.2);background:transparent}
+.expand-guide-area{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:2px solid var(--red)}
+.expand-guide-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.expand-guide-name{font-size:10px;font-weight:bold;color:var(--red);letter-spacing:2px;text-transform:uppercase}
+.expand-toggle-btn{padding:5px 12px;background:var(--red-d);border:1px solid var(--red-b);border-radius:5px;color:var(--red);font-family:inherit;font-size:9px;letter-spacing:1px;cursor:pointer}
+.expand-toggle-btn.active{background:rgba(136,187,68,.08);border-color:rgba(136,187,68,.4);color:#88bb44}
+.expand-guide-body{font-size:12px;color:var(--text);line-height:1.65;white-space:pre-wrap;max-height:240px;overflow-y:auto;min-height:30px}
+.expand-run-btn{margin-top:10px;width:100%;padding:11px;background:linear-gradient(135deg,rgba(120,0,0,.3),rgba(184,134,11,.12));border:1px solid var(--red);border-radius:8px;color:var(--red);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:3px;cursor:pointer;transition:opacity .15s}
+.expand-run-btn:disabled{opacity:.4;cursor:default}
+
+/* ── COMPETITOR SCANNER ── */
+.scan-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.scan-input-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:2px solid var(--red)}
+.scan-input-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:8px}
+.scan-row{display:flex;gap:8px}
+.scan-inp{flex:1;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:9px 11px;outline:none;-webkit-appearance:none}
+.scan-inp:focus{border-color:var(--red)}
+.scan-btn{padding:10px 14px;background:linear-gradient(135deg,var(--red),#4a0018);border:none;border-radius:7px;color:#fff;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer;white-space:nowrap;transition:opacity .15s}
+.scan-btn:disabled{opacity:.4;cursor:default}
+.scan-results{display:flex;flex-direction:column;gap:10px}
+.scan-result{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);overflow:hidden}
+.scan-result-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:linear-gradient(90deg,rgba(100,0,0,.2),transparent)}
+.scan-result-target{font-size:10px;font-weight:bold;color:var(--red);letter-spacing:2px;text-transform:uppercase}
+.scan-result-date{font-size:8px;color:var(--text-d)}
+.scan-result-body{padding:11px 13px;font-size:12px;color:var(--text);line-height:1.65;white-space:pre-wrap;max-height:200px;overflow-y:auto}
+.scan-result-actions{display:flex;gap:7px;padding:7px 13px 10px;border-top:1px solid rgba(100,0,0,.1)}
+.scan-result-del{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:4px 9px;cursor:pointer;margin-left:auto}
+
+/* ── NICHE TREND RADAR ── */
+.trend-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.trend-scan-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:14px;border-left:2px solid var(--red);text-align:center}
+.trend-scan-title{font-size:10px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:6px;font-family:'Cinzel',serif}
+.trend-scan-sub{font-size:10px;color:var(--text-d);margin-bottom:12px;line-height:1.5}
+.trend-scan-btn{width:100%;padding:14px;background:linear-gradient(135deg,rgba(120,0,0,.3),rgba(184,134,11,.12));border:1px solid var(--red);border-radius:var(--r);color:var(--red);font-family:inherit;font-size:12px;font-weight:bold;letter-spacing:4px;cursor:pointer;text-shadow:0 0 10px var(--red);transition:all .15s;box-shadow:0 0 16px rgba(100,0,0,.12)}
+.trend-scan-btn:disabled{opacity:.4;cursor:default;box-shadow:none}
+.trend-reports{display:flex;flex-direction:column;gap:10px}
+.trend-report{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);overflow:hidden}
+.trend-report-hdr{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;background:linear-gradient(90deg,rgba(100,0,0,.2),transparent)}
+.trend-report-niche{font-size:9px;letter-spacing:2px;color:var(--red);text-transform:uppercase}
+.trend-report-date{font-size:8px;color:var(--text-d)}
+.trend-report-body{padding:11px 13px;font-size:12px;color:var(--text);line-height:1.65;white-space:pre-wrap;max-height:220px;overflow-y:auto}
+.trend-report-actions{display:flex;gap:7px;padding:7px 13px 10px;border-top:1px solid rgba(100,0,0,.1)}
+.trend-report-del{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:4px 9px;cursor:pointer;margin-left:auto}
+
+/* ── TESTIMONIAL VAULT ── */
+.proof-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.proof-add-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:2px solid var(--red)}
+.proof-add-title{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:9px}
+.proof-fields{display:flex;flex-direction:column;gap:7px}
+.proof-inp{width:100%;background:rgba(100,0,0,.06);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;-webkit-appearance:none;resize:none}
+.proof-inp:focus{border-color:var(--red)}
+.proof-stars{display:flex;gap:4px;margin:2px 0}
+.proof-star{font-size:20px;cursor:pointer;opacity:.25;transition:opacity .15s;line-height:1;user-select:none;-webkit-user-select:none}
+.proof-star.on{opacity:1}
+.proof-add-btn{width:100%;padding:10px;background:linear-gradient(135deg,var(--red),#4a0018);border:none;border-radius:7px;color:#fff;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer}
+.proof-req-btn{width:100%;padding:10px;background:var(--red-d);border:1px solid var(--red-b);border-radius:7px;color:var(--red);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer;transition:opacity .15s}
+.proof-req-btn:disabled{opacity:.4;cursor:default}
+.testimonials-list{display:flex;flex-direction:column;gap:9px}
+.testimonial-card{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:13px;border-left:3px solid var(--gold)}
+.testimonial-text{font-size:13px;color:var(--text);line-height:1.65;font-style:italic;margin-bottom:8px}
+.testimonial-meta{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.testimonial-who{font-size:10px;color:var(--gold);letter-spacing:1px;font-weight:bold}
+.testimonial-product{font-size:9px;color:var(--text-d);margin-top:1px}
+.testimonial-stars{font-size:13px;letter-spacing:1px}
+.testimonial-del{background:none;border:none;color:var(--text-d);font-size:12px;cursor:pointer;flex-shrink:0;padding:2px}
+.proof-empty{text-align:center;color:var(--text-d);font-size:11px;padding:28px 0;letter-spacing:2px;text-transform:uppercase}
+
+/* ── EMPIRE MAP ── */
+.empire-content{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px}
+.empire-header{background:linear-gradient(135deg,rgba(80,0,20,.3),rgba(138,104,0,.08));border:1px solid var(--gold-b);border-radius:var(--r);padding:16px;text-align:center}
+.empire-title{font-size:13px;font-weight:700;color:var(--gold);letter-spacing:5px;text-transform:uppercase;font-family:'Cinzel',serif;text-shadow:0 0 14px rgba(138,104,0,.5)}
+.empire-sub{font-size:9px;color:var(--text-d);letter-spacing:2px;margin-top:4px}
+.empire-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.empire-stat{background:var(--panel);border:1px solid var(--red-b);border-radius:8px;padding:10px;text-align:center}
+.empire-stat-v{font-size:18px;font-weight:bold;color:var(--gold);text-shadow:0 0 8px rgba(138,104,0,.3)}
+.empire-stat-l{font-size:7px;letter-spacing:1.5px;color:var(--text-d);text-transform:uppercase;margin-top:2px}
+.empire-section{background:var(--panel);border:1px solid var(--red-b);border-radius:var(--r);padding:12px;border-left:2px solid var(--gold)}
+.empire-section-title{font-size:8px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:8px;opacity:.8}
+.niche-tags{display:flex;flex-wrap:wrap;gap:5px}
+.niche-tag{padding:4px 10px;background:rgba(138,104,0,.1);border:1px solid rgba(138,104,0,.3);border-radius:10px;font-size:10px;color:var(--gold);letter-spacing:1px}
+.empire-prog-row{margin-bottom:10px}
+.empire-prog-lbl-row{display:flex;justify-content:space-between;margin-bottom:4px}
+.empire-prog-lbl{font-size:10px;color:var(--text-d);letter-spacing:1px}
+.empire-prog-val{font-size:10px;color:var(--gold)}
+.empire-prog-bar-wrap{background:rgba(100,0,0,.15);border-radius:10px;height:5px;overflow:hidden;border:1px solid var(--red-b)}
+.empire-prog-bar{height:100%;background:linear-gradient(90deg,var(--red),var(--gold));border-radius:10px;transition:width .6s ease;min-width:3px}
+.empire-pipeline{display:flex;gap:6px}
+.empire-pipe-stage{flex:1;text-align:center;background:var(--red-d);border:1px solid var(--red-b);border-radius:7px;padding:9px 4px}
+.empire-pipe-count{font-size:18px;font-weight:bold;color:var(--gold)}
+.empire-pipe-lbl{font-size:7px;letter-spacing:1.5px;color:var(--text-d);text-transform:uppercase;margin-top:2px}
+.empire-assess-btn{width:100%;padding:14px;background:linear-gradient(135deg,rgba(70,0,15,.4),rgba(138,104,0,.12));border:1px solid var(--gold-b);border-radius:var(--r);color:var(--gold);font-family:inherit;font-size:11px;font-weight:bold;letter-spacing:3px;cursor:pointer;text-shadow:0 0 10px rgba(138,104,0,.4);transition:all .15s;box-shadow:0 0 14px rgba(80,40,0,.12)}
+.empire-assess-btn:disabled{opacity:.4;cursor:default;box-shadow:none}
+.empire-assess-out{background:rgba(0,0,0,.5);border:1px solid rgba(138,104,0,.2);border-radius:var(--r);padding:13px;font-size:12px;color:var(--text);line-height:1.7;white-space:pre-wrap;max-height:300px;overflow-y:auto}
+
 /* ── UTILS ── */
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -482,6 +612,12 @@ strong{color:#e8d4b0}
     <button class="tab" data-tab="calendar" onclick="switchTab('calendar')">CALENDAR</button>
     <button class="tab" data-tab="tiktok" onclick="switchTab('tiktok')">TIKTOK</button>
     <button class="tab" data-tab="email" onclick="switchTab('email')">EMAIL</button>
+    <button class="tab" data-tab="bundle" onclick="switchTab('bundle')">BUNDLE</button>
+    <button class="tab" data-tab="expand" onclick="switchTab('expand')">EXPAND</button>
+    <button class="tab" data-tab="scanner" onclick="switchTab('scanner')">SCANNER</button>
+    <button class="tab" data-tab="trends" onclick="switchTab('trends')">TRENDS</button>
+    <button class="tab" data-tab="proof" onclick="switchTab('proof')">PROOF</button>
+    <button class="tab" data-tab="empire" onclick="switchTab('empire')">EMPIRE</button>
     <button class="tab" data-tab="ideas" onclick="switchTab('ideas')">IDEAS</button>
     <button class="tab" data-tab="auto" onclick="switchTab('auto')">AUTO</button>
     <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
@@ -796,6 +932,131 @@ strong{color:#e8d4b0}
       </div>
     </div>
 
+    <!-- BUNDLE BUILDER -->
+    <div class="panel" id="p-bundle">
+      <div class="bundle-content">
+        <div class="bundle-select-card">
+          <div class="bundle-select-title">Select Products from Vault</div>
+          <div class="bundle-product-pick" id="bundle-picker">
+            <div class="tt-empty" id="bundle-picker-empty">No products in vault yet.<br>Add products in VAULT first.</div>
+          </div>
+          <div class="bundle-fields">
+            <input class="bundle-inp" id="bundle-name-inp" placeholder="Bundle name (e.g. Dark Psychology Mega Pack)">
+            <input class="bundle-inp bundle-inp-sm" id="bundle-price-inp" type="number" placeholder="$">
+          </div>
+          <button class="bundle-gen-btn" id="bundle-gen-btn" onclick="genBundle()">▶ BUILD BUNDLE LISTING</button>
+          <div id="bundle-gen-out" style="margin-top:10px;display:none;background:rgba(0,0,0,.4);border:1px solid rgba(100,0,0,.25);border-radius:8px;padding:10px;font-size:11px;color:var(--text);line-height:1.6;white-space:pre-wrap;max-height:180px;overflow-y:auto"></div>
+        </div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:2px 0">Saved Bundles</div>
+        <div class="bundles-list" id="bundles-list">
+          <div class="tt-empty" id="bundles-empty">No bundles created yet.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PLATFORM EXPANDER -->
+    <div class="panel" id="p-expand">
+      <div class="expand-content">
+        <div class="platform-grid" id="platform-grid"></div>
+        <div class="expand-guide-area" id="expand-guide-area">
+          <div class="expand-guide-hdr">
+            <span class="expand-guide-name" id="expand-guide-name">SELECT A PLATFORM</span>
+            <button class="expand-toggle-btn" id="expand-toggle-btn" onclick="toggleSelectedPlatform()" style="display:none">MARK ACTIVE</button>
+          </div>
+          <div class="expand-guide-body" id="expand-guide-body" style="color:var(--text-d);font-size:11px;letter-spacing:1px">Tap any platform above to get your setup guide and go-live checklist.</div>
+          <button class="expand-run-btn" id="expand-run-btn" onclick="genExpandGuide()" style="display:none" disabled>▶ GET SETUP GUIDE</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPETITOR SCANNER -->
+    <div class="panel" id="p-scanner">
+      <div class="scan-content">
+        <div class="scan-input-card">
+          <div class="scan-input-title">Competitor Intelligence</div>
+          <div style="font-size:10px;color:var(--text-d);margin-bottom:9px;line-height:1.5">Enter a competitor name, brand, or niche keyword. JARVIS reverse-engineers their strategy and finds your gap.</div>
+          <div class="scan-row">
+            <input class="scan-inp" id="scan-inp" placeholder="e.g. dark psychology, mindset coach, digital marketing guru…" onkeydown="if(event.key==='Enter')runScan()">
+            <button class="scan-btn" id="scan-btn" onclick="runScan()">SCAN</button>
+          </div>
+        </div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:2px 0">Intel Reports</div>
+        <div class="scan-results" id="scan-results">
+          <div class="tt-empty" id="scan-empty">No scans run yet.<br>Enter a competitor above.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NICHE TREND RADAR -->
+    <div class="panel" id="p-trends">
+      <div class="trend-content">
+        <div class="trend-scan-card">
+          <div class="trend-scan-title">Niche Trend Radar</div>
+          <div class="trend-scan-sub">JARVIS scans your active niche and returns what's trending, what angles are hot, what's oversaturated, and the #1 content opportunity right now.</div>
+          <button class="trend-scan-btn" id="trend-scan-btn" onclick="runTrendScan()">⚡ SCAN TRENDS NOW</button>
+        </div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:2px 0">Trend Reports</div>
+        <div class="trend-reports" id="trend-reports">
+          <div class="tt-empty" id="trend-empty">No trend reports yet.<br>Hit SCAN TRENDS above.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TESTIMONIAL VAULT -->
+    <div class="panel" id="p-proof">
+      <div class="proof-content">
+        <div class="proof-add-card">
+          <div class="proof-add-title">Add Testimonial</div>
+          <div class="proof-fields">
+            <textarea class="proof-inp" id="proof-text-inp" placeholder="What did your customer say…" rows="2" oninput="autoH(this)"></textarea>
+            <div class="proof-stars" id="proof-stars">
+              <span class="proof-star on" onclick="setProofRating(1)">★</span>
+              <span class="proof-star on" onclick="setProofRating(2)">★</span>
+              <span class="proof-star on" onclick="setProofRating(3)">★</span>
+              <span class="proof-star on" onclick="setProofRating(4)">★</span>
+              <span class="proof-star on" onclick="setProofRating(5)">★</span>
+            </div>
+            <div style="display:flex;gap:7px">
+              <input class="proof-inp" id="proof-name-inp" placeholder="Customer name (e.g. @jayDoe)" style="flex:1">
+              <input class="proof-inp" id="proof-prod-inp" placeholder="Product name" style="flex:1">
+            </div>
+            <button class="proof-add-btn" onclick="addTestimonial()">+ SAVE TESTIMONIAL</button>
+          </div>
+        </div>
+        <button class="proof-req-btn" id="proof-req-btn" onclick="genTestimonialRequest()">▶ GENERATE TESTIMONIAL REQUEST</button>
+        <div id="proof-req-out" style="display:none;background:rgba(0,0,0,.4);border:1px solid rgba(100,0,0,.25);border-radius:8px;padding:11px;font-size:11px;color:var(--text);line-height:1.65;white-space:pre-wrap;max-height:160px;overflow-y:auto"></div>
+        <div style="font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:2px 0">Testimonial Vault (<span id="proof-count">0</span>)</div>
+        <div class="testimonials-list" id="testimonials-list">
+          <div class="proof-empty" id="proof-empty">No testimonials saved yet.<br>Add your first one above.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EMPIRE MAP -->
+    <div class="panel" id="p-empire">
+      <div class="empire-content">
+        <div class="empire-header">
+          <div class="empire-title">THE EMPIRE</div>
+          <div class="empire-sub" id="empire-sub">Loading empire data…</div>
+        </div>
+        <div class="empire-grid" id="empire-grid"></div>
+        <div class="empire-section">
+          <div class="empire-section-title">Active Niches</div>
+          <div class="niche-tags" id="empire-niches"></div>
+        </div>
+        <div class="empire-section">
+          <div class="empire-section-title">Income Progress</div>
+          <div id="empire-progress"></div>
+        </div>
+        <div class="empire-section">
+          <div class="empire-section-title">Product Pipeline</div>
+          <div class="empire-pipeline" id="empire-pipeline"></div>
+        </div>
+        <button class="empire-assess-btn" id="empire-assess-btn" onclick="runEmpireAssess()">👑 ASSESS MY EMPIRE</button>
+        <div id="empire-assess-out" style="display:none" class="empire-assess-out"></div>
+      </div>
+    </div>
+
     <!-- IDEA BANK -->
     <div class="panel" id="p-ideas">
       <div class="ideas-content">
@@ -902,6 +1163,11 @@ function init() {
   loadCalendar();
   loadTTScripts();
   loadEmail();
+  loadBundles();
+  loadPlatforms();
+  loadScans();
+  loadTrends();
+  loadProof();
   startClock();
   updateStats();
   initSpeech();
@@ -1066,6 +1332,9 @@ function switchTab(t) {
   currentTab = t;
   document.querySelectorAll('.tab').forEach(el => el.classList.toggle('on', el.dataset.tab===t));
   document.querySelectorAll('.panel').forEach(el => el.classList.toggle('on', el.id===`p-${t}`));
+  if (t === 'bundle') renderBundlePicker();
+  if (t === 'expand') renderPlatformGrid();
+  if (t === 'empire') renderEmpire();
 }
 
 // ═══════════════════════════════════════════════
@@ -1988,6 +2257,510 @@ function renderIdeas() {
       </div>`;
     list.appendChild(card);
   });
+}
+
+// ═══════════════════════════════════════════════
+// BUNDLE BUILDER
+// ═══════════════════════════════════════════════
+let bundles = [];
+let selectedBundleItems = [];
+
+function loadBundles() {
+  try { bundles = JSON.parse(localStorage.getItem('jv-bundles')||'[]'); } catch(e){ bundles=[]; }
+  renderBundles();
+}
+
+function saveBundleData() { localStorage.setItem('jv-bundles', JSON.stringify(bundles)); }
+
+function renderBundlePicker() {
+  const el = document.getElementById('bundle-picker');
+  const empty = document.getElementById('bundle-picker-empty');
+  if (!el) return;
+  if (!vault.length) { if(empty)empty.style.display=''; el.querySelectorAll('.bundle-pick-item').forEach(e=>e.remove()); return; }
+  if (empty) empty.style.display='none';
+  el.querySelectorAll('.bundle-pick-item').forEach(e=>e.remove());
+  vault.forEach(p => {
+    const item = document.createElement('div');
+    const sel = selectedBundleItems.includes(p.id);
+    item.className = 'bundle-pick-item'+(sel?' sel':'');
+    item.innerHTML = `<div class="bundle-pick-check${sel?' sel':''}">${sel?'✓':''}</div>
+      <span class="bundle-pick-name">${p.name}</span>
+      <span class="bundle-pick-price">${p.price?'$'+p.price:''}</span>`;
+    item.onclick = () => {
+      if (selectedBundleItems.includes(p.id)) selectedBundleItems = selectedBundleItems.filter(i=>i!==p.id);
+      else selectedBundleItems.push(p.id);
+      renderBundlePicker();
+    };
+    el.appendChild(item);
+  });
+}
+
+async function genBundle() {
+  const selected = vault.filter(p => selectedBundleItems.includes(p.id));
+  if (!selected.length) { toast('Select at least one product'); return; }
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const name = document.getElementById('bundle-name-inp').value.trim() || `${getNiche()} Bundle`;
+  const price = parseFloat(document.getElementById('bundle-price-inp').value)||0;
+  const btn = document.getElementById('bundle-gen-btn');
+  const outEl = document.getElementById('bundle-gen-out');
+  btn.disabled = true; btn.textContent = '▶ BUILDING…';
+  outEl.style.display = 'block';
+  outEl.innerHTML = '<span class="cur"></span>';
+  const productList = selected.map(p=>`- ${p.name}${p.price?' ($'+p.price+')':''}`).join('\n');
+  const totalValue = selected.reduce((a,p)=>a+(p.price||0),0);
+  const bundlePrice = price || Math.round(totalValue * 0.65);
+  const prompt = `Write a complete Gumroad bundle listing for a product bundle called "${name}" containing:\n${productList}\nIndividual total value: $${totalValue}. Bundle price: $${bundlePrice}.\n\nWrite:\n1. Magnetic bundle title\n2. Hook paragraph (why this bundle, why now)\n3. What's included (each product with a one-line description)\n4. Total value vs bundle price comparison\n5. Who it's for\n6. Strong CTA\n\nMake it convert. No placeholders.`;
+  try {
+    const full = await callAPI('hunter', [{role:'user',content:prompt}], t=>{
+      outEl.innerHTML = fmt(t)+'<span class="cur"></span>';
+    });
+    outEl.innerHTML = fmt(full);
+    bundles.unshift({ name, price:bundlePrice, products:selected.map(p=>p.name), listing:full, date:Date.now(), id:Date.now() });
+    saveBundleData(); renderBundles(); sfx('recv'); toast('Bundle created!');
+  } catch(e) { outEl.textContent = 'Error: '+e.message; }
+  btn.disabled = false; btn.textContent = '▶ BUILD BUNDLE LISTING';
+}
+
+function delBundle(id) {
+  bundles = bundles.filter(b=>b.id!==id);
+  saveBundleData(); renderBundles();
+}
+
+function renderBundles() {
+  const list = document.getElementById('bundles-list');
+  const empty = document.getElementById('bundles-empty');
+  if (!list) return;
+  if (!bundles.length) { if(empty)empty.style.display=''; list.querySelectorAll('.bundle-card').forEach(e=>e.remove()); return; }
+  if (empty) empty.style.display='none';
+  list.querySelectorAll('.bundle-card').forEach(e=>e.remove());
+  bundles.forEach(b => {
+    const card = document.createElement('div');
+    card.className = 'bundle-card';
+    card.innerHTML = `
+      <div class="bundle-card-hdr">
+        <span class="bundle-card-name">${b.name}</span>
+        <span class="bundle-card-price">$${b.price}</span>
+      </div>
+      <div class="bundle-card-body" id="bc-${b.id}">${fmt(b.listing)}</div>
+      <div class="bundle-card-actions">
+        <button class="copy-btn" onclick="cpTxt(document.getElementById('bc-${b.id}').innerText)">COPY</button>
+        <span style="font-size:9px;color:var(--text-d);align-self:center">${b.products.length} products</span>
+        <button class="bundle-card-del" onclick="delBundle(${b.id})">DELETE</button>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// PLATFORM EXPANDER
+// ═══════════════════════════════════════════════
+const PLATFORMS = [
+  { name:'Gumroad', icon:'🛒', desc:'Digital products — zero setup, instant payouts', key:'gumroad' },
+  { name:'Etsy', icon:'🎨', desc:'Massive audience for digital downloads & templates', key:'etsy' },
+  { name:'Payhip', icon:'💳', desc:'0% transaction fees, direct to buyers', key:'payhip' },
+  { name:'Ko-fi', icon:'☕', desc:'Tips, memberships & one-time product sales', key:'kofi' },
+  { name:'Amazon KDP', icon:'📚', desc:'Self-publish ebooks & paperbacks worldwide', key:'kdp' },
+  { name:'Shopify', icon:'🏪', desc:'Full storefront with upsells & automation', key:'shopify' },
+  { name:'Substack', icon:'📧', desc:'Paid newsletter subscriptions', key:'substack' },
+  { name:'Teachable', icon:'🎓', desc:'Online courses & coaching programs', key:'teachable' },
+];
+
+let activePlatforms = [];
+let selectedPlatform = null;
+
+function loadPlatforms() {
+  try { activePlatforms = JSON.parse(localStorage.getItem('jv-platforms')||'[]'); } catch(e){ activePlatforms=[]; }
+  renderPlatformGrid();
+}
+
+function savePlatformsData() { localStorage.setItem('jv-platforms', JSON.stringify(activePlatforms)); }
+
+function renderPlatformGrid() {
+  const grid = document.getElementById('platform-grid');
+  if (!grid) return;
+  grid.innerHTML = PLATFORMS.map(p => {
+    const isActive = activePlatforms.includes(p.key);
+    const isSel = selectedPlatform === p.key;
+    return `<div class="platform-card${isActive?' active':''}" onclick="selectPlatform('${p.key}')" style="${isSel?'outline:1px solid var(--red);':''}">
+      <div class="platform-card-icon">${p.icon}</div>
+      <div class="platform-card-name">${p.name}</div>
+      <div class="platform-card-desc">${p.desc}</div>
+      <span class="platform-badge ${isActive?'active':'inactive'}">${isActive?'ACTIVE':'NOT STARTED'}</span>
+    </div>`;
+  }).join('');
+}
+
+function selectPlatform(key) {
+  selectedPlatform = key;
+  const p = PLATFORMS.find(pl=>pl.key===key);
+  if (!p) return;
+  renderPlatformGrid();
+  document.getElementById('expand-guide-name').textContent = p.name.toUpperCase();
+  document.getElementById('expand-guide-body').textContent = 'Hit the button below to get your setup guide.';
+  const btn = document.getElementById('expand-run-btn');
+  btn.style.display = '';
+  btn.disabled = false;
+  const toggleBtn = document.getElementById('expand-toggle-btn');
+  toggleBtn.style.display = '';
+  const isActive = activePlatforms.includes(key);
+  toggleBtn.textContent = isActive ? 'MARK INACTIVE' : 'MARK ACTIVE';
+  toggleBtn.className = 'expand-toggle-btn'+(isActive?' active':'');
+}
+
+function toggleSelectedPlatform() {
+  if (!selectedPlatform) return;
+  if (activePlatforms.includes(selectedPlatform)) activePlatforms = activePlatforms.filter(k=>k!==selectedPlatform);
+  else activePlatforms.push(selectedPlatform);
+  savePlatformsData(); renderPlatformGrid();
+  const isActive = activePlatforms.includes(selectedPlatform);
+  const btn = document.getElementById('expand-toggle-btn');
+  btn.textContent = isActive ? 'MARK INACTIVE' : 'MARK ACTIVE';
+  btn.className = 'expand-toggle-btn'+(isActive?' active':'');
+  toast(isActive ? 'Platform marked active' : 'Platform marked inactive');
+}
+
+async function genExpandGuide() {
+  if (!selectedPlatform) return;
+  const p = PLATFORMS.find(pl=>pl.key===selectedPlatform);
+  if (!p) return;
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const niche = getNiche();
+  const btn = document.getElementById('expand-run-btn');
+  const body = document.getElementById('expand-guide-body');
+  btn.disabled = true; btn.textContent = '▶ LOADING…';
+  body.innerHTML = '<span class="cur"></span>';
+  const prompt = `Give me a complete ${p.name} setup and launch guide for a digital product creator in the niche: "${niche}".\n\nInclude:\n1. Exact steps to set up a ${p.name} account and list the first product (step-by-step)\n2. Best practices specific to ${p.name} for ${niche} products\n3. How to optimize the listing for ${p.name}'s algorithm/search\n4. One quick win to get the first sale fast\n5. Common mistakes to avoid\n\nBe specific. No generic advice. Actionable, direct, ready to follow today.`;
+  try {
+    const full = await callAPI('atlas', [{role:'user',content:prompt}], t=>{
+      body.innerHTML = fmt(t)+'<span class="cur"></span>';
+    });
+    body.innerHTML = fmt(full);
+    sfx('recv'); toast(`${p.name} guide ready!`);
+  } catch(e) { body.textContent = 'Error: '+e.message; }
+  btn.disabled = false; btn.textContent = '▶ GET SETUP GUIDE';
+}
+
+// ═══════════════════════════════════════════════
+// COMPETITOR SCANNER
+// ═══════════════════════════════════════════════
+let scanResults = [];
+
+function loadScans() {
+  try { scanResults = JSON.parse(localStorage.getItem('jv-scans')||'[]'); } catch(e){ scanResults=[]; }
+  renderScans();
+}
+
+function saveScanData() { localStorage.setItem('jv-scans', JSON.stringify(scanResults)); }
+
+async function runScan() {
+  const inp = document.getElementById('scan-inp');
+  const target = inp.value.trim();
+  if (!target) { toast('Enter a competitor or niche'); inp.focus(); return; }
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const btn = document.getElementById('scan-btn');
+  btn.disabled = true; btn.textContent = 'SCANNING…';
+  const niche = getNiche();
+  const prompt = `You are a digital product intelligence analyst. I'm building a digital product business in "${niche}". Analyze the competitor/niche: "${target}".\n\nProvide:\n1. WHAT THEY SELL — Top 3-5 products they likely sell, formats, price points\n2. THEIR STRATEGY — How they attract buyers (content, platforms, hooks they use)\n3. WHAT'S WORKING — The #1 thing making them money right now\n4. THE GAP — What they're missing or doing poorly that I can exploit\n5. MY MOVE — One specific product or angle I should launch to take market share from them\n\nBe specific. Name real product types, real strategies, real opportunities.`;
+  const sec = document.createElement('div');
+  sec.className = 'scan-result';
+  const id = Date.now();
+  sec.innerHTML = `<div class="scan-result-hdr"><span class="scan-result-target">${target.toUpperCase()}</span><span class="scan-result-date">scanning…</span></div>
+    <div class="scan-result-body" id="sr-${id}"><span class="cur"></span></div>
+    <div class="scan-result-actions"><button class="copy-btn" onclick="cpTxt(document.getElementById('sr-${id}').innerText)">COPY</button><button class="scan-result-del" onclick="delScan(${id})">DELETE</button></div>`;
+  const resultsEl = document.getElementById('scan-results');
+  const empty = document.getElementById('scan-empty');
+  if (empty) empty.style.display='none';
+  resultsEl.insertBefore(sec, resultsEl.firstChild);
+  const body = document.getElementById(`sr-${id}`);
+  try {
+    const full = await callAPI('atlas', [{role:'user',content:prompt}], t=>{
+      body.innerHTML = fmt(t)+'<span class="cur"></span>';
+    });
+    body.innerHTML = fmt(full);
+    sec.querySelector('.scan-result-date').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    scanResults.unshift({ target, text:full, date:Date.now(), id });
+    saveScanData(); sfx('recv'); toast('Intel gathered!');
+  } catch(e) { body.textContent = 'Error: '+e.message; }
+  btn.disabled = false; btn.textContent = 'SCAN';
+  inp.value = '';
+}
+
+function delScan(id) {
+  scanResults = scanResults.filter(s=>s.id!==id);
+  saveScanData();
+  document.querySelector(`#sr-${id}`)?.closest('.scan-result')?.remove();
+  if (!scanResults.length) { const e = document.getElementById('scan-empty'); if(e) e.style.display=''; }
+}
+
+function renderScans() {
+  const list = document.getElementById('scan-results');
+  const empty = document.getElementById('scan-empty');
+  if (!list) return;
+  if (!scanResults.length) { if(empty)empty.style.display=''; list.querySelectorAll('.scan-result').forEach(e=>e.remove()); return; }
+  if (empty) empty.style.display='none';
+  list.querySelectorAll('.scan-result').forEach(e=>e.remove());
+  scanResults.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'scan-result';
+    card.innerHTML = `<div class="scan-result-hdr"><span class="scan-result-target">${s.target.toUpperCase()}</span><span class="scan-result-date">${new Date(s.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span></div>
+      <div class="scan-result-body" id="sr-${s.id}">${fmt(s.text)}</div>
+      <div class="scan-result-actions"><button class="copy-btn" onclick="cpTxt(document.getElementById('sr-${s.id}').innerText)">COPY</button><button class="scan-result-del" onclick="delScan(${s.id})">DELETE</button></div>`;
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// NICHE TREND RADAR
+// ═══════════════════════════════════════════════
+let trendReports = [];
+
+function loadTrends() {
+  try { trendReports = JSON.parse(localStorage.getItem('jv-trends')||'[]'); } catch(e){ trendReports=[]; }
+  renderTrends();
+}
+
+function saveTrendData() { localStorage.setItem('jv-trends', JSON.stringify(trendReports)); }
+
+async function runTrendScan() {
+  const niche = getNiche();
+  if (!niche || niche==='digital products') { toast('Set your niche in the bar above'); return; }
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const btn = document.getElementById('trend-scan-btn');
+  btn.disabled = true; btn.textContent = '⚡ SCANNING…';
+  const today = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const prompt = `You are a niche trend analyst for digital product creators. Today is ${today}. Analyze the niche: "${niche}".\n\nReturn:\n🔥 TOP 5 TRENDING TOPICS — The specific subjects getting the most attention in ${niche} right now\n⚡ 5 VIRAL HOOKS — Opening lines or angles that are working across TikTok/Instagram in ${niche}\n💰 #1 CONTENT OPPORTUNITY — The one type of content that is underserved and could blow up\n⚠️ OVERSATURATED — What everyone in ${niche} is already doing that you should avoid\n🎯 PRODUCT OPPORTUNITY — The digital product type with highest demand and lowest competition in ${niche} right now\n\nBe specific to ${niche}. Trends change fast — give what's actually hot right now, not generic advice.`;
+  const sec = document.createElement('div');
+  sec.className = 'trend-report';
+  const id = Date.now();
+  sec.innerHTML = `<div class="trend-report-hdr"><span class="trend-report-niche">${niche.toUpperCase()}</span><span class="trend-report-date">scanning…</span></div>
+    <div class="trend-report-body" id="tr-${id}"><span class="cur"></span></div>
+    <div class="trend-report-actions"><button class="copy-btn" onclick="cpTxt(document.getElementById('tr-${id}').innerText)">COPY</button><button class="trend-report-del" onclick="delTrend(${id})">DELETE</button></div>`;
+  const reportsEl = document.getElementById('trend-reports');
+  const empty = document.getElementById('trend-empty');
+  if (empty) empty.style.display='none';
+  reportsEl.insertBefore(sec, reportsEl.firstChild);
+  const body = document.getElementById(`tr-${id}`);
+  try {
+    const full = await callAPI('atlas', [{role:'user',content:prompt}], t=>{
+      body.innerHTML = fmt(t)+'<span class="cur"></span>';
+    });
+    body.innerHTML = fmt(full);
+    sec.querySelector('.trend-report-date').textContent = new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    trendReports.unshift({ niche, text:full, date:Date.now(), id });
+    saveTrendData(); sfx('recv'); toast('Trends scanned!');
+  } catch(e) { body.textContent = 'Error: '+e.message; }
+  btn.disabled = false; btn.textContent = '⚡ SCAN TRENDS NOW';
+}
+
+function delTrend(id) {
+  trendReports = trendReports.filter(t=>t.id!==id);
+  saveTrendData();
+  document.querySelector(`#tr-${id}`)?.closest('.trend-report')?.remove();
+  if (!trendReports.length) { const e = document.getElementById('trend-empty'); if(e) e.style.display=''; }
+}
+
+function renderTrends() {
+  const list = document.getElementById('trend-reports');
+  const empty = document.getElementById('trend-empty');
+  if (!list) return;
+  if (!trendReports.length) { if(empty)empty.style.display=''; list.querySelectorAll('.trend-report').forEach(e=>e.remove()); return; }
+  if (empty) empty.style.display='none';
+  list.querySelectorAll('.trend-report').forEach(e=>e.remove());
+  trendReports.forEach(r => {
+    const card = document.createElement('div');
+    card.className = 'trend-report';
+    card.innerHTML = `<div class="trend-report-hdr"><span class="trend-report-niche">${r.niche.toUpperCase()}</span><span class="trend-report-date">${new Date(r.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span></div>
+      <div class="trend-report-body" id="tr-${r.id}">${fmt(r.text)}</div>
+      <div class="trend-report-actions"><button class="copy-btn" onclick="cpTxt(document.getElementById('tr-${r.id}').innerText)">COPY</button><button class="trend-report-del" onclick="delTrend(${r.id})">DELETE</button></div>`;
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// TESTIMONIAL VAULT
+// ═══════════════════════════════════════════════
+let testimonials = [];
+let proofRating = 5;
+
+function loadProof() {
+  try { testimonials = JSON.parse(localStorage.getItem('jv-proof')||'[]'); } catch(e){ testimonials=[]; }
+  renderTestimonials();
+}
+
+function saveProofData() { localStorage.setItem('jv-proof', JSON.stringify(testimonials)); }
+
+function setProofRating(r) {
+  proofRating = r;
+  document.querySelectorAll('.proof-star').forEach((s,i)=>s.classList.toggle('on',i<r));
+}
+
+function addTestimonial() {
+  const text = document.getElementById('proof-text-inp').value.trim();
+  const name = document.getElementById('proof-name-inp').value.trim();
+  const prod = document.getElementById('proof-prod-inp').value.trim();
+  if (!text) { toast('Enter the testimonial text'); return; }
+  testimonials.unshift({ text, name:name||'Anonymous', prod:prod||'', rating:proofRating, date:Date.now() });
+  saveProofData();
+  document.getElementById('proof-text-inp').value='';
+  document.getElementById('proof-name-inp').value='';
+  document.getElementById('proof-prod-inp').value='';
+  const el = document.getElementById('proof-text-inp');
+  el.style.height='auto';
+  setProofRating(5);
+  renderTestimonials(); sfx('recv'); toast('Testimonial saved!');
+}
+
+function delTestimonial(i) {
+  testimonials.splice(i,1);
+  saveProofData(); renderTestimonials();
+}
+
+async function genTestimonialRequest() {
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const niche = getNiche();
+  const btn = document.getElementById('proof-req-btn');
+  const outEl = document.getElementById('proof-req-out');
+  btn.disabled = true; btn.textContent = '▶ WRITING…';
+  outEl.style.display = 'block';
+  outEl.innerHTML = '<span class="cur"></span>';
+  const prompt = `Write a short, natural testimonial request message I can send to customers who bought my digital product about "${niche}" on Gumroad.\n\nMake it:\n- Personal and genuine (not corporate)\n- Short (3-4 sentences max)\n- Easy to say yes to (low friction)\n- Give them a specific thing to comment on (results, favourite part, who they'd recommend it to)\n\nWrite 2 versions: one for DM (Instagram/Twitter) and one for email.`;
+  try {
+    const full = await callAPI('hunter', [{role:'user',content:prompt}], t=>{
+      outEl.innerHTML = fmt(t)+'<span class="cur"></span>';
+    });
+    outEl.innerHTML = fmt(full);
+    sfx('recv');
+  } catch(e) { outEl.textContent = 'Error: '+e.message; }
+  btn.disabled = false; btn.textContent = '▶ GENERATE TESTIMONIAL REQUEST';
+}
+
+function renderTestimonials() {
+  const list = document.getElementById('testimonials-list');
+  const empty = document.getElementById('proof-empty');
+  const countEl = document.getElementById('proof-count');
+  if (!list) return;
+  if (countEl) countEl.textContent = testimonials.length;
+  if (!testimonials.length) { if(empty)empty.style.display=''; list.querySelectorAll('.testimonial-card').forEach(e=>e.remove()); return; }
+  if (empty) empty.style.display='none';
+  list.querySelectorAll('.testimonial-card').forEach(e=>e.remove());
+  testimonials.forEach((t,i) => {
+    const card = document.createElement('div');
+    card.className = 'testimonial-card';
+    const stars = '★'.repeat(t.rating)+'☆'.repeat(5-t.rating);
+    card.innerHTML = `
+      <div class="testimonial-text">"${fmt(t.text)}"</div>
+      <div class="testimonial-meta">
+        <div>
+          <div class="testimonial-who">${t.name}</div>
+          ${t.prod?`<div class="testimonial-product">${t.prod}</div>`:''}
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="testimonial-stars">${stars}</span>
+          <button class="testimonial-del" onclick="delTestimonial(${i})">✕</button>
+        </div>
+      </div>`;
+    list.appendChild(card);
+  });
+}
+
+// ═══════════════════════════════════════════════
+// EMPIRE MAP
+// ═══════════════════════════════════════════════
+function renderEmpire() {
+  const totalRevenue = (sales||[]).reduce((a,s)=>a+s.amt,0);
+  const totalProducts = (vault||[]).length;
+  const streak = JSON.parse(localStorage.getItem('jv-streak')||'{"count":0}').count||0;
+  const subCount = (typeof subscribers!=='undefined'?subscribers:[]).length;
+  const scriptCount = (typeof ttScripts!=='undefined'?ttScripts:[]).length;
+  const kitCount = (typeof emailKits!=='undefined'?emailKits:[]).length;
+  const testCount = (testimonials||[]).length;
+  const bundleCount = (bundles||[]).length;
+
+  // Collect all active niches from vault + current niche
+  const nicheSet = new Set();
+  if (getNiche() && getNiche()!=='digital products') nicheSet.add(getNiche());
+  (vault||[]).forEach(p=>{ if(p.niche) nicheSet.add(p.niche); });
+  const niches = [...nicheSet];
+
+  // Stats grid
+  const grid = document.getElementById('empire-grid');
+  if (grid) grid.innerHTML = [
+    { v:'$'+totalRevenue.toFixed(0), l:'Revenue' },
+    { v:totalProducts, l:'Products' },
+    { v:niches.length||1, l:'Niches' },
+    { v:streak, l:'Streak' },
+    { v:subCount, l:'Subscribers' },
+    { v:testCount, l:'Proof' },
+  ].map(s=>`<div class="empire-stat"><div class="empire-stat-v">${s.v}</div><div class="empire-stat-l">${s.l}</div></div>`).join('');
+
+  // Sub
+  const sub = document.getElementById('empire-sub');
+  if (sub) sub.textContent = new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+
+  // Niches
+  const nicheEl = document.getElementById('empire-niches');
+  if (nicheEl) nicheEl.innerHTML = niches.length
+    ? niches.map(n=>`<span class="niche-tag">${n}</span>`).join('')
+    : '<span style="font-size:11px;color:var(--text-d);letter-spacing:1px">Set a niche in the bar above to begin.</span>';
+
+  // Progress
+  const progEl = document.getElementById('empire-progress');
+  if (progEl) {
+    const goal = cfg.goal||1;
+    const incomePct = Math.min(100,Math.round((totalRevenue/goal)*100));
+    const fn = parseFloat(localStorage.getItem('jv-freedom')||'0');
+    const freedomPct = fn>0 ? Math.min(100,Math.round((totalRevenue/fn)*100)) : 0;
+    progEl.innerHTML = `
+      <div class="empire-prog-row">
+        <div class="empire-prog-lbl-row"><span class="empire-prog-lbl">Monthly Goal</span><span class="empire-prog-val">$${totalRevenue.toFixed(0)} / $${(cfg.goal||0).toLocaleString()}</span></div>
+        <div class="empire-prog-bar-wrap"><div class="empire-prog-bar" style="width:${incomePct}%"></div></div>
+      </div>
+      <div class="empire-prog-row">
+        <div class="empire-prog-lbl-row"><span class="empire-prog-lbl">Freedom Number</span><span class="empire-prog-val">${fn>0?'$'+totalRevenue.toFixed(0)+' / $'+fn.toLocaleString():'Not set'}</span></div>
+        <div class="empire-prog-bar-wrap"><div class="empire-prog-bar" style="width:${freedomPct}%;background:linear-gradient(90deg,var(--gold),rgba(200,160,0,.6))"></div></div>
+      </div>`;
+  }
+
+  // Pipeline
+  const pipeEl = document.getElementById('empire-pipeline');
+  if (pipeEl) {
+    const stageCounts = [0,1,2,3].map(i=>(vault||[]).filter(p=>p.stage===i).length);
+    pipeEl.innerHTML = ['Built','Listed','Promoted','Scaling'].map((s,i)=>`
+      <div class="empire-pipe-stage">
+        <div class="empire-pipe-count">${stageCounts[i]}</div>
+        <div class="empire-pipe-lbl">${s}</div>
+      </div>`).join('');
+  }
+}
+
+async function runEmpireAssess() {
+  const ready = cfg.provider==='ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { toast('Add API key in ⚙ first'); openCfg(); return; }
+  const btn = document.getElementById('empire-assess-btn');
+  const outEl = document.getElementById('empire-assess-out');
+  btn.disabled = true; btn.textContent = '👑 ASSESSING…';
+  outEl.style.display = 'block';
+  outEl.innerHTML = '<span class="cur"></span>';
+
+  const totalRevenue = (sales||[]).reduce((a,s)=>a+s.amt,0);
+  const niche = getNiche();
+  const niches = [...new Set([niche,...(vault||[]).map(p=>p.niche).filter(Boolean)])];
+  const streak = JSON.parse(localStorage.getItem('jv-streak')||'{"count":0}').count||0;
+  const prompt = `You are JARVIS, the voice of the Underworld. Assess this digital product empire and give a cold, direct strategic evaluation.\n\nEMPIRE DATA:\n- Commander: ${cfg.name}\n- Total Revenue: $${totalRevenue.toFixed(2)}\n- Monthly Goal: $${cfg.goal||0}/mo\n- Products in vault: ${(vault||[]).length}\n- Active niches: ${niches.join(', ')||'none set'}\n- Streak: ${streak} days\n- Email subscribers: ${(typeof subscribers!=='undefined'?subscribers:[]).length}\n- Testimonials: ${(testimonials||[]).length}\n- TikTok scripts: ${(typeof ttScripts!=='undefined'?ttScripts:[]).length}\n- Bundles: ${(bundles||[]).length}\n\nProvide:\n1. EMPIRE STATUS — One-line verdict on where this empire stands right now\n2. STRONGEST ASSET — What's working that should be doubled down on\n3. CRITICAL WEAKNESS — The #1 thing holding the empire back\n4. NEXT POWER MOVE — The single action that would cause the biggest breakthrough in the next 30 days\n5. THE VERDICT — A commanding 2-sentence battle order\n\nBe direct. Dark energy. No sugarcoating.`;
+
+  try {
+    const full = await callAPI('jarvis', [{role:'user',content:prompt}], t=>{
+      outEl.innerHTML = fmt(t)+'<span class="cur"></span>';
+    });
+    outEl.innerHTML = fmt(full);
+    sfx('recv');
+  } catch(e) { outEl.textContent = 'Error: '+e.message; }
+  btn.disabled = false; btn.textContent = '👑 ASSESS MY EMPIRE';
 }
 
 // ═══════════════════════════════════════════════
