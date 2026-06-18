@@ -635,6 +635,34 @@ textarea.inp::placeholder{color:var(--text-d)}
 .tax-inp:focus{border-color:var(--red)}
 .tax-inp::placeholder{color:var(--text-d)}
 .tax-send-btn{background:linear-gradient(135deg,rgba(100,0,28,.35),rgba(80,0,20,.2));border:1px solid var(--red);border-radius:8px;color:var(--live);font-size:18px;width:42px;height:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+/* ── BLAST TAB ── */
+.blast-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:6px 0}
+.blast-btn{padding:13px 8px;border-radius:9px;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer;transition:all .15s;text-align:center;border:1px solid}
+.blast-discord{background:linear-gradient(135deg,rgba(88,101,242,.2),rgba(60,70,200,.1));border-color:rgba(88,101,242,.5);color:#8b9aff}
+.blast-discord:hover{background:rgba(88,101,242,.25)}
+.blast-telegram{background:linear-gradient(135deg,rgba(0,136,204,.2),rgba(0,100,160,.1));border-color:rgba(0,136,204,.4);color:#54b9e8}
+.blast-telegram:hover{background:rgba(0,136,204,.2)}
+.blast-both{grid-column:1/-1;background:linear-gradient(135deg,rgba(100,0,28,.3),rgba(138,104,0,.15));border-color:var(--red);color:var(--live);font-size:11px;padding:11px}
+.blast-both:hover{background:linear-gradient(135deg,rgba(120,0,34,.4),rgba(160,120,0,.2))}
+.blast-compose{width:100%;min-height:110px;background:var(--panel);border:1px solid var(--red-b);border-radius:8px;color:var(--text);font-family:inherit;font-size:12px;padding:11px 13px;resize:vertical;outline:none;line-height:1.6;box-sizing:border-box}
+.blast-compose:focus{border-color:var(--red)}
+.blast-compose::placeholder{color:var(--text-d)}
+.blast-status{font-size:10px;min-height:18px;letter-spacing:1px;padding:2px 0;text-align:center}
+.blast-status.ok{color:#44aa66}
+.blast-status.err{color:var(--live)}
+.blast-section-hdr{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:7px 0 4px}
+.blast-log{display:flex;flex-direction:column;gap:5px;max-height:160px;overflow-y:auto}
+.blast-log-item{background:rgba(4,0,14,.7);border:1px solid var(--red-b);border-radius:6px;padding:8px 11px;font-size:10px;color:var(--text-d);line-height:1.5}
+.blast-log-meta{display:flex;gap:8px;margin-bottom:3px;align-items:center}
+.blast-log-dest{font-size:8px;letter-spacing:1.5px;font-weight:bold;padding:2px 6px;border-radius:3px}
+.blast-log-dest.discord{background:rgba(88,101,242,.15);color:#8b9aff;border:1px solid rgba(88,101,242,.3)}
+.blast-log-dest.telegram{background:rgba(0,136,204,.12);color:#54b9e8;border:1px solid rgba(0,136,204,.25)}
+.blast-log-dest.both{background:rgba(100,0,28,.15);color:var(--live);border:1px solid var(--red-b)}
+.blast-log-time{font-size:8px;color:var(--text-d);letter-spacing:1px;margin-left:auto}
+.blast-log-text{font-size:10px;color:var(--text-d);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.blast-templ-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px}
+.blast-templ-btn{background:rgba(100,0,28,.1);border:1px solid var(--red-b);border-radius:5px;color:var(--text-d);font-family:inherit;font-size:9px;padding:5px 9px;cursor:pointer;letter-spacing:.5px;transition:all .15s}
+.blast-templ-btn:hover{background:var(--red-d);color:var(--text);border-color:var(--red)}
 /* ── UTILS ── */
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -754,6 +782,22 @@ strong{color:#e8d4b0}
         <input type="password" id="c-gum-key" placeholder="Your Gumroad access token…">
         <div class="hint">Gumroad → Settings → Advanced → Applications → Generate Access Token.</div>
       </div>
+      <div style="font-size:8px;letter-spacing:2px;color:var(--text-d);text-transform:uppercase;padding:6px 0 2px;border-top:1px solid var(--red-b);margin-top:4px">Messaging</div>
+      <div class="field">
+        <label>Telegram Bot Token</label>
+        <input type="password" id="c-tg-token" placeholder="123456:ABC-…">
+        <div class="hint">Open Telegram → search <strong>@BotFather</strong> → /newbot → copy the token it gives you.</div>
+      </div>
+      <div class="field">
+        <label>Telegram Chat ID</label>
+        <input type="text" id="c-tg-chat" placeholder="Your numeric chat ID…">
+        <div class="hint">Message your bot once, then search <strong>@userinfobot</strong> in Telegram → it shows your ID.</div>
+      </div>
+      <div class="field">
+        <label>Discord Webhook URL</label>
+        <input type="password" id="c-discord-wh" placeholder="https://discord.com/api/webhooks/…">
+        <div class="hint">Discord server → channel settings → Integrations → Webhooks → New Webhook → Copy URL.</div>
+      </div>
     </div>
     <button class="save-btn" onclick="saveCfg()">SAVE &amp; APPLY</button>
   </div>
@@ -827,6 +871,7 @@ strong{color:#e8d4b0}
     <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
     <button class="tab" data-tab="code" onclick="switchTab('code')">CODE</button>
     <button class="tab" data-tab="tax" onclick="switchTab('tax')">TAX</button>
+    <button class="tab" data-tab="blast" onclick="switchTab('blast')">BLAST</button>
   </div>
 
   <!-- Content -->
@@ -1528,6 +1573,28 @@ strong{color:#e8d4b0}
       </div>
     </div>
 
+    <!-- BLAST -->
+    <div class="panel" id="p-blast">
+      <div class="blast-section-hdr">Quick Templates</div>
+      <div class="blast-templ-row">
+        <button class="blast-templ-btn" onclick="blastTemplate('drop')">🔥 Product Drop</button>
+        <button class="blast-templ-btn" onclick="blastTemplate('update')">📊 Daily Update</button>
+        <button class="blast-templ-btn" onclick="blastTemplate('sale')">💸 Sale Alert</button>
+        <button class="blast-templ-btn" onclick="blastTemplate('content')">🎬 Content Drop</button>
+        <button class="blast-templ-btn" onclick="blastTemplate('grind')">⚡ Motivation</button>
+      </div>
+      <div class="blast-section-hdr">Compose</div>
+      <textarea class="blast-compose" id="blast-compose" placeholder="Type your message here, or pick a template above. Tap a content card's Discord button to pre-fill this."></textarea>
+      <div class="blast-actions">
+        <button class="blast-btn blast-discord" onclick="blastSend('discord')">📢 POST TO DISCORD</button>
+        <button class="blast-btn blast-telegram" onclick="blastSend('telegram')">✈ SEND TO TELEGRAM</button>
+        <button class="blast-btn blast-both" onclick="blastSend('both')">⚡ BLAST BOTH</button>
+      </div>
+      <div class="blast-status" id="blast-status"></div>
+      <div class="blast-section-hdr">Sent Log</div>
+      <div class="blast-log" id="blast-log"></div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /app -->
 
@@ -1541,7 +1608,7 @@ let activeNiche = '';
 let cfg = {
   provider:'groq', apikey:'', url:'', model:'llama-3.1-8b-instant',
   name:'Commander', goal:10000, income:0, date:'', tasks:[], done:[], ctx:'',
-  ytKey:'', gumKey:''
+  ytKey:'', gumKey:'', tgToken:'', tgChat:'', discordWh:''
 };
 let convos = {};          // {agent:[{role,content}]}
 let busy = false;
@@ -1603,6 +1670,7 @@ function init() {
   loadLaunchPad();
   loadCodeState();
   loadTax();
+  loadBlastLog();
   startClock();
   updateStats();
   initSpeech();
@@ -1666,8 +1734,11 @@ function fillCfgForm() {
   document.getElementById('c-income').value   = cfg.income||'';
   document.getElementById('c-date').value     = cfg.date||'';
   document.getElementById('c-tasks').value    = (cfg.tasks||[]).join('\n');
-  document.getElementById('c-yt-key').value  = cfg.ytKey||'';
-  document.getElementById('c-gum-key').value = cfg.gumKey||'';
+  document.getElementById('c-yt-key').value     = cfg.ytKey||'';
+  document.getElementById('c-gum-key').value    = cfg.gumKey||'';
+  document.getElementById('c-tg-token').value   = cfg.tgToken||'';
+  document.getElementById('c-tg-chat').value    = cfg.tgChat||'';
+  document.getElementById('c-discord-wh').value = cfg.discordWh||'';
   document.getElementById('c-ctx').value      = cfg.ctx||'';
   toggleProvider();
 }
@@ -1704,8 +1775,11 @@ function saveCfg() {
   cfg.date     = document.getElementById('c-date').value;
   cfg.tasks    = document.getElementById('c-tasks').value.split('\n').map(t=>t.trim()).filter(Boolean);
   cfg.ctx      = document.getElementById('c-ctx').value.trim();
-  cfg.ytKey    = document.getElementById('c-yt-key').value.trim();
-  cfg.gumKey   = document.getElementById('c-gum-key').value.trim();
+  cfg.ytKey     = document.getElementById('c-yt-key').value.trim();
+  cfg.gumKey    = document.getElementById('c-gum-key').value.trim();
+  cfg.tgToken   = document.getElementById('c-tg-token').value.trim();
+  cfg.tgChat    = document.getElementById('c-tg-chat').value.trim();
+  cfg.discordWh = document.getElementById('c-discord-wh').value.trim();
   localStorage.setItem('jv-cfg', JSON.stringify(cfg));
   updateStats(); updateDot(); closeCfg(); toast('Saved');
 }
@@ -1778,6 +1852,7 @@ function switchTab(t) {
   if (t === 'launch') renderLaunches();
   if (t === 'code') renderCodeMsgs();
   if (t === 'tax') renderTax();
+  if (t === 'blast') renderBlastLog();
 }
 
 // ═══════════════════════════════════════════════
@@ -3785,6 +3860,7 @@ function renderTTScripts() {
       <div class="tt-script-body">${fmt(s.text)}</div>
       <div class="tt-script-actions">
         <button class="copy-btn" onclick="cpTxt(this.closest('.tt-script').querySelector('.tt-script-body').innerText)">COPY</button>
+        <button class="copy-btn" onclick="blastText(this.closest('.tt-script').querySelector('.tt-script-body').innerText)" style="background:rgba(88,101,242,.15);border-color:rgba(88,101,242,.4);color:#8b9aff">→ DISCORD</button>
         <button class="tt-script-del" onclick="delTTScript(${s.id})">DELETE</button>
       </div>`;
     list.appendChild(card);
@@ -3883,6 +3959,7 @@ function renderEmailKits() {
       <div class="em-kit-body">${fmt(k.text)}</div>
       <div class="em-kit-actions">
         <button class="copy-btn" onclick="cpTxt(this.closest('.em-kit').querySelector('.em-kit-body').innerText)">COPY</button>
+        <button class="copy-btn" onclick="blastText(this.closest('.em-kit').querySelector('.em-kit-body').innerText)" style="background:rgba(88,101,242,.15);border-color:rgba(88,101,242,.4);color:#8b9aff">→ DISCORD</button>
         <button class="em-kit-del" onclick="delEmailKit(${k.id})">DELETE</button>
       </div>`;
     list.appendChild(card);
@@ -3990,6 +4067,7 @@ function handleCodeResponse(text) {
   prev.textContent = code.length > 600 ? code.slice(0,600)+'…' : code;
   prop.style.display = 'block';
   prop.scrollIntoView({behavior:'smooth', block:'nearest'});
+  if (isBig) sendTelegram(`⚠️ JARVIS CODE — BIG CHANGE needs your approval\n\nOpen JARVIS → CODE tab to review and approve or reject the proposed change.\n\nPreview:\n${code.slice(0,300)}${code.length>300?'…':''}`).catch(()=>{});
 }
 
 function approveCodeChange() {
@@ -4285,6 +4363,114 @@ async function taxCmd(prompt) {
 
 function handleTaxKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendTax(); }
+}
+
+// ═══════════════════════════════════════════════
+// BLAST — Telegram + Discord
+// ═══════════════════════════════════════════════
+let blastLog = [];
+
+function loadBlastLog() {
+  try { blastLog = JSON.parse(localStorage.getItem('jv-blast')||'[]'); } catch(e){ blastLog=[]; }
+}
+function saveBlastLog() {
+  try { localStorage.setItem('jv-blast', JSON.stringify(blastLog.slice(0,50))); } catch(e){}
+}
+
+async function sendTelegram(text) {
+  if (!cfg.tgToken || !cfg.tgChat) return;
+  const res = await fetch(`https://api.telegram.org/bot${cfg.tgToken}/sendMessage`, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({chat_id:cfg.tgChat, text, parse_mode:'HTML'})
+  });
+  if (!res.ok) throw new Error(`Telegram ${res.status}`);
+}
+
+async function sendDiscord(content) {
+  if (!cfg.discordWh) return;
+  const res = await fetch(cfg.discordWh, {
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({content, username:'JARVIS', avatar_url:'https://i.imgur.com/AfFp7pu.png'})
+  });
+  if (!res.ok) throw new Error(`Discord ${res.status}`);
+}
+
+function blastText(text) {
+  const el = document.getElementById('blast-compose');
+  if (el) el.value = text;
+  switchTab('blast');
+}
+
+function setBlastStatus(msg, isErr) {
+  const el = document.getElementById('blast-status');
+  if (!el) return;
+  el.textContent = msg;
+  el.className = 'blast-status ' + (isErr ? 'err' : 'ok');
+  setTimeout(() => { el.textContent = ''; el.className = 'blast-status'; }, 4000);
+}
+
+async function blastSend(dest) {
+  const el = document.getElementById('blast-compose');
+  const text = (el ? el.value : '').trim();
+  if (!text) { setBlastStatus('Nothing to send — compose a message first.', true); return; }
+
+  const needsDiscord  = dest === 'discord' || dest === 'both';
+  const needsTelegram = dest === 'telegram' || dest === 'both';
+
+  if (needsDiscord && !cfg.discordWh)   { setBlastStatus('No Discord webhook — add it in ⚙ Settings.', true); return; }
+  if (needsTelegram && (!cfg.tgToken || !cfg.tgChat)) { setBlastStatus('No Telegram config — add token + chat ID in ⚙ Settings.', true); return; }
+
+  try {
+    if (needsDiscord)  await sendDiscord(text);
+    if (needsTelegram) await sendTelegram(text);
+    blastLog.unshift({ dest, text, ts: Date.now() });
+    saveBlastLog();
+    renderBlastLog();
+    if (el) el.value = '';
+    const label = dest === 'both' ? 'Blasted to Discord + Telegram ✓' : dest === 'discord' ? 'Posted to Discord ✓' : 'Sent to Telegram ✓';
+    setBlastStatus(label, false);
+    sfx('send');
+  } catch(e) {
+    setBlastStatus('Error: '+e.message, true);
+  }
+}
+
+function renderBlastLog() {
+  const list = document.getElementById('blast-log');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!blastLog.length) {
+    list.innerHTML = '<div style="font-size:10px;color:var(--text-d);padding:8px 2px;letter-spacing:1px">No messages sent yet.</div>';
+    return;
+  }
+  blastLog.slice(0,20).forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'blast-log-item';
+    const time = new Date(item.ts).toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+    div.innerHTML = `<div class="blast-log-meta">
+      <span class="blast-log-dest ${item.dest}">${item.dest.toUpperCase()}</span>
+      <span class="blast-log-time">${time}</span>
+    </div>
+    <div class="blast-log-text">${item.text.slice(0,120)}${item.text.length>120?'…':''}</div>`;
+    list.appendChild(div);
+  });
+}
+
+function blastTemplate(type) {
+  const niche = getNiche() || 'digital products';
+  const name = cfg.name || 'Commander';
+  const income = (cfg.income||0).toLocaleString();
+  const templates = {
+    drop: `🔥 NEW DROP ALERT 🔥\n\nJust launched a brand new digital product in ${niche}.\n\nThis one is built different. Link in bio — grab it before the price goes up.\n\n#digitalproducts #gumroad #${niche.replace(/\s+/g,'').toLowerCase()}`,
+    update: `📊 DAILY UPDATE\n\nDay in the business:\n✅ Products live: ${(cfg.done||[]).length}\n💰 Monthly income: $${income}\n🎯 Goal: $${(cfg.goal||0).toLocaleString()}/mo\n\nThe grind doesn't stop. What are you building today?\n\n#entrepreneur #digitalproducts #buildingpublicly`,
+    sale: `💸 LIMITED SALE — DON'T SLEEP ON THIS\n\nDropping a deal on my ${niche} product today only.\n\nThis is the lowest it'll ever be. Link in bio.\n\n#sale #deal #gumroad #digitalproducts`,
+    content: `🎬 NEW CONTENT JUST DROPPED\n\nIf you're trying to build a business in ${niche}, this one's for you.\n\nGo watch it. Drop a comment. Let's build together.\n\n#contentcreator #${niche.replace(/\s+/g,'').toLowerCase()} #digitalproducts`,
+    grind: `⚡ NO DAYS OFF\n\nMost people will read this and scroll past.\n\nThe ones who don't are the ones who make it.\n\nYou're either building your empire or building someone else's. Choose.\n\n#mindset #entrepreneur #digitalproducts #grind`,
+  };
+  const el = document.getElementById('blast-compose');
+  if (el) el.value = templates[type] || '';
 }
 
 // ═══════════════════════════════════════════════
