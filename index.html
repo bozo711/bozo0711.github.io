@@ -742,6 +742,19 @@ strong{color:#e8d4b0}
         <textarea id="c-ctx" placeholder="Your business, offer, target client, current situation..."></textarea>
       </div>
     </div>
+    <div class="cfg-sec">
+      <div class="cfg-sec-title">Integrations</div>
+      <div class="field">
+        <label>YouTube API Key</label>
+        <input type="password" id="c-yt-key" placeholder="AIza…">
+        <div class="hint">Google Cloud Console → APIs &amp; Services → Credentials → Create API Key. Enable YouTube Data API v3.</div>
+      </div>
+      <div class="field">
+        <label>Gumroad Access Token</label>
+        <input type="password" id="c-gum-key" placeholder="Your Gumroad access token…">
+        <div class="hint">Gumroad → Settings → Advanced → Applications → Generate Access Token.</div>
+      </div>
+    </div>
     <button class="save-btn" onclick="saveCfg()">SAVE &amp; APPLY</button>
   </div>
 </div>
@@ -1527,7 +1540,8 @@ let activeNiche = '';
 
 let cfg = {
   provider:'groq', apikey:'', url:'', model:'llama-3.1-8b-instant',
-  name:'Commander', goal:10000, income:0, date:'', tasks:[], done:[], ctx:''
+  name:'Commander', goal:10000, income:0, date:'', tasks:[], done:[], ctx:'',
+  ytKey:'', gumKey:''
 };
 let convos = {};          // {agent:[{role,content}]}
 let busy = false;
@@ -1652,6 +1666,8 @@ function fillCfgForm() {
   document.getElementById('c-income').value   = cfg.income||'';
   document.getElementById('c-date').value     = cfg.date||'';
   document.getElementById('c-tasks').value    = (cfg.tasks||[]).join('\n');
+  document.getElementById('c-yt-key').value  = cfg.ytKey||'';
+  document.getElementById('c-gum-key').value = cfg.gumKey||'';
   document.getElementById('c-ctx').value      = cfg.ctx||'';
   toggleProvider();
 }
@@ -1688,6 +1704,8 @@ function saveCfg() {
   cfg.date     = document.getElementById('c-date').value;
   cfg.tasks    = document.getElementById('c-tasks').value.split('\n').map(t=>t.trim()).filter(Boolean);
   cfg.ctx      = document.getElementById('c-ctx').value.trim();
+  cfg.ytKey    = document.getElementById('c-yt-key').value.trim();
+  cfg.gumKey   = document.getElementById('c-gum-key').value.trim();
   localStorage.setItem('jv-cfg', JSON.stringify(cfg));
   updateStats(); updateDot(); closeCfg(); toast('Saved');
 }
