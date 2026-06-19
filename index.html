@@ -1759,14 +1759,22 @@ strong{color:#e8d4b0}
 
       <!-- AI Chat -->
       <div class="beats-section-hdr">JARVIS Production Advisor</div>
+      <div style="display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap">
+        <button style="flex:1;padding:11px 8px;background:linear-gradient(135deg,rgba(100,0,28,.35),rgba(138,104,0,.15));border:1px solid var(--red);border-radius:8px;color:var(--live);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer" onclick="beatCmd('Make me a dark trap type beat. Generate a full pattern — drums and melody — and auto-load it into the sequencer.')">⚡ TRAP TYPE BEAT</button>
+        <button style="flex:1;padding:11px 8px;background:linear-gradient(135deg,rgba(100,0,28,.25),rgba(80,0,0,.1));border:1px solid var(--red-b);border-radius:8px;color:var(--text-d);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer" onclick="beatCmd('Make me a melodic lo-fi hip hop beat. Generate a full pattern — drums and melody — and auto-load it into the sequencer.')">🌙 LO-FI TYPE BEAT</button>
+      </div>
+      <div style="display:flex;gap:7px;margin-bottom:8px">
+        <input id="beat-type-inp" style="flex:1;background:var(--panel);border:1px solid var(--red-b);border-radius:8px;color:var(--text);font-family:inherit;font-size:11px;padding:9px 12px;outline:none" placeholder="e.g. Travis Scott, Drake, Lil Baby, Summer Walker…">
+        <button style="padding:9px 14px;background:linear-gradient(135deg,rgba(100,0,28,.4),rgba(138,104,0,.2));border:1px solid var(--red);border-radius:8px;color:var(--live);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:1px;cursor:pointer;white-space:nowrap" onclick="genTypeBeat()">GENERATE</button>
+      </div>
       <div class="beats-msgs" id="beat-msgs"></div>
       <div class="code-quick-row" style="margin-bottom:7px">
-        <button class="code-qbtn" onclick="beatCmd('Suggest a trap beat pattern for my sequencer. Give me step numbers to activate for each drum.')">Trap Pattern</button>
-        <button class="code-qbtn" onclick="beatCmd('Give me a lo-fi hip hop beat pattern with the BPM and drum steps to activate.')">Lo-Fi</button>
-        <button class="code-qbtn" onclick="beatCmd('What BPM and drum pattern should I use for drill music?')">Drill</button>
-        <button class="code-qbtn" onclick="beatCmd('Explain sampling — how do I legally flip a sample without clearing it?')">Sampling</button>
-        <button class="code-qbtn" onclick="beatCmd('How do I make my 808s hit harder in a trap beat?')">808 Tips</button>
-        <button class="code-qbtn" onclick="beatCmd('What chords and melodies work over my current BPM?')">Melody</button>
+        <button class="code-qbtn" onclick="beatCmd('Make me a UK drill type beat, dark and hard. Generate and auto-load the full pattern.')">Drill</button>
+        <button class="code-qbtn" onclick="beatCmd('Make me an R&B type beat, smooth and melodic. Generate and auto-load the full pattern.')">R&B</button>
+        <button class="code-qbtn" onclick="beatCmd('Make me a hard Memphis rap type beat. Generate and auto-load the full pattern.')">Memphis</button>
+        <button class="code-qbtn" onclick="beatCmd('Explain how to legally flip a sample without clearing it.')">Sampling</button>
+        <button class="code-qbtn" onclick="beatCmd('How do I make 808s hit harder?')">808 Tips</button>
+        <button class="code-qbtn" onclick="beatCmd('What melody notes work best over this current BPM and key?')">Melody</button>
       </div>
       <div class="tax-input-row">
         <textarea class="tax-inp" id="beat-inp" rows="1" placeholder="Ask JARVIS about beats, sampling, production…" onkeydown="handleBeatKey(event)" oninput="autoGrow(this)"></textarea>
@@ -5138,18 +5146,45 @@ function sysPromptBeat() {
   const patternStr = BEAT_TRACKS.map((name, i) =>
     `${name}: ${beatPattern[i].map((on,s) => on ? (s+1).toString() : '·').join(' ')}`
   ).join('\n');
-  return `You are JARVIS BEATS, an expert music producer embedded in a digital beat sequencer. You specialize in trap, hip-hop, R&B, drill, and lo-fi production.
+  return `You are JARVIS BEATS, an expert music producer inside a live beat sequencer. You specialize in trap, hip-hop, R&B, drill, and lo-fi.
 
-User's current setup:
-- BPM: ${beatBpm}
-- Current pattern (step numbers that are ON):
-${patternStr}
+User's current setup — BPM: ${beatBpm} | Key: ${melKey} | Scale: ${melScale}
+Current drums: ${patternStr}
 
-When suggesting patterns, tell the user which step numbers (1-16) to activate for each drum track. Be specific.
+CRITICAL — When the user asks you to MAKE, CREATE, BUILD, or GENERATE a beat (type beat or otherwise), you MUST output a [BEAT_PATTERN] block. This auto-programs the sequencer — the user does NOT tap anything manually.
 
-You know: drum programming, sampling techniques, 808s, melody and chord construction, music theory, how to legally interpolate vs clear samples, mixing fundamentals, sound design, building a beat from a reference track.
+Format EXACTLY like this (1 = step active, 0 = inactive, 16 values per track):
 
-Keep responses concise and actionable. Address the user as ${cfg.name || 'Commander'}.`;
+[BEAT_PATTERN]
+{
+  "bpm": 140,
+  "key": "C",
+  "scale": "Min Penta",
+  "wave": "sine",
+  "drums": {
+    "KICK":  [1,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0],
+    "SNARE": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+    "HIHAT": [1,1,0,1,1,0,1,1,0,1,0,1,1,0,1,0],
+    "OPEN":  [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
+    "CLAP":  [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
+    "PERC":  [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0]
+  },
+  "melody": {
+    "C4":  [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
+    "Eb4": [0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0],
+    "G4":  [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
+    "Bb4": [0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0]
+  }
+}
+[/BEAT_PATTERN]
+
+Valid scale values: "Min Penta", "Maj Penta", "Minor", "Major", "Blues"
+Valid wave values: "sine", "triangle", "sawtooth", "square"
+Only include melody notes that actually exist in the chosen key + scale.
+Use sharps not flats for note names (C#, D#, F#, G#, A# — NOT Db, Eb, Gb, Ab, Bb).
+After the block, briefly describe the vibe and what makes it sound like that artist/style.
+
+You know: drum programming, trap patterns, 808s, melody construction, music theory, sampling law, mixing basics. Address the user as ${cfg.name || 'Commander'}.`;
 }
 
 function renderBeatMsgs() {
@@ -5175,6 +5210,60 @@ function mkBeatStream() {
   return { upd, fin };
 }
 
+function normalizeNoteName(n) {
+  return n.replace(/\s/g,'')
+    .replace(/Eb/g,'D#').replace(/Ab/g,'G#').replace(/Bb/g,'A#')
+    .replace(/Db/g,'C#').replace(/Gb/g,'F#');
+}
+
+function parseBeatPattern(text) {
+  const m = text.match(/\[BEAT_PATTERN\]([\s\S]*?)\[\/BEAT_PATTERN\]/);
+  if (!m) return null;
+  try { return JSON.parse(m[1].trim()); } catch(e) { return null; }
+}
+
+function applyBeatPattern(pat) {
+  // BPM
+  if (pat.bpm) {
+    beatBpm = Math.min(200, Math.max(60, parseInt(pat.bpm)));
+    const sl = document.getElementById('bpm-slider'); if (sl) sl.value = beatBpm;
+    const dp = document.getElementById('bpm-display'); if (dp) dp.textContent = beatBpm;
+  }
+  // Key + scale + wave
+  if (pat.key) { melKey = pat.key; const el = document.getElementById('mel-key'); if (el) el.value = melKey; }
+  if (pat.scale) { melScale = pat.scale; const el = document.getElementById('mel-scale'); if (el) el.value = melScale; }
+  if (pat.wave) { melWave = pat.wave; const el = document.getElementById('mel-wave'); if (el) el.value = melWave; }
+  melReverbNode = null;
+
+  // Drums
+  if (pat.drums) {
+    BEAT_TRACKS.forEach((name, i) => {
+      const row = pat.drums[name];
+      if (Array.isArray(row) && row.length === 16) beatPattern[i] = row.map(v => !!v);
+    });
+  }
+
+  // Recompute melody notes with new key/scale FIRST
+  melNotes = computeMelNotes();
+  melPattern = melNotes.map(() => new Array(16).fill(false));
+  if (pat.melody) {
+    Object.entries(pat.melody).forEach(([noteName, steps]) => {
+      if (!Array.isArray(steps) || steps.length !== 16) return;
+      const norm = normalizeNoteName(noteName);
+      const idx = melNotes.findIndex(n => normalizeNoteName(n.name) === norm);
+      if (idx >= 0) melPattern[idx] = steps.map(v => !!v);
+    });
+  }
+
+  renderBeatGrid();
+  renderMelGrid();
+  saveBeatData();
+
+  // Auto-start playing
+  if (!beatPlaying) toggleBeat();
+  toast('Beat loaded — playing now');
+}
+
 async function sendBeatMsg() {
   const inp = document.getElementById('beat-inp');
   const text = (inp ? inp.value : '').trim();
@@ -5191,6 +5280,8 @@ async function sendBeatMsg() {
     const full = await callAPIWithPrompt(sysPromptBeat(), msgs, upd);
     fin(full); beatConvo.push({ role: 'assistant', content: full });
     saveBeatData(); sfx('recv');
+    const pat = parseBeatPattern(full);
+    if (pat) applyBeatPattern(pat);
   } catch(e) { fin('Error: ' + e.message); }
   busy = false;
 }
@@ -5199,6 +5290,13 @@ async function beatCmd(prompt) {
   const inp = document.getElementById('beat-inp');
   if (inp) inp.value = prompt;
   await sendBeatMsg();
+}
+
+async function genTypeBeat() {
+  const inp = document.getElementById('beat-type-inp');
+  const artist = (inp ? inp.value.trim() : '') || 'trap';
+  if (inp) inp.value = '';
+  await beatCmd(`Make me a "${artist}" type beat. Generate a complete pattern — drums, melody, BPM, key, scale — that captures that exact sound and auto-load it into the sequencer.`);
 }
 
 function handleBeatKey(e) {
