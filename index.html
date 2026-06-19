@@ -671,6 +671,17 @@ textarea.inp::placeholder{color:var(--text-d)}
 .bpm-display{font-size:13px;color:var(--gold);font-weight:bold;min-width:30px;text-align:right}
 .beats-clear-btn{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:5px 9px;cursor:pointer;letter-spacing:1px}
 .beats-section-hdr{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:7px 0 4px}
+/* melody */
+.mel-ctrl{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px;align-items:center}
+.mel-sel{background:rgba(10,8,0,.9);border:1px solid rgba(138,104,0,.35);border-radius:6px;color:var(--gold);font-family:inherit;font-size:10px;padding:5px 7px;letter-spacing:.5px}
+.mel-rev-btn{background:rgba(138,104,0,.15);border:1px solid rgba(138,104,0,.35);border-radius:5px;color:var(--gold);font-family:inherit;font-size:9px;padding:5px 9px;cursor:pointer;letter-spacing:1px;white-space:nowrap}
+.mel-clear-btn{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:5px 9px;cursor:pointer;letter-spacing:1px}
+.mel-grid-wrap{overflow-x:auto;padding-bottom:4px}
+.mel-step{height:22px;border-radius:3px;border:1px solid rgba(138,104,0,.15);background:rgba(8,6,0,.85);cursor:pointer;transition:background .06s,box-shadow .06s;min-width:0}
+.mel-step.on{background:rgba(138,104,0,.55);border-color:var(--gold);box-shadow:0 0 5px rgba(138,104,0,.35)}
+.mel-step.cur{border-color:rgba(200,180,80,.5)!important}
+.mel-step.on.cur{box-shadow:0 0 9px rgba(200,160,0,.5)!important}
+.mel-lbl{font-size:7px;color:var(--gold);display:flex;align-items:center;font-weight:bold;padding-right:2px;letter-spacing:.5px}
 .beats-grid-wrap{overflow-x:auto;padding-bottom:4px}
 .beats-track{display:grid;grid-template-columns:38px repeat(16,1fr);gap:2px;margin-bottom:2px;min-width:320px}
 .beats-track-lbl{font-size:7px;letter-spacing:1.5px;color:var(--red);display:flex;align-items:center;font-weight:bold;padding-right:2px}
@@ -1662,6 +1673,39 @@ strong{color:#e8d4b0}
         <div id="beats-grid"></div>
       </div>
 
+      <!-- Melody Sequencer -->
+      <div class="beats-section-hdr" style="color:var(--gold)">Melody Sequencer</div>
+      <div class="mel-ctrl">
+        <select class="mel-sel" id="mel-key" onchange="updateMelSettings()">
+          <option>C</option><option>C#</option><option>D</option><option>D#</option>
+          <option>E</option><option>F</option><option>F#</option><option>G</option>
+          <option>G#</option><option>A</option><option>A#</option><option>B</option>
+        </select>
+        <select class="mel-sel" id="mel-scale" onchange="updateMelSettings()">
+          <option value="Min Penta">Min Pentatonic</option>
+          <option value="Maj Penta">Maj Pentatonic</option>
+          <option value="Minor">Natural Minor</option>
+          <option value="Major">Major</option>
+          <option value="Blues">Blues</option>
+        </select>
+        <select class="mel-sel" id="mel-wave" onchange="updateMelSettings()">
+          <option value="sine">Sine</option>
+          <option value="triangle">Triangle</option>
+          <option value="sawtooth">Sawtooth</option>
+          <option value="square">Square</option>
+        </select>
+        <select class="mel-sel" id="mel-dur" onchange="updateMelSettings()">
+          <option value="1">1/16</option>
+          <option value="2" selected>1/8</option>
+          <option value="4">1/4</option>
+        </select>
+        <button class="mel-rev-btn" id="mel-rev-btn" onclick="toggleMelReverb()">REVERB: ON</button>
+        <button class="mel-clear-btn" onclick="clearMelody()">CLEAR</button>
+      </div>
+      <div class="mel-grid-wrap">
+        <div id="mel-grid"></div>
+      </div>
+
       <!-- Custom Samples -->
       <div class="beats-section-hdr">Custom Samples <span style="font-size:8px;color:var(--text-d);letter-spacing:1px;font-weight:normal">Upload WAV/MP3 to replace synth sounds</span></div>
       <div class="beats-samples-grid" id="beats-samples-grid">
@@ -1990,7 +2034,7 @@ function switchTab(t) {
   if (t === 'code') renderCodeMsgs();
   if (t === 'tax') renderTax();
   if (t === 'blast') renderBlastLog();
-  if (t === 'beats') { renderBeatGrid(); renderSavedBeats(); renderRefs(); renderBeatMsgs(); }
+  if (t === 'beats') { renderBeatGrid(); renderMelGrid(); renderSavedBeats(); renderRefs(); renderBeatMsgs(); }
 }
 
 // ═══════════════════════════════════════════════
@@ -4617,6 +4661,162 @@ function blastTemplate(type) {
 }
 
 // ═══════════════════════════════════════════════
+// MELODY SEQUENCER
+// ═══════════════════════════════════════════════
+const SCALES = {
+  'Min Penta': [0,3,5,7,10],
+  'Maj Penta': [0,2,4,7,9],
+  'Minor':     [0,2,3,5,7,8,10],
+  'Major':     [0,2,4,5,7,9,11],
+  'Blues':     [0,3,5,6,7,10],
+};
+const ROOT_NOTES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+let melKey = 'C';
+let melScale = 'Min Penta';
+let melWave = 'sine';
+let melNoteDur = 2;
+let melReverb = true;
+let melNotes = [];
+let melPattern = [];
+let melReverbNode = null;
+
+function noteFreq(midi) { return 440 * Math.pow(2, (midi - 69) / 12); }
+
+function computeMelNotes() {
+  const rootIdx = ROOT_NOTES.indexOf(melKey);
+  const rootMidi = 48 + rootIdx; // C3 base
+  const intervals = SCALES[melScale] || SCALES['Min Penta'];
+  const notes = [];
+  const seen = new Set();
+  for (let oct = 2; oct >= 0; oct--) {
+    for (let i = intervals.length - 1; i >= 0; i--) {
+      const midi = rootMidi + intervals[i] + oct * 12;
+      if (seen.has(midi) || midi < 36 || midi > 88) continue;
+      seen.add(midi);
+      const noteIdx = (rootIdx + intervals[i]) % 12;
+      const octNum = Math.floor(midi / 12) - 1;
+      notes.push({ name: ROOT_NOTES[noteIdx] + octNum, freq: noteFreq(midi), midi });
+    }
+  }
+  return notes;
+}
+
+function getMelReverb() {
+  if (melReverbNode) return melReverbNode;
+  const ctx = getBeatCtx();
+  melReverbNode = ctx.createConvolver();
+  const dur = 1.8, sr = ctx.sampleRate;
+  const ir = ctx.createBuffer(2, Math.ceil(sr * dur), sr);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = ir.getChannelData(ch);
+    for (let i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 1.8);
+  }
+  melReverbNode.buffer = ir;
+  const revGain = ctx.createGain(); revGain.gain.value = 0.7;
+  melReverbNode.connect(revGain); revGain.connect(ctx.destination);
+  return melReverbNode;
+}
+
+function playMelNote(freq, time) {
+  const ctx = getBeatCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = melWave;
+  osc.frequency.value = freq;
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  if (melReverb) {
+    const send = ctx.createGain(); send.gain.value = 0.3;
+    gain.connect(send); send.connect(getMelReverb());
+  }
+  const stepLen = 60 / beatBpm / 4;
+  const dur = stepLen * melNoteDur;
+  gain.gain.setValueAtTime(0, time);
+  gain.gain.linearRampToValueAtTime(0.32, time + 0.012);
+  gain.gain.setValueAtTime(0.32, time + dur * 0.65);
+  gain.gain.exponentialRampToValueAtTime(0.001, time + dur + 0.06);
+  osc.start(time); osc.stop(time + dur + 0.12);
+}
+
+function toggleMelStep(ni, si) {
+  if (!melPattern[ni]) melPattern[ni] = new Array(16).fill(false);
+  melPattern[ni][si] = !melPattern[ni][si];
+  const btn = document.querySelector(`.mel-step[data-ni="${ni}"][data-si="${si}"]`);
+  if (btn) {
+    btn.classList.toggle('on', melPattern[ni][si]);
+    btn.style.background = melPattern[ni][si] ? 'rgba(138,104,0,.55)' : '';
+    btn.style.borderColor = melPattern[ni][si] ? 'var(--gold)' : '';
+  }
+  saveBeatData();
+}
+
+function clearMelody() {
+  melPattern = melNotes.map(() => new Array(16).fill(false));
+  renderMelGrid();
+  saveBeatData();
+}
+
+function renderMelGrid() {
+  melNotes = computeMelNotes();
+  // Preserve existing pattern, extend if scale changed
+  const oldPat = melPattern;
+  melPattern = melNotes.map((_, i) => oldPat[i] ? [...oldPat[i]] : new Array(16).fill(false));
+  const grid = document.getElementById('mel-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  // Header
+  const hdr = document.createElement('div');
+  hdr.className = 'beats-track';
+  hdr.innerHTML = '<div class="beats-track-lbl" style="color:var(--gold)"></div>';
+  for (let s = 0; s < 16; s++) {
+    const n = document.createElement('div');
+    n.style.cssText = `font-size:7px;color:rgba(138,104,0,.5);text-align:center;padding-bottom:2px${s===3||s===7||s===11?';margin-right:4px':''}`;
+    n.textContent = s + 1;
+    hdr.appendChild(n);
+  }
+  grid.appendChild(hdr);
+  melNotes.forEach((note, ni) => {
+    const row = document.createElement('div');
+    row.className = 'beats-track';
+    const lbl = document.createElement('div');
+    lbl.className = 'beats-track-lbl mel-lbl';
+    lbl.textContent = note.name;
+    row.appendChild(lbl);
+    for (let si = 0; si < 16; si++) {
+      const btn = document.createElement('button');
+      const isOn = melPattern[ni][si];
+      btn.className = 'beat-step mel-step' + (isOn ? ' on' : '');
+      if (isOn) { btn.style.background = 'rgba(138,104,0,.55)'; btn.style.borderColor = 'var(--gold)'; }
+      if (si === 3 || si === 7 || si === 11) btn.style.marginRight = '4px';
+      btn.dataset.ni = ni; btn.dataset.si = si;
+      btn.addEventListener('click', () => toggleMelStep(ni, si));
+      row.appendChild(btn);
+    }
+    grid.appendChild(row);
+  });
+}
+
+function updateMelSettings() {
+  const k = document.getElementById('mel-key');
+  const sc = document.getElementById('mel-scale');
+  const wv = document.getElementById('mel-wave');
+  const nd = document.getElementById('mel-dur');
+  if (k) melKey = k.value;
+  if (sc) melScale = sc.value;
+  if (wv) melWave = wv.value;
+  if (nd) melNoteDur = parseFloat(nd.value);
+  melReverbNode = null;
+  renderMelGrid();
+  saveBeatData();
+}
+
+function toggleMelReverb() {
+  melReverb = !melReverb;
+  const btn = document.getElementById('mel-rev-btn');
+  if (btn) { btn.textContent = 'REVERB: ' + (melReverb ? 'ON' : 'OFF'); btn.style.color = melReverb ? 'var(--gold)' : 'var(--text-d)'; btn.style.borderColor = melReverb ? 'rgba(138,104,0,.35)' : 'rgba(100,0,0,.2)'; }
+}
+
+// ═══════════════════════════════════════════════
 // BEATS
 // ═══════════════════════════════════════════════
 let beatPlaying = false;
@@ -4728,10 +4928,13 @@ function beatScheduler() {
     const step = beatStep;
     const time = beatNextTime;
     BEAT_TRACKS.forEach((_, i) => { if (beatPattern[i][step]) playBeatDrum(i, time); });
+    melNotes.forEach((note, ni) => { if (melPattern[ni] && melPattern[ni][step]) playMelNote(note.freq, time); });
     const lag = Math.max(0, (time - ctx.currentTime) * 1000);
     setTimeout(() => {
-      document.querySelectorAll('.beat-step').forEach(el => el.classList.remove('cur'));
-      document.querySelectorAll(`.beat-step[data-step="${step}"]`).forEach(el => el.classList.add('cur'));
+      document.querySelectorAll('.beat-step:not(.mel-step)').forEach(el => el.classList.remove('cur'));
+      document.querySelectorAll(`.beat-step:not(.mel-step)[data-step="${step}"]`).forEach(el => el.classList.add('cur'));
+      document.querySelectorAll('.mel-step').forEach(el => el.classList.remove('cur'));
+      document.querySelectorAll(`.mel-step[data-si="${step}"]`).forEach(el => el.classList.add('cur'));
     }, lag);
     beatStep = (beatStep + 1) % 16;
     beatNextTime += 60 / beatBpm / 4;
@@ -4914,7 +5117,7 @@ function renderSavedBeats() {
 }
 
 function saveBeatData() {
-  try { localStorage.setItem('jv-beats', JSON.stringify({ beats: savedBeats, refs: beatRefs.map(r=>({name:r.name})), convo: beatConvo.slice(-30) })); } catch(e) {}
+  try { localStorage.setItem('jv-beats', JSON.stringify({ beats: savedBeats, refs: beatRefs.map(r=>({name:r.name})), convo: beatConvo.slice(-30), melPat: melPattern, melKey, melScale, melWave, melNoteDur })); } catch(e) {}
 }
 
 function loadBeats() {
@@ -4922,9 +5125,13 @@ function loadBeats() {
     const s = JSON.parse(localStorage.getItem('jv-beats') || '{}');
     savedBeats = s.beats || [];
     beatConvo = s.convo || [];
-    // Note: refs have blob URLs that don't survive reload — names persist but audio won't
+    if (s.melPat) melPattern = s.melPat;
+    if (s.melKey) { melKey = s.melKey; const el = document.getElementById('mel-key'); if (el) el.value = melKey; }
+    if (s.melScale) { melScale = s.melScale; const el = document.getElementById('mel-scale'); if (el) el.value = melScale; }
+    if (s.melWave) { melWave = s.melWave; const el = document.getElementById('mel-wave'); if (el) el.value = melWave; }
+    if (s.melNoteDur) { melNoteDur = s.melNoteDur; const el = document.getElementById('mel-dur'); if (el) el.value = melNoteDur; }
   } catch(e) { savedBeats = []; beatConvo = []; }
-  renderBeatGrid(); renderSavedBeats(); renderRefs();
+  renderBeatGrid(); renderMelGrid(); renderSavedBeats(); renderRefs();
 }
 
 function sysPromptBeat() {
