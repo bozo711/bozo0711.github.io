@@ -58,9 +58,12 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 .stat-v{font-size:14px;color:var(--gold);font-weight:bold;margin-top:1px;text-shadow:0 0 8px rgba(184,134,11,.4)}
 
 /* ── TABS ── */
+.cat-bar{display:flex;background:rgba(2,0,8,.99);border-bottom:1px solid rgba(60,0,20,.5)}
+.cat-btn{flex:1;padding:9px 2px 7px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-d);font-family:inherit;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .18s;white-space:nowrap}
+.cat-btn.on{color:var(--live);border-bottom-color:var(--live);background:rgba(100,0,28,.1);text-shadow:0 0 8px rgba(204,34,68,.4)}
 .tabs{flex-shrink:0;display:flex;background:var(--bg2);border-bottom:1px solid var(--red-b);overflow-x:auto;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
-.tab{flex:1;min-width:56px;padding:9px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-d);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .2s}
+.tab{flex:1;min-width:52px;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;color:var(--text-d);font-family:inherit;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:all .2s}
 .tab.on{color:var(--red);border-bottom-color:var(--red);text-shadow:0 0 10px var(--red)}
 
 /* ── PANELS ── */
@@ -900,37 +903,17 @@ strong{color:#e8d4b0}
     <input class="niche-inp" id="niche-inp" placeholder="Type a niche or idea… e.g. dark psychology, fitness, crypto" oninput="saveNiche()">
   </div>
 
-  <!-- Tabs -->
-  <div class="tabs">
-    <button class="tab on" data-tab="jarvis" onclick="switchTab('jarvis')">JARVIS</button>
-    <button class="tab" data-tab="atlas" onclick="switchTab('atlas')">ATLAS</button>
-    <button class="tab" data-tab="scribe" onclick="switchTab('scribe')">SCRIBE</button>
-    <button class="tab" data-tab="hunter" onclick="switchTab('hunter')">HUNTER</button>
-    <button class="tab" data-tab="ledger" onclick="switchTab('ledger')">LEDGER</button>
-    <button class="tab" data-tab="vault" onclick="switchTab('vault')">VAULT</button>
-    <button class="tab" data-tab="sales" onclick="switchTab('sales')">SALES</button>
-    <button class="tab" data-tab="warroom" onclick="switchTab('warroom')">WAR ROOM</button>
-    <button class="tab" data-tab="calendar" onclick="switchTab('calendar')">CALENDAR</button>
-    <button class="tab" data-tab="tiktok" onclick="switchTab('tiktok')">TIKTOK</button>
-    <button class="tab" data-tab="email" onclick="switchTab('email')">EMAIL</button>
-    <button class="tab" data-tab="bundle" onclick="switchTab('bundle')">BUNDLE</button>
-    <button class="tab" data-tab="expand" onclick="switchTab('expand')">EXPAND</button>
-    <button class="tab" data-tab="scanner" onclick="switchTab('scanner')">SCANNER</button>
-    <button class="tab" data-tab="trends" onclick="switchTab('trends')">TRENDS</button>
-    <button class="tab" data-tab="proof" onclick="switchTab('proof')">PROOF</button>
-    <button class="tab" data-tab="empire" onclick="switchTab('empire')">EMPIRE</button>
-    <button class="tab" data-tab="brain" onclick="switchTab('brain')">BRAIN</button>
-    <button class="tab" data-tab="tasks" onclick="switchTab('tasks')">TASKS</button>
-    <button class="tab" data-tab="analytics" onclick="switchTab('analytics')">ANALYTICS</button>
-    <button class="tab" data-tab="launch" onclick="switchTab('launch')">LAUNCH</button>
-    <button class="tab" data-tab="ideas" onclick="switchTab('ideas')">IDEAS</button>
-    <button class="tab" data-tab="auto" onclick="switchTab('auto')">AUTO</button>
-    <button class="tab" data-tab="overseer" onclick="switchTab('overseer')">BUILD</button>
-    <button class="tab" data-tab="code" onclick="switchTab('code')">CODE</button>
-    <button class="tab" data-tab="tax" onclick="switchTab('tax')">TAX</button>
-    <button class="tab" data-tab="blast" onclick="switchTab('blast')">BLAST</button>
-    <button class="tab" data-tab="beats" onclick="switchTab('beats')">BEATS</button>
+  <!-- Category Nav -->
+  <div class="cat-bar">
+    <button class="cat-btn on" data-cat="agents"  onclick="switchCat('agents')">AGENTS</button>
+    <button class="cat-btn"    data-cat="empire"  onclick="switchCat('empire')">EMPIRE</button>
+    <button class="cat-btn"    data-cat="content" onclick="switchCat('content')">CONTENT</button>
+    <button class="cat-btn"    data-cat="intel"   onclick="switchCat('intel')">INTEL</button>
+    <button class="cat-btn"    data-cat="create"  onclick="switchCat('create')">CREATE</button>
+    <button class="cat-btn"    data-cat="money"   onclick="switchCat('money')">MONEY</button>
   </div>
+  <!-- Sub-tabs (rendered by JS) -->
+  <div class="tabs" id="sub-tabs"></div>
 
   <!-- Content -->
   <div class="content">
@@ -1860,6 +1843,7 @@ function init() {
   loadTax();
   loadBlastLog();
   loadBeats();
+  renderSubTabs('agents');
   startClock();
   updateStats();
   initSpeech();
@@ -2030,10 +2014,54 @@ function pushConvo(agent, role, content) {
 // ═══════════════════════════════════════════════
 // TABS
 // ═══════════════════════════════════════════════
+const CATEGORIES = {
+  agents:  [{tab:'jarvis',label:'JARVIS'},{tab:'atlas',label:'ATLAS'},{tab:'scribe',label:'SCRIBE'},{tab:'hunter',label:'HUNTER'},{tab:'ledger',label:'LEDGER'}],
+  empire:  [{tab:'brain',label:'BRAIN'},{tab:'tasks',label:'TASKS'},{tab:'analytics',label:'ANALYTICS'},{tab:'launch',label:'LAUNCH'},{tab:'ideas',label:'IDEAS'},{tab:'empire',label:'EMPIRE'}],
+  content: [{tab:'tiktok',label:'TIKTOK'},{tab:'email',label:'EMAIL'},{tab:'calendar',label:'CAL'},{tab:'bundle',label:'BUNDLE'},{tab:'blast',label:'BLAST'}],
+  intel:   [{tab:'scanner',label:'SCANNER'},{tab:'trends',label:'TRENDS'},{tab:'proof',label:'PROOF'},{tab:'expand',label:'EXPAND'},{tab:'warroom',label:'WAR ROOM'}],
+  create:  [{tab:'overseer',label:'BUILD'},{tab:'code',label:'CODE'},{tab:'beats',label:'BEATS'},{tab:'auto',label:'AUTO'}],
+  money:   [{tab:'vault',label:'VAULT'},{tab:'sales',label:'SALES'},{tab:'tax',label:'TAX'}],
+};
+let currentCat = 'agents';
+
+function catOfTab(t) {
+  for (const [cat, tabs] of Object.entries(CATEGORIES)) {
+    if (tabs.find(x => x.tab === t)) return cat;
+  }
+  return null;
+}
+
+function renderSubTabs(cat) {
+  const bar = document.getElementById('sub-tabs'); if (!bar) return;
+  bar.innerHTML = '';
+  (CATEGORIES[cat] || []).forEach(({tab, label}) => {
+    const btn = document.createElement('button');
+    btn.className = 'tab' + (currentTab === tab ? ' on' : '');
+    btn.dataset.tab = tab; btn.textContent = label;
+    btn.onclick = () => switchTab(tab);
+    bar.appendChild(btn);
+  });
+}
+
+function switchCat(cat) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(el => el.classList.toggle('on', el.dataset.cat === cat));
+  renderSubTabs(cat);
+  const tabs = CATEGORIES[cat] || [];
+  if (!tabs.find(x => x.tab === currentTab)) switchTab(tabs[0].tab);
+}
+
 function switchTab(t) {
+  // Auto-switch category if the tab belongs to a different one
+  const cat = catOfTab(t);
+  if (cat && cat !== currentCat) {
+    currentCat = cat;
+    document.querySelectorAll('.cat-btn').forEach(el => el.classList.toggle('on', el.dataset.cat === cat));
+    renderSubTabs(cat);
+  }
   currentTab = t;
-  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('on', el.dataset.tab===t));
-  document.querySelectorAll('.panel').forEach(el => el.classList.toggle('on', el.id===`p-${t}`));
+  document.querySelectorAll('.tab').forEach(el => el.classList.toggle('on', el.dataset.tab === t));
+  document.querySelectorAll('.panel').forEach(el => el.classList.toggle('on', el.id === `p-${t}`));
   if (t === 'bundle') renderBundlePicker();
   if (t === 'expand') renderPlatformGrid();
   if (t === 'empire') renderEmpire();
