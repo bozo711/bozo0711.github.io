@@ -663,6 +663,52 @@ textarea.inp::placeholder{color:var(--text-d)}
 .blast-templ-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:6px}
 .blast-templ-btn{background:rgba(100,0,28,.1);border:1px solid var(--red-b);border-radius:5px;color:var(--text-d);font-family:inherit;font-size:9px;padding:5px 9px;cursor:pointer;letter-spacing:.5px;transition:all .15s}
 .blast-templ-btn:hover{background:var(--red-d);color:var(--text);border-color:var(--red)}
+/* ── BEATS TAB ── */
+.beats-ctrl{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:2px 0 6px}
+.beat-play-btn{background:linear-gradient(135deg,rgba(100,0,28,.35),rgba(80,0,20,.2));border:1px solid var(--red);border-radius:7px;color:var(--live);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;padding:8px 14px;cursor:pointer;white-space:nowrap}
+.bpm-ctrl{display:flex;align-items:center;gap:6px;flex:1;min-width:120px}
+.bpm-slider{flex:1;accent-color:var(--red);cursor:pointer;height:3px}
+.bpm-display{font-size:13px;color:var(--gold);font-weight:bold;min-width:30px;text-align:right}
+.beats-clear-btn{background:none;border:1px solid rgba(100,0,0,.3);border-radius:5px;color:rgba(150,50,50,.6);font-family:inherit;font-size:9px;padding:5px 9px;cursor:pointer;letter-spacing:1px}
+.beats-section-hdr{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:7px 0 4px}
+.beats-grid-wrap{overflow-x:auto;padding-bottom:4px}
+.beats-track{display:grid;grid-template-columns:38px repeat(16,1fr);gap:2px;margin-bottom:2px;min-width:320px}
+.beats-track-lbl{font-size:7px;letter-spacing:1.5px;color:var(--red);display:flex;align-items:center;font-weight:bold;padding-right:2px}
+.beat-step{height:26px;border-radius:3px;border:1px solid rgba(100,0,0,.18);background:rgba(4,0,14,.85);cursor:pointer;transition:background .06s,box-shadow .06s;min-width:0}
+.beat-step.on{background:var(--red);border-color:var(--live);box-shadow:0 0 5px rgba(204,34,68,.35)}
+.beat-step.cur{border-color:rgba(200,180,80,.6)!important;box-shadow:0 0 6px rgba(200,180,80,.25)!important}
+.beat-step.on.cur{box-shadow:0 0 10px rgba(204,34,68,.6),0 0 4px rgba(200,180,80,.3)!important}
+.beat-divider{margin-right:4px}
+.beats-samples-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:5px;margin-bottom:4px}
+.beats-sample-slot{background:rgba(4,0,14,.8);border:1px solid var(--red-b);border-radius:7px;padding:8px 6px;display:flex;flex-direction:column;gap:4px;align-items:center;text-align:center}
+.beats-sample-name{font-size:8px;letter-spacing:2px;color:var(--red);font-weight:bold}
+.beats-sample-file{font-size:8px;color:var(--text-d);min-height:12px;line-height:1.3;word-break:break-all}
+.beats-sample-btn{font-size:8px;letter-spacing:.5px;padding:3px 7px;background:none;border:1px solid var(--red-b);border-radius:4px;color:var(--text-d);font-family:inherit;cursor:pointer;width:100%}
+.beats-sample-btn:hover{border-color:var(--red);color:var(--text)}
+.beats-ref-add{display:flex;gap:7px;margin-bottom:6px;flex-wrap:wrap}
+.beats-ref-upload{background:linear-gradient(135deg,rgba(100,0,0,.2),rgba(80,0,0,.1));border:1px solid var(--red-b);border-radius:7px;color:var(--text-d);font-family:inherit;font-size:10px;padding:7px 12px;cursor:pointer;letter-spacing:1px}
+.beats-ref-upload:hover{border-color:var(--red);color:var(--text)}
+.beats-ref-list{display:flex;flex-direction:column;gap:5px;max-height:130px;overflow-y:auto;margin-bottom:4px}
+.beats-ref-item{display:flex;align-items:center;gap:7px;background:rgba(4,0,14,.8);border:1px solid var(--red-b);border-radius:7px;padding:8px 11px}
+.beats-ref-name{flex:1;font-size:10px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.beats-ref-ctrl{font-size:8px;padding:4px 8px;background:rgba(100,0,0,.2);border:1px solid var(--red-b);border-radius:4px;color:var(--live);font-family:inherit;cursor:pointer;white-space:nowrap}
+.beats-ref-del{background:none;border:none;color:rgba(150,50,50,.5);font-size:14px;cursor:pointer;padding:0 2px;line-height:1}
+.beats-save-row{display:flex;gap:7px;margin-bottom:6px}
+.beats-save-inp{flex:1;background:var(--panel);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:11px;padding:7px 10px;outline:none}
+.beats-save-inp::placeholder{color:var(--text-d)}
+.beats-save-inp:focus{border-color:var(--red)}
+.beats-save-btn{background:linear-gradient(135deg,rgba(100,0,28,.3),rgba(138,104,0,.1));border:1px solid var(--red);border-radius:7px;color:var(--red);font-family:inherit;font-size:9px;letter-spacing:2px;padding:7px 12px;cursor:pointer}
+.beats-saved-list{display:flex;flex-direction:column;gap:5px;max-height:100px;overflow-y:auto;margin-bottom:4px}
+.beats-saved-item{display:flex;align-items:center;gap:7px;background:rgba(4,0,14,.7);border:1px solid var(--red-b);border-radius:6px;padding:7px 11px}
+.beats-saved-name{flex:1;font-size:11px;color:var(--text)}
+.beats-saved-bpm{font-size:9px;color:var(--text-d);letter-spacing:1px}
+.beats-load-btn{font-size:8px;padding:3px 8px;background:rgba(100,0,0,.15);border:1px solid var(--red-b);border-radius:4px;color:var(--red);font-family:inherit;cursor:pointer}
+.beats-del-btn{background:none;border:none;color:rgba(150,50,50,.5);font-size:14px;cursor:pointer;padding:0 2px}
+.beats-msgs{display:flex;flex-direction:column;gap:8px;max-height:200px;overflow-y:auto;padding:4px 0}
+.beats-msg{padding:10px 12px;border-radius:8px;font-size:11px;line-height:1.6;max-width:95%}
+.beats-msg.user{background:linear-gradient(135deg,rgba(100,0,28,.18),rgba(90,0,20,.1));border:1px solid var(--red-b);align-self:flex-end;color:var(--text)}
+.beats-msg.ai{background:var(--panel);border:1px solid var(--red-b);align-self:flex-start;color:var(--text)}
+.beats-msg.thinking{opacity:.6}
 /* ── UTILS ── */
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -872,6 +918,7 @@ strong{color:#e8d4b0}
     <button class="tab" data-tab="code" onclick="switchTab('code')">CODE</button>
     <button class="tab" data-tab="tax" onclick="switchTab('tax')">TAX</button>
     <button class="tab" data-tab="blast" onclick="switchTab('blast')">BLAST</button>
+    <button class="tab" data-tab="beats" onclick="switchTab('beats')">BEATS</button>
   </div>
 
   <!-- Content -->
@@ -1595,6 +1642,95 @@ strong{color:#e8d4b0}
       <div class="blast-log" id="blast-log"></div>
     </div>
 
+    <!-- BEATS -->
+    <div class="panel" id="p-beats">
+
+      <!-- Controls -->
+      <div class="beats-ctrl">
+        <button class="beat-play-btn" id="beat-play-btn" onclick="toggleBeat()">▶ PLAY</button>
+        <div class="bpm-ctrl">
+          <span style="font-size:8px;color:var(--text-d);letter-spacing:2px">BPM</span>
+          <input type="range" id="bpm-slider" min="60" max="200" value="120" class="bpm-slider" oninput="setBeatBpm(this.value)">
+          <span id="bpm-display" class="bpm-display">120</span>
+        </div>
+        <button class="beats-clear-btn" onclick="clearBeat()">CLEAR</button>
+      </div>
+
+      <!-- Sequencer -->
+      <div class="beats-section-hdr">Drum Sequencer — 16 Steps</div>
+      <div class="beats-grid-wrap">
+        <div id="beats-grid"></div>
+      </div>
+
+      <!-- Custom Samples -->
+      <div class="beats-section-hdr">Custom Samples <span style="font-size:8px;color:var(--text-d);letter-spacing:1px;font-weight:normal">Upload WAV/MP3 to replace synth sounds</span></div>
+      <div class="beats-samples-grid" id="beats-samples-grid">
+        <div class="beats-sample-slot">
+          <div class="beats-sample-name">KICK</div>
+          <div class="beats-sample-file" id="sample-lbl-KICK">— synth —</div>
+          <button class="beats-sample-btn" onclick="uploadSample('KICK')">UPLOAD</button>
+        </div>
+        <div class="beats-sample-slot">
+          <div class="beats-sample-name">SNARE</div>
+          <div class="beats-sample-file" id="sample-lbl-SNARE">— synth —</div>
+          <button class="beats-sample-btn" onclick="uploadSample('SNARE')">UPLOAD</button>
+        </div>
+        <div class="beats-sample-slot">
+          <div class="beats-sample-name">HIHAT</div>
+          <div class="beats-sample-file" id="sample-lbl-HIHAT">— synth —</div>
+          <button class="beats-sample-btn" onclick="uploadSample('HIHAT')">UPLOAD</button>
+        </div>
+        <div class="beats-sample-slot">
+          <div class="beats-sample-name">OPEN HH</div>
+          <div class="beats-sample-file" id="sample-lbl-OPEN">— synth —</div>
+          <button class="beats-sample-btn" onclick="uploadSample('OPEN')">UPLOAD</button>
+        </div>
+        <div class="beats-sample-slot">
+          <div class="beats-sample-name">CLAP</div>
+          <div class="beats-sample-file" id="sample-lbl-CLAP">— synth —</div>
+          <button class="beats-sample-btn" onclick="uploadSample('CLAP')">UPLOAD</button>
+        </div>
+        <div class="beats-sample-slot">
+          <div class="beats-sample-name">PERC</div>
+          <div class="beats-sample-file" id="sample-lbl-PERC">— synth —</div>
+          <button class="beats-sample-btn" onclick="uploadSample('PERC')">UPLOAD</button>
+        </div>
+      </div>
+
+      <!-- Save/Load -->
+      <div class="beats-section-hdr">Save Beat</div>
+      <div class="beats-save-row">
+        <input class="beats-save-inp" id="beat-save-name" placeholder="Name this beat…">
+        <button class="beats-save-btn" onclick="saveBeat()">SAVE</button>
+      </div>
+      <div class="beats-saved-list" id="beats-saved-list"></div>
+
+      <!-- References -->
+      <div class="beats-section-hdr">Reference Tracks <span style="font-size:8px;color:var(--text-d);font-weight:normal;letter-spacing:1px">Upload songs to sample from or compare against</span></div>
+      <div class="beats-ref-add">
+        <button class="beats-ref-upload" onclick="uploadRef()">+ UPLOAD REFERENCE</button>
+        <button class="beats-ref-upload" onclick="stopRef()" style="color:var(--live);border-color:rgba(100,0,0,.3)">■ STOP</button>
+      </div>
+      <div class="beats-ref-list" id="beats-ref-list"></div>
+
+      <!-- AI Chat -->
+      <div class="beats-section-hdr">JARVIS Production Advisor</div>
+      <div class="beats-msgs" id="beat-msgs"></div>
+      <div class="code-quick-row" style="margin-bottom:7px">
+        <button class="code-qbtn" onclick="beatCmd('Suggest a trap beat pattern for my sequencer. Give me step numbers to activate for each drum.')">Trap Pattern</button>
+        <button class="code-qbtn" onclick="beatCmd('Give me a lo-fi hip hop beat pattern with the BPM and drum steps to activate.')">Lo-Fi</button>
+        <button class="code-qbtn" onclick="beatCmd('What BPM and drum pattern should I use for drill music?')">Drill</button>
+        <button class="code-qbtn" onclick="beatCmd('Explain sampling — how do I legally flip a sample without clearing it?')">Sampling</button>
+        <button class="code-qbtn" onclick="beatCmd('How do I make my 808s hit harder in a trap beat?')">808 Tips</button>
+        <button class="code-qbtn" onclick="beatCmd('What chords and melodies work over my current BPM?')">Melody</button>
+      </div>
+      <div class="tax-input-row">
+        <textarea class="tax-inp" id="beat-inp" rows="1" placeholder="Ask JARVIS about beats, sampling, production…" onkeydown="handleBeatKey(event)" oninput="autoGrow(this)"></textarea>
+        <button class="tax-send-btn" onclick="sendBeatMsg()">↑</button>
+      </div>
+
+    </div>
+
   </div><!-- /content -->
 </div><!-- /app -->
 
@@ -1671,6 +1807,7 @@ function init() {
   loadCodeState();
   loadTax();
   loadBlastLog();
+  loadBeats();
   startClock();
   updateStats();
   initSpeech();
@@ -1853,6 +1990,7 @@ function switchTab(t) {
   if (t === 'code') renderCodeMsgs();
   if (t === 'tax') renderTax();
   if (t === 'blast') renderBlastLog();
+  if (t === 'beats') { renderBeatGrid(); renderSavedBeats(); renderRefs(); renderBeatMsgs(); }
 }
 
 // ═══════════════════════════════════════════════
@@ -4365,6 +4503,11 @@ function handleTaxKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendTax(); }
 }
 
+function autoGrow(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 110) + 'px';
+}
+
 // ═══════════════════════════════════════════════
 // BLAST — Telegram + Discord
 // ═══════════════════════════════════════════════
@@ -4471,6 +4614,388 @@ function blastTemplate(type) {
   };
   const el = document.getElementById('blast-compose');
   if (el) el.value = templates[type] || '';
+}
+
+// ═══════════════════════════════════════════════
+// BEATS
+// ═══════════════════════════════════════════════
+let beatPlaying = false;
+let beatStep = 0;
+let beatBpm = 120;
+let beatNextTime = 0;
+let beatTimer = null;
+const BEAT_TRACKS = ['KICK','SNARE','HIHAT','OPEN','CLAP','PERC'];
+let beatPattern = BEAT_TRACKS.map(() => new Array(16).fill(false));
+let beatSamples = {};
+let beatRefs = [];
+let activeRefAudio = null;
+let savedBeats = [];
+let beatConvo = [];
+
+function getBeatCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function makeNoiseBuf(ctx, secs) {
+  const n = Math.ceil(ctx.sampleRate * secs);
+  const b = ctx.createBuffer(1, n, ctx.sampleRate);
+  const d = b.getChannelData(0);
+  for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  return b;
+}
+
+function synthDrum(track, time) {
+  const ctx = getBeatCtx();
+  const out = ctx.createGain(); out.gain.value = 1; out.connect(ctx.destination);
+
+  if (track === 'KICK') {
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.connect(g); g.connect(out);
+    osc.frequency.setValueAtTime(160, time);
+    osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.45);
+    g.gain.setValueAtTime(1.3, time); g.gain.exponentialRampToValueAtTime(0.001, time + 0.45);
+    osc.start(time); osc.stop(time + 0.45);
+    const c = ctx.createOscillator(), cg = ctx.createGain();
+    c.frequency.value = 1200; c.connect(cg); cg.connect(out);
+    cg.gain.setValueAtTime(0.4, time); cg.gain.exponentialRampToValueAtTime(0.001, time + 0.02);
+    c.start(time); c.stop(time + 0.02);
+  }
+  else if (track === 'SNARE') {
+    const ns = ctx.createBufferSource(); ns.buffer = makeNoiseBuf(ctx, 0.25);
+    const nf = ctx.createBiquadFilter(); nf.type = 'bandpass'; nf.frequency.value = 2500; nf.Q.value = 0.8;
+    const ng = ctx.createGain();
+    ns.connect(nf); nf.connect(ng); ng.connect(out);
+    ng.gain.setValueAtTime(1, time); ng.gain.exponentialRampToValueAtTime(0.001, time + 0.22);
+    ns.start(time); ns.stop(time + 0.25);
+    const osc = ctx.createOscillator(), og = ctx.createGain();
+    osc.frequency.value = 190; osc.connect(og); og.connect(out);
+    og.gain.setValueAtTime(0.5, time); og.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+    osc.start(time); osc.stop(time + 0.1);
+  }
+  else if (track === 'HIHAT') {
+    const ns = ctx.createBufferSource(); ns.buffer = makeNoiseBuf(ctx, 0.08);
+    const nf = ctx.createBiquadFilter(); nf.type = 'highpass'; nf.frequency.value = 9000;
+    const ng = ctx.createGain();
+    ns.connect(nf); nf.connect(ng); ng.connect(out);
+    ng.gain.setValueAtTime(0.65, time); ng.gain.exponentialRampToValueAtTime(0.001, time + 0.06);
+    ns.start(time); ns.stop(time + 0.08);
+  }
+  else if (track === 'OPEN') {
+    const ns = ctx.createBufferSource(); ns.buffer = makeNoiseBuf(ctx, 0.5);
+    const nf = ctx.createBiquadFilter(); nf.type = 'bandpass'; nf.frequency.value = 7000; nf.Q.value = 0.5;
+    const ng = ctx.createGain();
+    ns.connect(nf); nf.connect(ng); ng.connect(out);
+    ng.gain.setValueAtTime(0.55, time); ng.gain.exponentialRampToValueAtTime(0.001, time + 0.45);
+    ns.start(time); ns.stop(time + 0.5);
+  }
+  else if (track === 'CLAP') {
+    for (let i = 0; i < 3; i++) {
+      const ns = ctx.createBufferSource(); ns.buffer = makeNoiseBuf(ctx, 0.06);
+      const nf = ctx.createBiquadFilter(); nf.type = 'bandpass'; nf.frequency.value = 1200 + i * 300;
+      const ng = ctx.createGain(); ns.connect(nf); nf.connect(ng); ng.connect(out);
+      const t = time + i * 0.011;
+      ng.gain.setValueAtTime(0.75, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.1);
+      ns.start(t); ns.stop(t + 0.12);
+    }
+  }
+  else if (track === 'PERC') {
+    const osc = ctx.createOscillator(), g = ctx.createGain();
+    osc.type = 'triangle'; osc.connect(g); g.connect(out);
+    osc.frequency.setValueAtTime(420, time); osc.frequency.exponentialRampToValueAtTime(60, time + 0.18);
+    g.gain.setValueAtTime(0.85, time); g.gain.exponentialRampToValueAtTime(0.001, time + 0.18);
+    osc.start(time); osc.stop(time + 0.2);
+  }
+}
+
+function playBeatDrum(trackIdx, time) {
+  const name = BEAT_TRACKS[trackIdx];
+  if (beatSamples[name]) {
+    const ctx = getBeatCtx();
+    const src = ctx.createBufferSource();
+    src.buffer = beatSamples[name];
+    src.connect(ctx.destination);
+    src.start(time);
+  } else {
+    synthDrum(name, time);
+  }
+}
+
+function beatScheduler() {
+  const ctx = getBeatCtx();
+  while (beatNextTime < ctx.currentTime + 0.12) {
+    const step = beatStep;
+    const time = beatNextTime;
+    BEAT_TRACKS.forEach((_, i) => { if (beatPattern[i][step]) playBeatDrum(i, time); });
+    const lag = Math.max(0, (time - ctx.currentTime) * 1000);
+    setTimeout(() => {
+      document.querySelectorAll('.beat-step').forEach(el => el.classList.remove('cur'));
+      document.querySelectorAll(`.beat-step[data-step="${step}"]`).forEach(el => el.classList.add('cur'));
+    }, lag);
+    beatStep = (beatStep + 1) % 16;
+    beatNextTime += 60 / beatBpm / 4;
+  }
+  beatTimer = setTimeout(beatScheduler, 25);
+}
+
+function toggleBeat() {
+  const ctx = getBeatCtx();
+  if (beatPlaying) {
+    clearTimeout(beatTimer); beatPlaying = false; beatStep = 0;
+    document.querySelectorAll('.beat-step').forEach(el => el.classList.remove('cur'));
+    const btn = document.getElementById('beat-play-btn');
+    if (btn) btn.textContent = '▶ PLAY';
+  } else {
+    beatNextTime = ctx.currentTime + 0.05; beatStep = 0; beatPlaying = true;
+    beatScheduler();
+    const btn = document.getElementById('beat-play-btn');
+    if (btn) btn.textContent = '■ STOP';
+  }
+}
+
+function setBeatBpm(val) {
+  beatBpm = parseInt(val);
+  const d = document.getElementById('bpm-display');
+  if (d) d.textContent = beatBpm;
+}
+
+function clearBeat() {
+  beatPattern = BEAT_TRACKS.map(() => new Array(16).fill(false));
+  renderBeatGrid();
+}
+
+function toggleStep(ti, si) {
+  beatPattern[ti][si] = !beatPattern[ti][si];
+  const btn = document.querySelector(`.beat-step[data-track="${ti}"][data-step="${si}"]`);
+  if (btn) btn.classList.toggle('on', beatPattern[ti][si]);
+}
+
+function renderBeatGrid() {
+  const grid = document.getElementById('beats-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  // Header row with step numbers
+  const hdr = document.createElement('div');
+  hdr.className = 'beats-track';
+  hdr.innerHTML = '<div class="beats-track-lbl"></div>';
+  for (let s = 0; s < 16; s++) {
+    const n = document.createElement('div');
+    n.style.cssText = `font-size:7px;color:var(--text-d);text-align:center;padding-bottom:2px${s===3||s===7||s===11?';margin-right:4px':''}`;
+    n.textContent = s + 1;
+    hdr.appendChild(n);
+  }
+  grid.appendChild(hdr);
+  BEAT_TRACKS.forEach((name, ti) => {
+    const row = document.createElement('div');
+    row.className = 'beats-track';
+    const lbl = document.createElement('div');
+    lbl.className = 'beats-track-lbl';
+    lbl.textContent = name === 'HIHAT' ? 'HH' : name === 'OPEN' ? 'OPEN' : name;
+    row.appendChild(lbl);
+    for (let si = 0; si < 16; si++) {
+      const btn = document.createElement('button');
+      btn.className = 'beat-step' + (beatPattern[ti][si] ? ' on' : '');
+      if (si === 3 || si === 7 || si === 11) btn.style.marginRight = '4px';
+      btn.dataset.track = ti; btn.dataset.step = si;
+      btn.addEventListener('click', () => toggleStep(ti, si));
+      row.appendChild(btn);
+    }
+    grid.appendChild(row);
+  });
+}
+
+function uploadSample(trackName) {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'audio/*';
+  inp.onchange = async e => {
+    const file = e.target.files[0]; if (!file) return;
+    try {
+      const ctx = getBeatCtx();
+      const arrBuf = await file.arrayBuffer();
+      beatSamples[trackName] = await ctx.decodeAudioData(arrBuf);
+      const lbl = document.getElementById(`sample-lbl-${trackName}`);
+      const short = file.name.length > 14 ? file.name.slice(0,13)+'…' : file.name;
+      if (lbl) lbl.textContent = short;
+      toast('Sample loaded: ' + trackName);
+    } catch(e) { toast('Error loading sample'); }
+  };
+  inp.click();
+}
+
+function uploadRef() {
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = 'audio/*';
+  inp.onchange = e => {
+    const file = e.target.files[0]; if (!file) return;
+    const url = URL.createObjectURL(file);
+    beatRefs.push({ name: file.name, url });
+    saveBeatData();
+    renderRefs();
+    toast('Reference added');
+  };
+  inp.click();
+}
+
+function playRef(i) {
+  if (activeRefAudio) { activeRefAudio.pause(); activeRefAudio = null; }
+  const ref = beatRefs[i]; if (!ref) return;
+  activeRefAudio = new Audio(ref.url);
+  activeRefAudio.loop = true;
+  activeRefAudio.play().catch(()=>{});
+  activeRefAudio.onended = () => { activeRefAudio = null; renderRefs(); };
+  renderRefs();
+}
+
+function stopRef() {
+  if (activeRefAudio) { activeRefAudio.pause(); activeRefAudio = null; }
+  renderRefs();
+}
+
+function delRef(i) {
+  stopRef();
+  beatRefs.splice(i, 1);
+  saveBeatData(); renderRefs();
+}
+
+function renderRefs() {
+  const list = document.getElementById('beats-ref-list');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!beatRefs.length) {
+    list.innerHTML = '<div style="font-size:10px;color:var(--text-d);padding:6px 2px;letter-spacing:1px">No references yet. Upload a track to sample from or compare against your beat.</div>';
+    return;
+  }
+  beatRefs.forEach((ref, i) => {
+    const div = document.createElement('div'); div.className = 'beats-ref-item';
+    const playing = activeRefAudio && !activeRefAudio.paused;
+    div.innerHTML = `<span class="beats-ref-name">${ref.name}</span>
+      <button class="beats-ref-ctrl" id="ref-btn-${i}">${playing ? '■ STOP' : '▶ PLAY'}</button>
+      <button class="beats-ref-del" onclick="delRef(${i})">×</button>`;
+    div.querySelector(`#ref-btn-${i}`).onclick = () => { if (activeRefAudio && !activeRefAudio.paused) stopRef(); else playRef(i); };
+    list.appendChild(div);
+  });
+}
+
+function saveBeat() {
+  const nameEl = document.getElementById('beat-save-name');
+  const name = (nameEl ? nameEl.value.trim() : '') || `Beat ${savedBeats.length + 1}`;
+  savedBeats.unshift({ id: Date.now(), name, bpm: beatBpm, pattern: beatPattern.map(t=>[...t]) });
+  if (nameEl) nameEl.value = '';
+  saveBeatData(); renderSavedBeats();
+  toast('Saved: ' + name);
+}
+
+function loadBeat(id) {
+  const b = savedBeats.find(s => s.id === id); if (!b) return;
+  beatPattern = b.pattern.map(t=>[...t]); beatBpm = b.bpm;
+  const sl = document.getElementById('bpm-slider'); if (sl) sl.value = beatBpm;
+  const dp = document.getElementById('bpm-display'); if (dp) dp.textContent = beatBpm;
+  renderBeatGrid(); toast('Loaded: ' + b.name);
+}
+
+function deleteBeat(id) {
+  savedBeats = savedBeats.filter(s => s.id !== id);
+  saveBeatData(); renderSavedBeats();
+}
+
+function renderSavedBeats() {
+  const list = document.getElementById('beats-saved-list'); if (!list) return;
+  list.innerHTML = '';
+  if (!savedBeats.length) { list.innerHTML = '<div style="font-size:10px;color:var(--text-d);padding:5px 2px;letter-spacing:1px">No saved beats yet.</div>'; return; }
+  savedBeats.forEach(b => {
+    const div = document.createElement('div'); div.className = 'beats-saved-item';
+    div.innerHTML = `<span class="beats-saved-name">${b.name}</span>
+      <span class="beats-saved-bpm">${b.bpm} BPM</span>
+      <button class="beats-load-btn" onclick="loadBeat(${b.id})">LOAD</button>
+      <button class="beats-del-btn" onclick="deleteBeat(${b.id})">×</button>`;
+    list.appendChild(div);
+  });
+}
+
+function saveBeatData() {
+  try { localStorage.setItem('jv-beats', JSON.stringify({ beats: savedBeats, refs: beatRefs.map(r=>({name:r.name})), convo: beatConvo.slice(-30) })); } catch(e) {}
+}
+
+function loadBeats() {
+  try {
+    const s = JSON.parse(localStorage.getItem('jv-beats') || '{}');
+    savedBeats = s.beats || [];
+    beatConvo = s.convo || [];
+    // Note: refs have blob URLs that don't survive reload — names persist but audio won't
+  } catch(e) { savedBeats = []; beatConvo = []; }
+  renderBeatGrid(); renderSavedBeats(); renderRefs();
+}
+
+function sysPromptBeat() {
+  const patternStr = BEAT_TRACKS.map((name, i) =>
+    `${name}: ${beatPattern[i].map((on,s) => on ? (s+1).toString() : '·').join(' ')}`
+  ).join('\n');
+  return `You are JARVIS BEATS, an expert music producer embedded in a digital beat sequencer. You specialize in trap, hip-hop, R&B, drill, and lo-fi production.
+
+User's current setup:
+- BPM: ${beatBpm}
+- Current pattern (step numbers that are ON):
+${patternStr}
+
+When suggesting patterns, tell the user which step numbers (1-16) to activate for each drum track. Be specific.
+
+You know: drum programming, sampling techniques, 808s, melody and chord construction, music theory, how to legally interpolate vs clear samples, mixing fundamentals, sound design, building a beat from a reference track.
+
+Keep responses concise and actionable. Address the user as ${cfg.name || 'Commander'}.`;
+}
+
+function renderBeatMsgs() {
+  const c = document.getElementById('beat-msgs'); if (!c) return;
+  c.innerHTML = '';
+  beatConvo.forEach(m => {
+    const d = document.createElement('div');
+    d.className = 'beats-msg ' + (m.role === 'user' ? 'user' : 'ai');
+    d.innerHTML = fmt(m.content);
+    c.appendChild(d);
+  });
+  c.scrollTop = c.scrollHeight;
+}
+
+function mkBeatStream() {
+  const c = document.getElementById('beat-msgs');
+  const div = document.createElement('div');
+  div.className = 'beats-msg ai thinking';
+  div.innerHTML = '<span class="cur"></span>';
+  c.appendChild(div); c.scrollTop = c.scrollHeight;
+  const upd = t => { div.innerHTML = fmt(t) + '<span class="cur"></span>'; c.scrollTop = c.scrollHeight; };
+  const fin = t => { div.classList.remove('thinking'); div.innerHTML = fmt(t); c.scrollTop = c.scrollHeight; };
+  return { upd, fin };
+}
+
+async function sendBeatMsg() {
+  const inp = document.getElementById('beat-inp');
+  const text = (inp ? inp.value : '').trim();
+  if (!text || busy) return;
+  inp.value = ''; inp.style.height = 'auto';
+  const c = document.getElementById('beat-msgs');
+  const ud = document.createElement('div'); ud.className = 'beats-msg user'; ud.textContent = text;
+  c.appendChild(ud); c.scrollTop = 99999;
+  beatConvo.push({ role: 'user', content: text });
+  const msgs = beatConvo.map(m => ({ role: m.role, content: m.content }));
+  const { upd, fin } = mkBeatStream();
+  busy = true;
+  try {
+    const full = await callAPIWithPrompt(sysPromptBeat(), msgs, upd);
+    fin(full); beatConvo.push({ role: 'assistant', content: full });
+    saveBeatData(); sfx('recv');
+  } catch(e) { fin('Error: ' + e.message); }
+  busy = false;
+}
+
+async function beatCmd(prompt) {
+  const inp = document.getElementById('beat-inp');
+  if (inp) inp.value = prompt;
+  await sendBeatMsg();
+}
+
+function handleBeatKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBeatMsg(); }
 }
 
 // ═══════════════════════════════════════════════
