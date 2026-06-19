@@ -723,6 +723,45 @@ textarea.inp::placeholder{color:var(--text-d)}
 .beats-msg.user{background:linear-gradient(135deg,rgba(100,0,28,.18),rgba(90,0,20,.1));border:1px solid var(--red-b);align-self:flex-end;color:var(--text)}
 .beats-msg.ai{background:var(--panel);border:1px solid var(--red-b);align-self:flex-start;color:var(--text)}
 .beats-msg.thinking{opacity:.6}
+/* ── PUBLISH TAB ── */
+.pub-idea-wrap{display:flex;gap:7px;align-items:flex-end;margin-bottom:8px}
+.pub-idea-inp{flex:1;background:var(--panel);border:1px solid var(--red-b);border-radius:8px;color:var(--text);font-family:inherit;font-size:12px;padding:10px 13px;resize:none;outline:none;line-height:1.5;min-height:60px}
+.pub-idea-inp:focus{border-color:var(--red)}
+.pub-idea-inp::placeholder{color:var(--text-d)}
+.pub-gen-btn{background:linear-gradient(135deg,rgba(100,0,28,.4),rgba(138,104,0,.2));border:1px solid var(--red);border-radius:8px;color:var(--live);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;padding:10px 14px;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.pub-proposal{background:rgba(4,0,14,.97);border:1px solid rgba(0,120,40,.4);border-radius:11px;padding:14px;display:none;margin-bottom:10px}
+.pub-proposal-hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid rgba(0,80,30,.3)}
+.pub-proposal-title{font-size:9px;letter-spacing:2.5px;color:#44cc77;font-weight:bold}
+.pub-proposal-sub{font-size:8px;color:var(--text-d);letter-spacing:1px}
+.pub-field{margin-bottom:10px}
+.pub-field-lbl{font-size:8px;letter-spacing:2px;color:var(--text-d);text-transform:uppercase;margin-bottom:4px}
+.pub-field-val{font-size:12px;color:var(--text);line-height:1.5;background:rgba(0,0,0,.4);border:1px solid var(--red-b);border-radius:6px;padding:8px 11px}
+.pub-desc-preview{font-size:11px;color:var(--text);line-height:1.6;background:rgba(0,0,0,.4);border:1px solid var(--red-b);border-radius:6px;padding:10px 11px;max-height:160px;overflow-y:auto}
+.pub-price-tag{font-size:18px;font-weight:bold;color:var(--gold)}
+.pub-actions{display:flex;gap:7px;margin-top:12px;flex-wrap:wrap}
+.pub-approve-btn{flex:1;padding:11px 8px;background:linear-gradient(135deg,rgba(0,100,40,.35),rgba(0,80,30,.2));border:1px solid rgba(0,120,40,.5);border-radius:8px;color:#44cc77;font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer}
+.pub-edit-btn{padding:11px 14px;background:rgba(138,104,0,.12);border:1px solid rgba(138,104,0,.3);border-radius:8px;color:var(--gold);font-family:inherit;font-size:10px;letter-spacing:1px;cursor:pointer}
+.pub-reject-btn{padding:11px 14px;background:rgba(80,0,0,.15);border:1px solid rgba(100,0,0,.3);border-radius:8px;color:rgba(180,60,60,.8);font-family:inherit;font-size:10px;letter-spacing:1px;cursor:pointer}
+.pub-form{background:rgba(4,0,14,.8);border:1px solid var(--red-b);border-radius:11px;padding:13px;margin-bottom:10px}
+.pub-inp{width:100%;background:rgba(0,0,0,.5);border:1px solid var(--red-b);border-radius:7px;color:var(--text);font-family:inherit;font-size:11px;padding:9px 11px;outline:none;box-sizing:border-box;resize:vertical}
+.pub-inp:focus{border-color:var(--red)}
+.pub-inp::placeholder{color:var(--text-d)}
+.pub-inp-label{font-size:8px;letter-spacing:2px;color:var(--text-d);text-transform:uppercase;margin:8px 0 4px;display:block}
+.pub-status{min-height:18px;font-size:10px;letter-spacing:1px;text-align:center;padding:3px 0;margin-bottom:4px}
+.pub-status.ok{color:#44cc77}
+.pub-status.err{color:var(--live)}
+.pub-status.info{color:var(--gold)}
+.pub-section-hdr{font-size:8px;letter-spacing:3px;color:var(--red);text-transform:uppercase;padding:7px 0 5px}
+.pub-history{display:flex;flex-direction:column;gap:6px}
+.pub-item{background:rgba(4,0,14,.8);border:1px solid var(--red-b);border-radius:8px;padding:10px 13px}
+.pub-item-name{font-size:12px;color:var(--text);font-weight:bold;margin-bottom:3px}
+.pub-item-meta{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pub-item-price{font-size:11px;color:var(--gold)}
+.pub-item-date{font-size:9px;color:var(--text-d);letter-spacing:1px}
+.pub-item-link{font-size:9px;color:#44cc77;letter-spacing:1px;text-decoration:none;border:1px solid rgba(0,120,40,.3);border-radius:4px;padding:3px 7px}
+.pub-item-status{font-size:8px;letter-spacing:1px;padding:2px 6px;border-radius:3px}
+.pub-item-status.live{color:#44cc77;background:rgba(0,100,40,.15);border:1px solid rgba(0,100,40,.3)}
+.pub-item-status.draft{color:var(--gold);background:rgba(138,104,0,.12);border:1px solid rgba(138,104,0,.25)}
 /* ── UTILS ── */
 ::-webkit-scrollbar{width:3px;height:3px}
 ::-webkit-scrollbar-track{background:transparent}
@@ -1766,6 +1805,59 @@ strong{color:#e8d4b0}
 
     </div>
 
+    <!-- PUBLISH -->
+    <div class="panel" id="p-publish">
+      <div class="pub-section-hdr">Describe Your Product</div>
+      <div class="pub-idea-wrap">
+        <textarea class="pub-idea-inp" id="pub-idea" placeholder="e.g. A TikTok script pack for digital product sellers — 50 ready-to-post scripts. $17." rows="3"></textarea>
+        <button class="pub-gen-btn" onclick="generateProduct()">⚡ GENERATE</button>
+      </div>
+
+      <!-- Proposal Card -->
+      <div class="pub-proposal" id="pub-proposal">
+        <div class="pub-proposal-hdr">
+          <span class="pub-proposal-title">✓ PRODUCT READY</span>
+          <span class="pub-proposal-sub">Review before publishing to Gumroad</span>
+        </div>
+        <div class="pub-field">
+          <div class="pub-field-lbl">Product Name</div>
+          <div class="pub-field-val" id="pub-name-disp"></div>
+        </div>
+        <div class="pub-field">
+          <div class="pub-field-lbl">Price</div>
+          <div class="pub-price-tag" id="pub-price-disp"></div>
+        </div>
+        <div class="pub-field">
+          <div class="pub-field-lbl">Gumroad Description</div>
+          <div class="pub-desc-preview" id="pub-desc-disp"></div>
+        </div>
+        <div class="pub-actions">
+          <button class="pub-approve-btn" onclick="approveAndPublish()">✓ APPROVE &amp; PUBLISH</button>
+          <button class="pub-edit-btn" onclick="openPubEdit()">✎ EDIT</button>
+          <button class="pub-reject-btn" onclick="rejectProduct()">✕ REJECT</button>
+        </div>
+      </div>
+
+      <!-- Edit Form -->
+      <div class="pub-form" id="pub-form">
+        <span class="pub-inp-label">Product Name</span>
+        <input class="pub-inp" id="pub-edit-name" type="text" placeholder="Product name…">
+        <span class="pub-inp-label">Price ($)</span>
+        <input class="pub-inp" id="pub-edit-price" type="number" placeholder="17" min="0" style="width:100px">
+        <span class="pub-inp-label">Description (HTML)</span>
+        <textarea class="pub-inp" id="pub-edit-desc" rows="6" placeholder="Your Gumroad description…"></textarea>
+        <div class="pub-actions" style="margin-top:10px">
+          <button class="pub-approve-btn" onclick="publishFromForm()">✓ PUBLISH TO GUMROAD</button>
+          <button class="pub-reject-btn" onclick="closePubEdit()">CANCEL</button>
+        </div>
+      </div>
+
+      <div class="pub-status" id="pub-status"></div>
+
+      <div class="pub-section-hdr">Published <span id="pub-count" style="color:var(--gold);font-weight:bold"></span></div>
+      <div class="pub-history" id="pub-history"></div>
+    </div>
+
   </div><!-- /content -->
 </div><!-- /app -->
 
@@ -1842,6 +1934,7 @@ function init() {
   loadCodeState();
   loadTax();
   loadBlastLog();
+  loadPublish();
   loadBeats();
   renderSubTabs('agents');
   startClock();
@@ -2020,7 +2113,7 @@ const CATEGORIES = {
   content: [{tab:'tiktok',label:'TIKTOK'},{tab:'email',label:'EMAIL'},{tab:'calendar',label:'CAL'},{tab:'bundle',label:'BUNDLE'},{tab:'blast',label:'BLAST'}],
   intel:   [{tab:'scanner',label:'SCANNER'},{tab:'trends',label:'TRENDS'},{tab:'proof',label:'PROOF'},{tab:'expand',label:'EXPAND'},{tab:'warroom',label:'WAR ROOM'}],
   create:  [{tab:'overseer',label:'BUILD'},{tab:'code',label:'CODE'},{tab:'beats',label:'BEATS'},{tab:'auto',label:'AUTO'}],
-  money:   [{tab:'vault',label:'VAULT'},{tab:'sales',label:'SALES'},{tab:'tax',label:'TAX'}],
+  money:   [{tab:'vault',label:'VAULT'},{tab:'sales',label:'SALES'},{tab:'tax',label:'TAX'},{tab:'publish',label:'PUBLISH'}],
 };
 let currentCat = 'agents';
 
@@ -2070,6 +2163,7 @@ function switchTab(t) {
   if (t === 'code') renderCodeMsgs();
   if (t === 'tax') renderTax();
   if (t === 'blast') renderBlastLog();
+  if (t === 'publish') renderPubHistory();
   if (t === 'beats') { renderBeatGrid(); renderMelGrid(); renderSavedBeats(); renderRefs(); renderBeatMsgs(); }
 }
 
@@ -4694,6 +4788,188 @@ function blastTemplate(type) {
   };
   const el = document.getElementById('blast-compose');
   if (el) el.value = templates[type] || '';
+}
+
+// ═══════════════════════════════════════════════
+// PUBLISH → GUMROAD
+// ═══════════════════════════════════════════════
+let pendingProduct = null;
+let publishedProducts = [];
+
+function loadPublish() {
+  try { publishedProducts = JSON.parse(localStorage.getItem('jv-publish')||'[]'); } catch(e){ publishedProducts=[]; }
+  renderPubHistory();
+}
+function savePublish() {
+  try { localStorage.setItem('jv-publish', JSON.stringify(publishedProducts.slice(0,100))); } catch(e){}
+}
+
+function setPubStatus(msg, type='info') {
+  const el = document.getElementById('pub-status'); if (!el) return;
+  el.textContent = msg; el.className = 'pub-status ' + type;
+  if (type !== 'err') setTimeout(()=>{ el.textContent=''; el.className='pub-status'; }, 6000);
+}
+
+function sysPromptPublish() {
+  return `You are JARVIS PUBLISH, a digital product listing specialist. When asked to generate a product, output a [PRODUCT] JSON block EXACTLY like this:
+
+[PRODUCT]
+{
+  "name": "Complete TikTok Script Pack for Digital Product Sellers",
+  "price": 17,
+  "description": "<p><strong>Stop staring at a blank screen.</strong> Every script is written and ready to record.</p><p><strong>What's included:</strong></p><ul><li>50 proven TikTok scripts for digital product niches</li><li>Hook formulas that stop the scroll</li><li>CTA lines that drive clicks to Gumroad</li></ul><p><strong>Perfect for:</strong> creators building passive income with digital products.</p>",
+  "tags": "tiktok, digital products, scripts"
+}
+[/PRODUCT]
+
+Rules:
+- name: clear, specific, benefit-driven (not generic)
+- price: realistic for the niche ($7 low ticket, $17-$27 mid, $37-$97 high)
+- description: compelling HTML — hook, what's included (bullets), who it's for, benefit close. No placeholders.
+- tags: 3-5 relevant comma-separated tags
+
+User context: ${cfg.name}, niche: ${getNiche()||'digital products'}, income goal: $${cfg.goal||0}/mo.
+
+After the block, give a one-line note on why you priced it that way.`;
+}
+
+function parseProductBlock(text) {
+  const m = text.match(/\[PRODUCT\]([\s\S]*?)\[\/PRODUCT\]/);
+  if (!m) return null;
+  try { return JSON.parse(m[1].trim()); } catch(e) { return null; }
+}
+
+function showProductProposal(prod) {
+  pendingProduct = prod;
+  const nd = document.getElementById('pub-name-disp');
+  const pd = document.getElementById('pub-price-disp');
+  const dd = document.getElementById('pub-desc-disp');
+  if (nd) nd.textContent = prod.name;
+  if (pd) pd.textContent = '$' + (prod.price||0);
+  if (dd) dd.innerHTML = prod.description || '';
+  const card = document.getElementById('pub-proposal');
+  if (card) { card.style.display = 'block'; card.scrollIntoView({behavior:'smooth',block:'nearest'}); }
+  document.getElementById('pub-form').style.display = 'none';
+}
+
+function rejectProduct() {
+  pendingProduct = null;
+  const card = document.getElementById('pub-proposal');
+  if (card) card.style.display = 'none';
+  setPubStatus('Rejected.', 'info');
+}
+
+function openPubEdit() {
+  if (!pendingProduct) return;
+  document.getElementById('pub-edit-name').value = pendingProduct.name || '';
+  document.getElementById('pub-edit-price').value = pendingProduct.price || '';
+  document.getElementById('pub-edit-desc').value = pendingProduct.description || '';
+  document.getElementById('pub-form').style.display = 'block';
+  document.getElementById('pub-proposal').style.display = 'none';
+}
+
+function closePubEdit() {
+  document.getElementById('pub-form').style.display = 'none';
+  if (pendingProduct) document.getElementById('pub-proposal').style.display = 'block';
+}
+
+function publishFromForm() {
+  const name  = document.getElementById('pub-edit-name').value.trim();
+  const price = parseFloat(document.getElementById('pub-edit-price').value)||0;
+  const desc  = document.getElementById('pub-edit-desc').value.trim();
+  if (!name) { setPubStatus('Product name is required.', 'err'); return; }
+  pendingProduct = { name, price, description: desc };
+  showProductProposal(pendingProduct);
+  document.getElementById('pub-form').style.display = 'none';
+}
+
+async function publishToGumroad(prod) {
+  if (!cfg.gumKey) throw new Error('No Gumroad token — add it in ⚙ Settings → Integrations');
+  const params = new URLSearchParams();
+  params.append('access_token', cfg.gumKey);
+  params.append('name', prod.name);
+  params.append('description', prod.description || '');
+  params.append('price', Math.round((parseFloat(prod.price)||0) * 100));
+  params.append('published', 'true');
+  if (prod.tags) params.append('tags', prod.tags);
+  const res = await fetch('https://api.gumroad.com/v2/products', {
+    method: 'POST',
+    headers: {'Content-Type':'application/x-www-form-urlencoded'},
+    body: params.toString()
+  });
+  if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`Gumroad ${res.status}: ${t.slice(0,120)}`); }
+  const data = await res.json();
+  if (!data.success) throw new Error(data.message || 'Gumroad API error');
+  return data.product;
+}
+
+async function approveAndPublish() {
+  if (!pendingProduct) return;
+  setPubStatus('Publishing to Gumroad…', 'info');
+  const prod = { ...pendingProduct };
+  try {
+    const result = await publishToGumroad(prod);
+    document.getElementById('pub-proposal').style.display = 'none';
+    const record = { id: Date.now(), name: prod.name, price: prod.price, status:'live', url: result.short_url || result.url || 'https://gumroad.com', date: Date.now() };
+    publishedProducts.unshift(record);
+    savePublish(); renderPubHistory();
+    setPubStatus('Published to Gumroad ✓', 'ok');
+    await sendTelegram(`✅ PRODUCT LIVE ON GUMROAD\n\n${prod.name}\n$${prod.price}\n\n${record.url}`).catch(()=>{});
+    sfx('send'); pendingProduct = null;
+  } catch(e) {
+    // CORS or API error — save as draft and send details to Telegram
+    const isCors = e.message.includes('Failed to fetch') || e.message.includes('NetworkError');
+    const record = { id: Date.now(), name: prod.name, price: prod.price, status:'draft', url:'', date: Date.now(), description: prod.description };
+    publishedProducts.unshift(record);
+    savePublish(); renderPubHistory();
+    if (isCors) {
+      setPubStatus('Browser blocked direct API call — details sent to Telegram + saved as draft.', 'info');
+      const msg = `📦 READY TO PUBLISH ON GUMROAD\n\n*${prod.name}*\nPrice: $${prod.price}\n\nGo to: https://app.gumroad.com/products/new\n\nDescription:\n${prod.description.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,500)}`;
+      await sendTelegram(msg).catch(()=>{});
+    } else {
+      setPubStatus('Error: ' + e.message, 'err');
+    }
+  }
+}
+
+function renderPubHistory() {
+  const list = document.getElementById('pub-history');
+  const cnt = document.getElementById('pub-count');
+  if (!list) return;
+  if (cnt) cnt.textContent = publishedProducts.length ? `(${publishedProducts.length})` : '';
+  list.innerHTML = '';
+  if (!publishedProducts.length) {
+    list.innerHTML = '<div style="font-size:10px;color:var(--text-d);padding:8px 2px;letter-spacing:1px">No products published yet. Describe a product above and hit GENERATE.</div>';
+    return;
+  }
+  publishedProducts.forEach(p => {
+    const div = document.createElement('div'); div.className = 'pub-item';
+    const date = new Date(p.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    div.innerHTML = `<div class="pub-item-name">${p.name}</div>
+      <div class="pub-item-meta">
+        <span class="pub-item-price">$${p.price}</span>
+        <span class="pub-item-status ${p.status}">${p.status.toUpperCase()}</span>
+        <span class="pub-item-date">${date}</span>
+        ${p.url ? `<a class="pub-item-link" href="${p.url}" target="_blank">VIEW ↗</a>` : ''}
+      </div>`;
+    list.appendChild(div);
+  });
+}
+
+async function generateProduct() {
+  const idea = (document.getElementById('pub-idea')?.value||'').trim();
+  if (!idea) { setPubStatus('Describe your product idea first.', 'err'); return; }
+  if (busy) return;
+  setPubStatus('JARVIS is generating your listing…', 'info');
+  busy = true;
+  try {
+    let full = '';
+    await callAPIWithPrompt(sysPromptPublish(), [{role:'user',content:`Generate a complete Gumroad product listing for: ${idea}`}], t => { full = t; });
+    const prod = parseProductBlock(full);
+    if (prod) { showProductProposal(prod); setPubStatus(''); }
+    else setPubStatus('Could not parse product — try again.', 'err');
+  } catch(e) { setPubStatus('Error: '+e.message, 'err'); }
+  busy = false;
 }
 
 // ═══════════════════════════════════════════════
