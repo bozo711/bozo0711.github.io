@@ -237,7 +237,15 @@ textarea.inp::placeholder{color:rgba(190,150,160,.2)}
 .del-idea-btn:active{color:var(--red)}
 .ideas-empty{text-align:center;color:var(--text-d);font-size:11px;padding:30px 0;letter-spacing:2px;text-transform:uppercase}
 
-/* ── NICHE BAR ── */
+/* ── MODE INDICATOR ── */
+.mode-ind{flex-shrink:0;display:none;align-items:center;gap:9px;padding:5px 14px;background:rgba(1,0,4,.98);border-bottom:2px solid;position:relative;overflow:hidden}
+.mode-ind::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.0),rgba(255,255,255,.02),rgba(0,0,0,.0));animation:mode-sweep 3s linear infinite}
+@keyframes mode-sweep{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.mode-dot{width:7px;height:7px;border-radius:50%;background:currentColor;flex-shrink:0;animation:blink-dot 1.5s infinite}
+.mode-lbl{flex:1;font-size:9px;font-weight:bold;letter-spacing:4px;text-transform:uppercase}
+.mode-desc{font-size:8px;color:rgba(190,160,190,.3);letter-spacing:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.mode-x{background:none;border:none;color:rgba(190,160,190,.3);font-size:15px;cursor:pointer;padding:0 2px;line-height:1;transition:color .15s;flex-shrink:0}
+.mode-x:active{color:var(--live)}
 .niche-bar{flex-shrink:0;display:flex;align-items:center;gap:8px;padding:5px 12px;background:rgba(30,0,8,.45);border-bottom:1px solid rgba(80,0,25,.35);position:relative}
 .niche-bar::after{content:'▸';position:absolute;left:12px;color:rgba(204,34,68,.4);font-size:8px;pointer-events:none}
 .niche-label{font-size:6px;letter-spacing:3px;color:rgba(184,134,11,.55);white-space:nowrap;text-transform:uppercase;padding-left:14px}
@@ -984,6 +992,9 @@ strong{color:#e8d4b0}
     <span class="niche-label">Niche</span>
     <input class="niche-inp" id="niche-inp" placeholder="Type a niche or idea… e.g. dark psychology, fitness, crypto" oninput="saveNiche()">
   </div>
+
+  <!-- Mode Indicator -->
+  <div class="mode-ind" id="mode-ind"></div>
 
   <!-- Category Nav -->
   <div class="cat-bar">
@@ -1917,6 +1928,65 @@ let busy = false;
 let voiceOut = true;
 let pendingAttachment = null; // {type:'image'|'file', name, mime, data}
 let attachTargetAgent = '';
+let jarvisMode = null;
+
+const MODES = {
+  business: { label:'BUSINESS MODE', color:'#b8860b', desc:'Empire building — research · creation · marketing · revenue',
+    focus:'You are in BUSINESS MODE. Every response helps build, grow, or monetize the digital product empire. Cover research (what to build), creation (write it), marketing (how to sell it), and revenue (how much it makes). Give specific product titles, prices, and next actions.' },
+  empire:   { label:'EMPIRE MODE',   color:'#b8860b', desc:'Empire building — all agents locked in',
+    focus:'You are in EMPIRE MODE. Maximum digital empire focus. Research niches, write products, create marketing copy, and break down revenue — all in one response when relevant. Be the whole team.' },
+  code:     { label:'CODE MODE',     color:'#00cc44', desc:'Write · debug · optimize · explain code',
+    focus:'You are in CODE MODE. Focus exclusively on code. When writing or changing code: use [BIG_CHANGE]complete code[/BIG_CHANGE] for full files/rewrites, or [SMALL_CHANGE]changed section[/SMALL_CHANGE] for targeted edits. Always include complete, working, runnable code. Explain what changed and why in 1-2 lines.' },
+  beats:    { label:'BEATS MODE',    color:'#9933ff', desc:'Beat production — auto-loads sequencer',
+    focus:'You are in BEATS MODE. For every request, output a complete [BEAT_PATTERN]{"bpm":140,"key":"C","scale":"minor","wave":"sawtooth","kick":[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],"snare":[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],"hihat":[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],"openhat":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],"clap":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bass":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"melody":[{"note":"C3","step":0},{"note":"Eb3","step":4}]}[/BEAT_PATTERN] block customized for the style requested. Use sharps not flats. Also give 2-3 production tips specific to that style.' },
+  music:    { label:'BEATS MODE',    color:'#9933ff', desc:'Beat production — auto-loads sequencer',
+    focus:'You are in BEATS MODE. Always output a [BEAT_PATTERN] JSON block for every beat request. Use sharps not flats in note names.' },
+  tax:      { label:'TAX MODE',      color:'#cc2244', desc:'Quarterly taxes · deductions · SE tax',
+    focus:'You are in TAX MODE. Give real dollar amounts based on their income data. Cover: SE tax (15.3% × 92.35% of net), federal income tax brackets, quarterly payment schedule (Apr 15 · Jun 15 · Sep 15 · Jan 15), deductions for digital creators (home office, software, equipment, courses, subscriptions, marketing). Always calculate numbers, not just concepts.' },
+  launch:   { label:'LAUNCH MODE',   color:'#cc2244', desc:'Gumroad listings · social posts · scripts',
+    focus:'You are in LAUNCH MODE. Write launch content — Gumroad listings, social media posts, TikTok/Reels scripts, Twitter threads. Everything must be copy-paste ready. No placeholders. No [your product here]. Real finished copy that can go live today.' },
+  research: { label:'RESEARCH MODE', color:'#b8860b', desc:'Niche validation · product ideas · demand',
+    focus:'You are in RESEARCH MODE. Validate niches, find product ideas, analyze demand. Always give specific product titles (not categories), exact formats (ebook/prompt pack/template/checklist/guide), price points ($7-$47), and reasoning. Give 5-7 ideas minimum when asked.' },
+  write:    { label:'WRITE MODE',    color:'#4499ff', desc:'Full products — ebooks · guides · prompt packs',
+    focus:'You are in WRITE MODE. Write complete sellable digital products. NOT outlines. NOT descriptions. The ACTUAL content — full ebooks, every prompt in a pack, complete guides. Format clearly so it can be pasted into a Google Doc, exported as PDF, and sold on Gumroad today. Minimum 1000 words for guides, 1500 for ebooks.' },
+  create:   { label:'CREATE MODE',   color:'#4499ff', desc:'Full product creation',
+    focus:'You are in CREATE MODE. Write the complete product content. Full ebooks, every prompt in a pack, complete step-by-step guides. No outlines. Write the whole thing.' },
+  sales:    { label:'SALES MODE',    color:'#b8860b', desc:'Revenue · pricing · income projections',
+    focus:'You are in SALES MODE. Focus on revenue and pricing. Give projections at 10/50/100/500 sales. Build product ladders (low-ticket $7-17 → mid-ticket $27-47 → bundle $67-97). Break income goals into daily/weekly targets. Account for Gumroad fees (~10% + $0.30/sale).' },
+  blast:    { label:'BLAST MODE',    color:'#7289da', desc:'Content for Telegram and Discord',
+    focus:'You are in BLAST MODE. Write punchy, engaging content for Telegram and Discord. Short, direct, action-oriented. Mix hype, value, and CTA. Ready to copy and paste into the BLAST tab.' },
+};
+
+function activateMode(name) {
+  const key = name.toLowerCase().replace(/\s+/g,'');
+  // Handle exit
+  if (/^(exit|off|none|clear|normal|general|reset)$/.test(key)) { deactivateMode(); return true; }
+  const mode = MODES[key];
+  if (!mode) return false;
+  jarvisMode = key;
+  renderModeIndicator();
+  addMsg('jarvis','assistant',
+    `⚡ ${mode.label} ACTIVATED\n\n${mode.desc.toUpperCase()}\n\nAll capabilities locked in on this. What are we doing, ${cfg.name}?`);
+  sfx('recv');
+  return true;
+}
+
+function deactivateMode() {
+  jarvisMode = null;
+  renderModeIndicator();
+  addMsg('jarvis','assistant',`Mode cleared. Back to full JARVIS — every capability open. What do you need?`);
+  sfx('recv');
+}
+
+function renderModeIndicator() {
+  const ind = document.getElementById('mode-ind');
+  if (!ind) return;
+  if (!jarvisMode || !MODES[jarvisMode]) { ind.style.display = 'none'; return; }
+  const m = MODES[jarvisMode];
+  ind.style.display = 'flex';
+  ind.style.borderBottomColor = m.color;
+  ind.innerHTML = `<span class="mode-dot" style="color:${m.color}"></span><span class="mode-lbl" style="color:${m.color}">${m.label}</span><span class="mode-desc">${m.desc}</span><button class="mode-x" onclick="deactivateMode()">✕</button>`;
+}
 let recognition = null;
 let audioCtx = null;
 let currentTab = 'jarvis';
@@ -2276,6 +2346,11 @@ Current Income: $${(cfg.income||0).toLocaleString()}/month
 Products Launched: ${(cfg.done||[]).length}
 Business Context: ${cfg.ctx||'Building a digital product business selling on Gumroad'}${brainFacts?'\n\nKnowledge Base:\n'+brainFacts:''}${activeTasks?'\n\nPending Tasks:\n'+activeTasks:''}`;
 
+  // Active mode injects focused behavior on top of the base prompt
+  const modeBlock = (jarvisMode && MODES[jarvisMode])
+    ? `\n\n⚡ ACTIVE MODE: ${MODES[jarvisMode].label}\n${MODES[jarvisMode].focus}\nStay locked in this mode for every response until the user exits.`
+    : '';
+
   const jarvisFull = `You are JARVIS — a full-stack AI built for ${cfg.name}. One conversation. Every capability. You handle it all:
 
 ▸ EMPIRE RESEARCH (ATLAS): Find what sells, validate niches, build launch plans. Gumroad formats (ebooks, prompt packs, templates, guides), price points ($7-$47), demand signals. Give specific product titles, not vague categories.
@@ -2290,7 +2365,7 @@ Rules: Direct and specific. Address ${cfg.name} by name. Never say "I'd suggest"
 
 ${base}
 
-Commands: "status" · "list" · "add product X" · "set income X"`;
+Commands: "status" · "list" · "add product X" · "set income X" · "[name] mode" to focus · "exit mode" to reset${modeBlock}`;
 
   return jarvisFull;
 }
@@ -2388,6 +2463,12 @@ async function callAPIWithPrompt(sysP, messages, onToken) {
 // ═══════════════════════════════════════════════
 function cmd(text) {
   const t = text.toLowerCase().trim();
+
+  // Mode detection — "business mode", "enter code mode", "switch to beats mode", etc.
+  const modeMatch = t.match(/(?:^|\b)(business|empire|code|beats|music|tax|launch|research|write|create|sales|blast|exit|off|normal|general|reset|clear)\s+mode\b/i)
+    || t.match(/^mode[:\s]+(\w+)$/i)
+    || (t === 'exit mode' || t === 'clear mode' || t === 'no mode' ? ['', 'exit'] : null);
+  if (modeMatch) { return activateMode((modeMatch[1]||modeMatch[0]).trim()); }
 
   if (t==='status') {
     const pct = cfg.goal>0?Math.round((cfg.income/cfg.goal)*100):0;
