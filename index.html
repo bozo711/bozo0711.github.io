@@ -103,6 +103,12 @@ textarea.inp::placeholder{color:var(--text-d)}
 .mic-btn{width:42px;height:42px;background:var(--red-d);border:2px solid var(--red-b);border-radius:50%;color:#cc5544;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;user-select:none;-webkit-user-select:none}
 .mic-btn.on{background:rgba(200,0,0,.2);border-color:var(--red);color:var(--red);box-shadow:0 0 16px rgba(180,0,0,.4);animation:mic-pulse .5s infinite alternate}
 @keyframes mic-pulse{to{transform:scale(1.08)}}
+.attach-btn{width:34px;height:34px;background:rgba(80,0,20,.1);border:1px solid var(--red-b);border-radius:50%;color:var(--text-d);font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.attach-btn.live{color:var(--live);border-color:var(--live);background:rgba(100,0,28,.3);box-shadow:0 0 8px rgba(200,30,60,.3)}
+.attach-chip{display:flex;align-items:center;gap:8px;padding:6px 14px;background:rgba(100,0,28,.18);border-top:1px solid rgba(140,0,40,.25)}
+.attach-chip img{width:38px;height:38px;object-fit:cover;border-radius:5px;flex-shrink:0;border:1px solid var(--red-b)}
+.attach-chip .ac-name{flex:1;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.attach-chip .ac-rm{color:var(--text-d);font-size:18px;line-height:1;cursor:pointer;padding:0 3px}
 
 /* ── AGENT CARD ── */
 .agent-card{flex-shrink:0;border-bottom:1px solid var(--red-b)}
@@ -1876,6 +1882,8 @@ let cfg = {
 let convos = {};          // {agent:[{role,content}]}
 let busy = false;
 let voiceOut = true;
+let pendingAttachment = null; // {type:'image'|'file', name, mime, data}
+let attachTargetAgent = '';
 let recognition = null;
 let audioCtx = null;
 let currentTab = 'jarvis';
@@ -1936,6 +1944,7 @@ function init() {
   loadBlastLog();
   loadPublish();
   loadBeats();
+  initAttach();
   renderSubTabs('agents');
   startClock();
   updateStats();
@@ -2289,10 +2298,13 @@ async function callAPI(agent, messages, onToken) {
   // OpenAI-compatible (Groq or OpenAI)
   if (!cfg.apikey) throw new Error('No API key. Tap ⚙ to add your key.');
   const base = p==='openai' ? 'https://api.openai.com' : 'https://api.groq.com/openai';
+  const hasVision = messages.some(m => Array.isArray(m.content));
+  let model = cfg.model || 'llama-3.1-8b-instant';
+  if (hasVision && p !== 'openai') model = 'llama-3.2-11b-vision-preview';
   const res = await fetch(`${base}/v1/chat/completions`, {
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':`Bearer ${cfg.apikey}`},
-    body:JSON.stringify({model:cfg.model||'llama-3.1-8b-instant',messages:[{role:'system',content:sysPrompt(agent)},...messages],stream:true}),
+    body:JSON.stringify({model,messages:[{role:'system',content:sysPrompt(agent)},...messages],stream:true}),
   });
   if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`HTTP ${res.status}: ${t||res.statusText}`); }
   const reader=res.body.getReader(); const dec=new TextDecoder(); let full='';
@@ -2403,14 +2415,18 @@ function cmd(text) {
 async function send(agent) {
   const inp = document.getElementById(`i-${agent}`);
   const text = inp.value.trim();
-  if (!text || busy) return;
+  const attach = pendingAttachment;
 
-  if (agent==='jarvis' && cmd(text)) { inp.value=''; autoH(inp); return; }
+  if (!text && !attach || busy) return;
+  if (agent==='jarvis' && text && cmd(text)) { inp.value=''; autoH(inp); return; }
 
   inp.value=''; autoH(inp);
-  addMsg(agent,'user',text);
+  if (attach) clearAttachment(agent);
+
+  const displayText = text + (attach ? `\n📎 ${attach.name}` : '');
+  addMsg(agent,'user', displayText);
   sfx('send');
-  pushConvo(agent,'user',text);
+  pushConvo(agent,'user', text || `[Attached: ${attach?.name}]`);
 
   busy = true;
   const sb = document.getElementById(`sb-${agent}`);
@@ -2419,6 +2435,18 @@ async function send(agent) {
   const el = mkStream(agent);
   try {
     const msgs = (convos[agent]||[]).slice(-20);
+    // Inject attachment into the last user message for this API call only
+    if (attach && msgs.length > 0) {
+      const last = msgs[msgs.length - 1];
+      if (attach.type === 'image') {
+        last.content = [
+          {type:'image_url', image_url:{url: attach.data}},
+          {type:'text', text: text || 'Analyze this image and give me actionable insights for my digital product business.'}
+        ];
+      } else {
+        last.content = `[File: ${attach.name}]\n${attach.data.slice(0,8000)}\n[/File]\n\n${text || 'Analyze this file and give me actionable insights.'}`;
+      }
+    }
     const full = await callAPI(agent, msgs, t => el?.upd(t));
     el?.fin(full);
     pushConvo(agent,'assistant',full);
@@ -2430,6 +2458,80 @@ async function send(agent) {
 
   busy = false;
   if (sb) sb.disabled = false;
+}
+
+// ═══════════════════════════════════════════════
+// FILE / IMAGE ATTACH
+// ═══════════════════════════════════════════════
+function initAttach() {
+  const fi = document.createElement('input');
+  fi.type = 'file';
+  fi.id = 'g-file-inp';
+  fi.accept = 'image/*,.pdf,.txt,.md,.csv,.js,.ts,.py,.html,.css,.json';
+  fi.style.display = 'none';
+  fi.addEventListener('change', () => { handleAttach(fi.files); fi.value = ''; });
+  document.body.appendChild(fi);
+
+  ['jarvis','atlas','scribe','hunter','ledger'].forEach(ag => {
+    const area = document.querySelector(`#p-${ag} .inp-area`);
+    if (!area) return;
+    const btn = document.createElement('button');
+    btn.className = 'attach-btn';
+    btn.id = `abt-${ag}`;
+    btn.title = 'Attach image or file';
+    btn.innerHTML = '📎';
+    btn.onclick = () => { attachTargetAgent = ag; document.getElementById('g-file-inp').click(); };
+    const sendBtn = area.querySelector('.send-btn');
+    area.insertBefore(btn, sendBtn);
+  });
+}
+
+function handleAttach(files) {
+  if (!files || !files[0]) return;
+  const file = files[0];
+  const agent = attachTargetAgent;
+  if (file.size > 4 * 1024 * 1024) { toast('File too large — max 4MB'); return; }
+
+  const reader = new FileReader();
+  if (file.type.startsWith('image/')) {
+    reader.onload = e => {
+      pendingAttachment = {type:'image', name:file.name, mime:file.type, data:e.target.result};
+      showAttachPreview(agent);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    reader.onload = e => {
+      pendingAttachment = {type:'file', name:file.name, mime:file.type, data:e.target.result};
+      showAttachPreview(agent);
+    };
+    reader.readAsText(file);
+  }
+}
+
+function showAttachPreview(agent) {
+  const old = document.getElementById(`ap-${agent}`);
+  if (old) old.remove();
+  if (!pendingAttachment) return;
+  const inpArea = document.querySelector(`#p-${agent} .inp-area`);
+  if (!inpArea) return;
+
+  const div = document.createElement('div');
+  div.id = `ap-${agent}`;
+  div.className = 'attach-chip';
+  if (pendingAttachment.type === 'image') {
+    div.innerHTML = `<img src="${pendingAttachment.data}" alt=""><span class="ac-name">${pendingAttachment.name}</span><span class="ac-rm" onclick="clearAttachment('${agent}')">✕</span>`;
+  } else {
+    div.innerHTML = `<span style="font-size:18px">📎</span><span class="ac-name">${pendingAttachment.name}</span><span class="ac-rm" onclick="clearAttachment('${agent}')">✕</span>`;
+  }
+  inpArea.parentNode.insertBefore(div, inpArea);
+  document.getElementById(`abt-${agent}`)?.classList.add('live');
+}
+
+function clearAttachment(agent) {
+  pendingAttachment = null;
+  const chip = document.getElementById(`ap-${agent}`);
+  if (chip) chip.remove();
+  document.getElementById(`abt-${agent}`)?.classList.remove('live');
 }
 
 async function qp(agent, prompt) {
