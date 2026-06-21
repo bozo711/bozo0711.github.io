@@ -71,6 +71,27 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
 /* ── PANELS ── */
 .content{flex:1;overflow:hidden;position:relative}
+
+/* ── INLINE BEAT PLAYER ── */
+.beat-card{margin-top:10px;background:rgba(40,0,70,.35);border:1px solid rgba(153,51,255,.35);border-radius:4px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.beat-card-info{display:flex;gap:10px;align-items:center}
+.beat-card-bpm{font-size:12px;font-weight:bold;letter-spacing:2px;color:#9933ff}
+.beat-card-key{font-size:9px;letter-spacing:2px;color:rgba(153,51,255,.7);text-transform:uppercase}
+.beat-card-wave{font-size:8px;letter-spacing:1px;color:rgba(153,51,255,.45);text-transform:uppercase}
+.beat-viz{display:flex;align-items:flex-end;gap:2px;height:18px}
+.beat-viz span{flex:1;background:rgba(153,51,255,.3);min-height:3px;border-radius:1px;transition:height .1s}
+.beat-viz.on span{background:rgba(153,51,255,.7);animation:bviz .35s ease-in-out infinite alternate}
+.beat-viz.on span:nth-child(2){animation-delay:.04s}
+.beat-viz.on span:nth-child(3){animation-delay:.08s}
+.beat-viz.on span:nth-child(4){animation-delay:.12s}
+.beat-viz.on span:nth-child(5){animation-delay:.16s}
+.beat-viz.on span:nth-child(6){animation-delay:.20s}
+.beat-viz.on span:nth-child(7){animation-delay:.24s}
+.beat-viz.on span:nth-child(8){animation-delay:.28s}
+@keyframes bviz{0%{height:20%}100%{height:100%}}
+.chat-beat-btn{background:rgba(153,51,255,.12);border:1px solid rgba(153,51,255,.45);color:#9933ff;font-family:inherit;font-size:10px;letter-spacing:2.5px;padding:7px 16px;cursor:pointer;text-transform:uppercase;transition:all .2s;width:100%;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)}
+.chat-beat-btn:hover{background:rgba(153,51,255,.25);border-color:#9933ff}
+.chat-beat-btn.on{background:rgba(153,51,255,.22);color:#cc66ff;border-color:#9933ff}
 .panel{display:none;flex-direction:column;height:100%;position:relative}
 .panel.on{display:flex}
 .panel.on::before,.panel.on::after{content:'';position:absolute;width:16px;height:16px;pointer-events:none;z-index:5;opacity:.5;transition:opacity .3s}
@@ -1720,6 +1741,7 @@ async function send(agent) {
     pushConvo(target,'assistant',full);
     sfx('recv');
     if (voiceOut && agent==='jarvis') speak(full);
+    if (target === 'jarvis') { const bp = parseBeatPattern(full); if (bp) applyBeatPattern(bp); }
   } catch(e) {
     el?.fin(`⚠ ${e.message}`);
   }
@@ -4657,11 +4679,15 @@ function toggleBeat() {
     document.querySelectorAll('.beat-step').forEach(el => el.classList.remove('cur'));
     const btn = document.getElementById('beat-play-btn');
     if (btn) btn.textContent = '▶ PLAY';
+    document.querySelectorAll('.chat-beat-btn').forEach(b => { b.textContent = '▶ PLAY BEAT'; b.classList.remove('on'); });
+    document.querySelectorAll('.beat-viz').forEach(v => v.classList.remove('on'));
   } else {
     beatNextTime = ctx.currentTime + 0.05; beatStep = 0; beatPlaying = true;
     beatScheduler();
     const btn = document.getElementById('beat-play-btn');
     if (btn) btn.textContent = '■ STOP';
+    document.querySelectorAll('.chat-beat-btn').forEach(b => { b.textContent = '■ STOP'; b.classList.add('on'); });
+    document.querySelectorAll('.beat-viz').forEach(v => v.classList.add('on'));
   }
 }
 
@@ -4922,20 +4948,45 @@ function parseBeatPattern(text) {
   try { return JSON.parse(m[1].trim()); } catch(e) { return null; }
 }
 
+function injectBeatPlayer(bubble, pat) {
+  const old = bubble.querySelector('.beat-card');
+  if (old) old.remove();
+  const bpm = pat.bpm || beatBpm;
+  const key = (pat.key || melKey) + ' ' + (pat.scale || melScale);
+  const wave = pat.wave || melWave;
+  const card = document.createElement('div');
+  card.className = 'beat-card';
+  card.innerHTML = `<div class="beat-card-info">
+    <span class="beat-card-bpm">${bpm} BPM</span>
+    <span class="beat-card-key">${key}</span>
+    <span class="beat-card-wave">${wave}</span>
+  </div>
+  <div class="beat-viz" id="bviz-${Date.now()}">
+    <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+  </div>
+  <button class="chat-beat-btn" onclick="toggleBeat()">▶ PLAY BEAT</button>`;
+  bubble.appendChild(card);
+}
+
 function applyBeatPattern(pat) {
-  // BPM
   if (pat.bpm) {
     beatBpm = Math.min(200, Math.max(60, parseInt(pat.bpm)));
     const sl = document.getElementById('bpm-slider'); if (sl) sl.value = beatBpm;
     const dp = document.getElementById('bpm-display'); if (dp) dp.textContent = beatBpm;
   }
-  // Key + scale + wave
-  if (pat.key) { melKey = pat.key; const el = document.getElementById('mel-key'); if (el) el.value = melKey; }
+  if (pat.key)   { melKey   = pat.key;   const el = document.getElementById('mel-key');   if (el) el.value = melKey; }
   if (pat.scale) { melScale = pat.scale; const el = document.getElementById('mel-scale'); if (el) el.value = melScale; }
-  if (pat.wave) { melWave = pat.wave; const el = document.getElementById('mel-wave'); if (el) el.value = melWave; }
+  if (pat.wave)  { melWave  = pat.wave;  const el = document.getElementById('mel-wave');  if (el) el.value = melWave; }
   melReverbNode = null;
 
-  // Drums
+  // Flat format: kick/snare/hihat/open/clap/perc as top-level arrays
+  const keyMap = {kick:'KICK',snare:'SNARE',hihat:'HIHAT',openhat:'OPEN',open:'OPEN',clap:'CLAP',perc:'PERC',bass:'KICK'};
+  BEAT_TRACKS.forEach((name, i) => {
+    const flatKey = Object.keys(keyMap).find(k => keyMap[k] === name);
+    const row = (pat[name.toLowerCase()] || (flatKey && pat[flatKey]));
+    if (Array.isArray(row) && row.length === 16) beatPattern[i] = row.map(v => !!v);
+  });
+  // Nested drums format fallback
   if (pat.drums) {
     BEAT_TRACKS.forEach((name, i) => {
       const row = pat.drums[name];
@@ -4943,25 +4994,44 @@ function applyBeatPattern(pat) {
     });
   }
 
-  // Recompute melody notes with new key/scale FIRST
   melNotes = computeMelNotes();
   melPattern = melNotes.map(() => new Array(16).fill(false));
   if (pat.melody) {
-    Object.entries(pat.melody).forEach(([noteName, steps]) => {
-      if (!Array.isArray(steps) || steps.length !== 16) return;
-      const norm = normalizeNoteName(noteName);
-      const idx = melNotes.findIndex(n => normalizeNoteName(n.name) === norm);
-      if (idx >= 0) melPattern[idx] = steps.map(v => !!v);
-    });
+    if (Array.isArray(pat.melody)) {
+      // [{note:'C3', step:0}, ...] format
+      pat.melody.forEach(({note, step}) => {
+        const norm = normalizeNoteName(note);
+        const idx = melNotes.findIndex(n => normalizeNoteName(n.name) === norm);
+        if (idx >= 0 && step >= 0 && step < 16) melPattern[idx][step] = true;
+      });
+    } else {
+      // {noteName: [16 steps]} format
+      Object.entries(pat.melody).forEach(([noteName, steps]) => {
+        if (!Array.isArray(steps) || steps.length !== 16) return;
+        const norm = normalizeNoteName(noteName);
+        const idx = melNotes.findIndex(n => normalizeNoteName(n.name) === norm);
+        if (idx >= 0) melPattern[idx] = steps.map(v => !!v);
+      });
+    }
   }
 
   renderBeatGrid();
   renderMelGrid();
   saveBeatData();
 
-  // Auto-start playing
-  if (!beatPlaying) toggleBeat();
-  toast('Beat loaded — playing now');
+  // Stop any currently playing beat first
+  if (beatPlaying) { clearTimeout(beatTimer); beatPlaying = false; beatStep = 0; }
+
+  // Inject player into last JARVIS message
+  const msgArea = document.getElementById('m-jarvis');
+  if (msgArea) {
+    const lastBubble = msgArea.querySelector('.msg.a:last-child .bubble');
+    if (lastBubble) injectBeatPlayer(lastBubble, pat);
+  }
+
+  // Auto-start
+  toggleBeat();
+  toast('Beat loaded — tap play in chat');
 }
 
 async function sendBeatMsg() {
