@@ -1611,7 +1611,6 @@ strong{color:#e8d4b0}
             <button class="code-reject-btn" onclick="rejectCodeChange()">✕ REJECT</button>
           </div>
         </div>
-        <div class="code-msgs" id="code-msgs"></div>
         <div class="code-quick-row">
           <button class="code-qbtn" onclick="codeCmd('Review this code. Find bugs, issues, and anything that could be improved.')">Review</button>
           <button class="code-qbtn" onclick="codeCmd('Debug this code. Identify the errors and fix them.')">Debug</button>
@@ -1625,6 +1624,7 @@ strong{color:#e8d4b0}
           <textarea class="code-inp" id="code-inp" rows="1" placeholder="Ask JARVIS to write, fix, or explain code…" onkeydown="handleCodeKey(event)" oninput="autoGrow(this)"></textarea>
           <button class="code-send-btn" onclick="sendCode()">↑</button>
         </div>
+        <div style="padding:6px 10px;font-size:9px;letter-spacing:2px;color:rgba(204,34,68,.35);text-align:center;border-top:1px solid rgba(80,0,20,.3)">▸ RESPONSES APPEAR IN JARVIS CHAT · <span style="cursor:pointer;text-decoration:underline" onclick="switchTab('jarvis')">OPEN →</span></div>
       </div>
     </div>
 
@@ -1676,8 +1676,7 @@ strong{color:#e8d4b0}
       <div class="tax-deduct-total" id="tax-deduct-total"></div>
 
       <!-- AI Tax Advisor Chat -->
-      <div class="tax-section-hdr">Tax Advisor</div>
-      <div class="tax-msgs" id="tax-msgs"></div>
+      <div class="tax-section-hdr">Tax Advisor — Ask JARVIS</div>
       <div class="tax-quick-row" style="margin-bottom:7px">
         <button class="tax-qbtn" onclick="taxCmd('What deductions can I take as a digital product creator selling on Gumroad?')">Deductions</button>
         <button class="tax-qbtn" onclick="taxCmd('Walk me through my quarterly estimated tax schedule for this year.')">Q Schedule</button>
@@ -1687,9 +1686,10 @@ strong{color:#e8d4b0}
         <button class="tax-qbtn" onclick="taxCmd('Give me a year-end tax checklist for my digital product business.')">Year-End</button>
       </div>
       <div class="tax-input-row">
-        <textarea class="tax-inp" id="tax-inp" rows="1" placeholder="Ask your tax advisor anything…" onkeydown="handleTaxKey(event)" oninput="autoGrow(this)"></textarea>
+        <textarea class="tax-inp" id="tax-inp" rows="1" placeholder="Ask JARVIS anything about taxes…" onkeydown="handleTaxKey(event)" oninput="autoGrow(this)"></textarea>
         <button class="tax-send-btn" onclick="sendTax()">↑</button>
       </div>
+      <div style="padding:6px 10px;font-size:9px;letter-spacing:2px;color:rgba(204,34,68,.35);text-align:center;border-top:1px solid rgba(80,0,20,.3)">▸ RESPONSES APPEAR IN JARVIS CHAT · <span style="cursor:pointer;text-decoration:underline" onclick="switchTab('jarvis')">OPEN →</span></div>
     </div>
 
     <!-- BLAST -->
@@ -1819,7 +1819,7 @@ strong{color:#e8d4b0}
       <div class="beats-ref-list" id="beats-ref-list"></div>
 
       <!-- AI Chat -->
-      <div class="beats-section-hdr">JARVIS Production Advisor</div>
+      <div class="beats-section-hdr">JARVIS Production Advisor — responses in JARVIS chat</div>
       <div style="display:flex;gap:7px;margin-bottom:8px;flex-wrap:wrap">
         <button style="flex:1;padding:11px 8px;background:linear-gradient(135deg,rgba(100,0,28,.35),rgba(138,104,0,.15));border:1px solid var(--red);border-radius:8px;color:var(--live);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer" onclick="beatCmd('Make me a dark trap type beat. Generate a full pattern — drums and melody — and auto-load it into the sequencer.')">⚡ TRAP TYPE BEAT</button>
         <button style="flex:1;padding:11px 8px;background:linear-gradient(135deg,rgba(100,0,28,.25),rgba(80,0,0,.1));border:1px solid var(--red-b);border-radius:8px;color:var(--text-d);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:2px;cursor:pointer" onclick="beatCmd('Make me a melodic lo-fi hip hop beat. Generate a full pattern — drums and melody — and auto-load it into the sequencer.')">🌙 LO-FI TYPE BEAT</button>
@@ -1828,7 +1828,6 @@ strong{color:#e8d4b0}
         <input id="beat-type-inp" style="flex:1;background:var(--panel);border:1px solid var(--red-b);border-radius:8px;color:var(--text);font-family:inherit;font-size:11px;padding:9px 12px;outline:none" placeholder="e.g. Travis Scott, Drake, Lil Baby, Summer Walker…">
         <button style="padding:9px 14px;background:linear-gradient(135deg,rgba(100,0,28,.4),rgba(138,104,0,.2));border:1px solid var(--red);border-radius:8px;color:var(--live);font-family:inherit;font-size:10px;font-weight:bold;letter-spacing:1px;cursor:pointer;white-space:nowrap" onclick="genTypeBeat()">GENERATE</button>
       </div>
-      <div class="beats-msgs" id="beat-msgs"></div>
       <div class="code-quick-row" style="margin-bottom:7px">
         <button class="code-qbtn" onclick="beatCmd('Make me a UK drill type beat, dark and hard. Generate and auto-load the full pattern.')">Drill</button>
         <button class="code-qbtn" onclick="beatCmd('Make me an R&B type beat, smooth and melodic. Generate and auto-load the full pattern.')">R&B</button>
@@ -1841,6 +1840,7 @@ strong{color:#e8d4b0}
         <textarea class="tax-inp" id="beat-inp" rows="1" placeholder="Ask JARVIS about beats, sampling, production…" onkeydown="handleBeatKey(event)" oninput="autoGrow(this)"></textarea>
         <button class="tax-send-btn" onclick="sendBeatMsg()">↑</button>
       </div>
+      <div style="padding:6px 10px;font-size:9px;letter-spacing:2px;color:rgba(204,34,68,.35);text-align:center;border-top:1px solid rgba(80,0,20,.3)">▸ RESPONSES IN JARVIS CHAT · BEAT PATTERNS AUTO-LOAD HERE · <span style="cursor:pointer;text-decoration:underline" onclick="switchTab('jarvis')">OPEN JARVIS →</span></div>
 
     </div>
 
@@ -2276,15 +2276,17 @@ Current Income: $${(cfg.income||0).toLocaleString()}/month
 Products Launched: ${(cfg.done||[]).length}
 Business Context: ${cfg.ctx||'Building a digital product business selling on Gumroad'}${brainFacts?'\n\nKnowledge Base:\n'+brainFacts:''}${activeTasks?'\n\nPending Tasks:\n'+activeTasks:''}`;
 
-  const jarvisFull = `You are JARVIS — a full-stack digital empire AI built for ${cfg.name}. You combine the power of five specialized agents:
+  const jarvisFull = `You are JARVIS — a full-stack AI built for ${cfg.name}. One conversation. Every capability. You handle it all:
 
-▸ ATLAS (Research): Find what sells, validate niches, build launch plans. Know Gumroad inside out — formats (ebooks, prompt packs, templates, guides), price points ($7-$47), demand signals.
-▸ SCRIBE (Create): Write complete sellable products — NOT outlines, the ACTUAL content. Full ebooks, every prompt in a pack, complete guides. Paste-ready into Google Docs, export as PDF, upload to Gumroad.
-▸ HUNTER (Launch): Gumroad listings that convert, social posts that drive clicks, TikTok/Reels scripts word for word, Twitter threads. Everything copy-paste ready — no placeholders.
-▸ LEDGER (Money): Real numbers. Gumroad fees (~10% + $0.30). Revenue projections at 10/50/100/500 sales. Daily/weekly targets to hit income goals. Product ladders to maximize revenue per customer.
-▸ JARVIS (Command): Direct, specific next actions. Never generic. When asked for ideas — give specific titles and price points. When asked what to do next — give the single clearest action.
+▸ EMPIRE RESEARCH (ATLAS): Find what sells, validate niches, build launch plans. Gumroad formats (ebooks, prompt packs, templates, guides), price points ($7-$47), demand signals. Give specific product titles, not vague categories.
+▸ PRODUCT CREATION (SCRIBE): Write complete sellable products — NOT outlines, the ACTUAL content. Full ebooks, every prompt in a pack, complete guides. Paste-ready into Google Docs → PDF → Gumroad.
+▸ LAUNCH & SALES (HUNTER): Gumroad listings that convert, social posts, TikTok/Reels scripts word-for-word, Twitter threads. Copy-paste ready, no placeholders, no [insert here].
+▸ REVENUE & PRICING (LEDGER): Real numbers. Gumroad fees (~10% + $0.30/sale). Revenue projections at 10/50/100/500 sales. Daily/weekly targets. Product ladders.
+▸ TAX ADVISOR: SE tax = 15.3% × 92.35% of net profit. Quarterly estimated taxes (Q1 Apr 15 · Q2 Jun 15 · Q3 Sep 15 · Q4 Jan 15). Deductions for digital creators: home office, software, subscriptions, equipment, courses, marketing spend. Know 2024 standard deduction ($14,600 single). Give real dollar amounts based on their income data.
+▸ BEAT PRODUCER: When asked to make a beat, ALWAYS output a [BEAT_PATTERN] block with this exact JSON: {"bpm":140,"key":"C","scale":"minor","wave":"sawtooth","kick":[1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0],"snare":[0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],"hihat":[1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0],"openhat":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],"clap":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"bass":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"melody":[{"note":"C3","step":0},{"note":"Eb3","step":2}]} — customize all values for the requested style. Use sharps not flats.
+▸ CODE ASSISTANT: When asked to write or change code: for full rewrites or new files use [BIG_CHANGE]complete code here[/BIG_CHANGE]. For targeted edits use [SMALL_CHANGE]the changed section[/SMALL_CHANGE]. Always include complete working code, explain the change briefly.
 
-You are sharp, direct, and results-focused. Address the user as "${cfg.name}". Never say "I'd suggest" — say what to do. Never give outlines when asked to write — write the thing.
+Rules: Direct and specific. Address ${cfg.name} by name. Never say "I'd suggest" — say what to do. Never give outlines when asked to write — write the thing. Give real numbers not approximations.
 
 ${base}
 
@@ -4529,35 +4531,51 @@ async function sendCode() {
   const inp = document.getElementById('code-inp');
   const text = (inp ? inp.value : '').trim();
   if (!text || busy) return;
-  inp.value = ''; inp.style.height = 'auto';
+  if (inp) { inp.value = ''; inp.style.height = 'auto'; }
   dismissProposal();
-  const userDiv = document.createElement('div');
-  userDiv.className = 'code-msg user';
-  userDiv.textContent = text;
-  const msgs_el = document.getElementById('code-msgs');
-  msgs_el.appendChild(userDiv);
-  msgs_el.scrollTop = 99999;
-  codeConvo.push({role:'user', content:text});
-  const msgs = codeConvo.map(m=>({role:m.role, content:m.content}));
-  const {upd, fin} = mkCodeStream();
+  // Inject code editor context into the message
+  const code = document.getElementById('code-editor')?.value?.trim();
+  const lang = document.getElementById('code-lang')?.value || 'code';
+  const fullMsg = code ? `[Code Editor — ${lang}]\n\`\`\`\n${code.slice(0,4000)}\n\`\`\`\n\n${text}` : text;
+  // Route to JARVIS
+  switchTab('jarvis');
+  addMsg('jarvis','user', text);
+  sfx('send');
+  pushConvo('jarvis','user', fullMsg);
   busy = true;
+  const el = mkStream('jarvis');
   try {
-    const full = await callAPIWithPrompt(sysPromptCode(), msgs, upd);
-    fin(full);
-    codeConvo.push({role:'assistant', content:full});
+    const msgs = (convos['jarvis']||[]).slice(-16);
+    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
+    el?.fin(full);
+    pushConvo('jarvis','assistant', full);
     handleCodeResponse(full);
     saveCodeState();
     sfx('recv');
-  } catch(e) {
-    fin('Error: '+e.message);
-  }
+  } catch(e) { el?.fin('⚠ '+e.message); }
   busy = false;
 }
 
 async function codeCmd(prompt) {
-  const inp = document.getElementById('code-inp');
-  if (inp) { inp.value = prompt; }
-  await sendCode();
+  const code = document.getElementById('code-editor')?.value?.trim();
+  const lang = document.getElementById('code-lang')?.value || 'code';
+  const fullPrompt = code ? `[Code Editor — ${lang}]\n\`\`\`\n${code.slice(0,4000)}\n\`\`\`\n\n${prompt}` : prompt;
+  switchTab('jarvis');
+  addMsg('jarvis','user', prompt);
+  sfx('send');
+  pushConvo('jarvis','user', fullPrompt);
+  busy = true;
+  const el = mkStream('jarvis');
+  try {
+    const msgs = (convos['jarvis']||[]).slice(-16);
+    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
+    el?.fin(full);
+    pushConvo('jarvis','assistant', full);
+    handleCodeResponse(full);
+    saveCodeState();
+    sfx('recv');
+  } catch(e) { el?.fin('⚠ '+e.message); }
+  busy = false;
 }
 
 function copyCode() {
@@ -4774,29 +4792,37 @@ async function sendTax() {
   const inp = document.getElementById('tax-inp');
   const text = (inp ? inp.value : '').trim();
   if (!text || busy) return;
-  inp.value = ''; inp.style.height = 'auto';
-  const c = document.getElementById('tax-msgs');
-  const ud = document.createElement('div');
-  ud.className = 'tax-msg user'; ud.textContent = text;
-  c.appendChild(ud); c.scrollTop = 99999;
-  taxConvo.push({role:'user', content:text});
-  const msgs = taxConvo.map(m=>({role:m.role, content:m.content}));
-  const {upd, fin} = mkTaxStream();
+  if (inp) { inp.value = ''; inp.style.height = 'auto'; }
+  switchTab('jarvis');
+  addMsg('jarvis','user', text);
+  sfx('send');
+  pushConvo('jarvis','user', text);
   busy = true;
+  const el = mkStream('jarvis');
   try {
-    const full = await callAPIWithPrompt(sysPromptTax(), msgs, upd);
-    fin(full);
-    taxConvo.push({role:'assistant', content:full});
+    const msgs = (convos['jarvis']||[]).slice(-16);
+    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
+    el?.fin(full);
+    pushConvo('jarvis','assistant', full);
     saveTax();
     sfx('recv');
-  } catch(e) { fin('Error: '+e.message); }
+  } catch(e) { el?.fin('⚠ '+e.message); }
   busy = false;
 }
 
 async function taxCmd(prompt) {
-  const inp = document.getElementById('tax-inp');
-  if (inp) inp.value = prompt;
-  await sendTax();
+  switchTab('jarvis');
+  addMsg('jarvis','user', prompt);
+  sfx('send');
+  pushConvo('jarvis','user', prompt);
+  busy = true;
+  const el = mkStream('jarvis');
+  try {
+    const msgs = (convos['jarvis']||[]).slice(-16);
+    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
+    el?.fin(full); pushConvo('jarvis','assistant', full); sfx('recv');
+  } catch(e) { el?.fin('⚠ '+e.message); }
+  busy = false;
 }
 
 function handleTaxKey(e) {
@@ -5698,28 +5724,41 @@ async function sendBeatMsg() {
   const inp = document.getElementById('beat-inp');
   const text = (inp ? inp.value : '').trim();
   if (!text || busy) return;
-  inp.value = ''; inp.style.height = 'auto';
-  const c = document.getElementById('beat-msgs');
-  const ud = document.createElement('div'); ud.className = 'beats-msg user'; ud.textContent = text;
-  c.appendChild(ud); c.scrollTop = 99999;
-  beatConvo.push({ role: 'user', content: text });
-  const msgs = beatConvo.map(m => ({ role: m.role, content: m.content }));
-  const { upd, fin } = mkBeatStream();
+  if (inp) { inp.value = ''; inp.style.height = 'auto'; }
+  switchTab('jarvis');
+  addMsg('jarvis','user', text);
+  sfx('send');
+  pushConvo('jarvis','user', text);
   busy = true;
+  const el = mkStream('jarvis');
   try {
-    const full = await callAPIWithPrompt(sysPromptBeat(), msgs, upd);
-    fin(full); beatConvo.push({ role: 'assistant', content: full });
+    const msgs = (convos['jarvis']||[]).slice(-16);
+    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
+    el?.fin(full);
+    pushConvo('jarvis','assistant', full);
     saveBeatData(); sfx('recv');
     const pat = parseBeatPattern(full);
     if (pat) applyBeatPattern(pat);
-  } catch(e) { fin('Error: ' + e.message); }
+  } catch(e) { el?.fin('⚠ ' + e.message); }
   busy = false;
 }
 
 async function beatCmd(prompt) {
-  const inp = document.getElementById('beat-inp');
-  if (inp) inp.value = prompt;
-  await sendBeatMsg();
+  switchTab('jarvis');
+  addMsg('jarvis','user', prompt);
+  sfx('send');
+  pushConvo('jarvis','user', prompt);
+  busy = true;
+  const el = mkStream('jarvis');
+  try {
+    const msgs = (convos['jarvis']||[]).slice(-16);
+    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
+    el?.fin(full); pushConvo('jarvis','assistant', full);
+    saveBeatData(); sfx('recv');
+    const pat = parseBeatPattern(full);
+    if (pat) applyBeatPattern(pat);
+  } catch(e) { el?.fin('⚠ ' + e.message); }
+  busy = false;
 }
 
 async function genTypeBeat() {
