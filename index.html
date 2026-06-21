@@ -1019,6 +1019,7 @@ strong{color:#e8d4b0}
         <button class="qbtn" onclick="qp('jarvis','What is the single most important thing I should do right now to move forward?')">What Now</button>
         <button class="qbtn" onclick="qp('jarvis','Motivate me. I need to push through right now.')">Motivate</button>
         <button class="qbtn" onclick="cmd('status')">Status</button>
+        <button class="qbtn" onclick="cleanJarvis()" style="color:rgba(204,34,68,.6)">🧹 Clean</button>
       </div>
       <div class="inp-area">
         <button class="mic-btn" id="mic"
@@ -1723,7 +1724,7 @@ async function send(agent) {
 
   const el = mkStream(target);
   try {
-    const msgs = (convos[target]||[]).slice(-20);
+    const msgs = (convos[target]||[]).slice(-8);
     // Inject attachment into the last user message for this API call only
     if (attach && msgs.length > 0) {
       const last = msgs[msgs.length - 1];
@@ -3678,24 +3679,6 @@ function renderEmailKits() {
 let codeConvo = [];
 let pendingCodeChange = null;
 
-function sysPromptCode() {
-  const {code, lang, file} = getCodeContext();
-  return `You are JARVIS CODE, an expert software engineer. You write clean, production-ready code.
-
-When you want to modify the user's code, use these prefixes on the very first line of your response:
-- [BIG CHANGE] — for large rewrites, new files, or structural changes. The user must approve before it applies.
-- [SMALL CHANGE] — for minor fixes, typo corrections, or one-liners. Applies with one click.
-- No prefix — for explanations, questions, or reviews that don't touch the code.
-
-After the prefix, always provide the full updated code in a fenced code block.
-
-Current file: ${file || 'untitled'}
-Language: ${lang}
-${code ? `\nCurrent code:\n\`\`\`${lang}\n${code}\n\`\`\`` : '\nNo code in editor yet.'}
-
-Never use placeholders like "// rest of code here". Always provide complete, working code.`;
-}
-
 function loadCodeState() {
   try {
     const s = JSON.parse(localStorage.getItem('jv-code')||'{}');
@@ -3727,19 +3710,6 @@ function getCodeContext() {
   };
 }
 
-function renderCodeMsgs() {
-  const c = document.getElementById('code-msgs');
-  if (!c) return;
-  c.innerHTML = '';
-  codeConvo.forEach(m => {
-    const div = document.createElement('div');
-    div.className = 'code-msg ' + (m.role === 'user' ? 'user' : 'ai');
-    div.innerHTML = fmt(m.content);
-    c.appendChild(div);
-  });
-  c.scrollTop = c.scrollHeight;
-}
-
 function mkCodeStream() {
   const c = document.getElementById('code-msgs');
   const div = document.createElement('div');
@@ -3757,25 +3727,6 @@ function extractFirstCodeBlock(text) {
   return m ? m[1].replace(/\n$/, '') : null;
 }
 
-function handleCodeResponse(text) {
-  const isBig = text.trimStart().startsWith('[BIG CHANGE]');
-  const isSmall = text.trimStart().startsWith('[SMALL CHANGE]');
-  if (!isBig && !isSmall) return;
-  const code = extractFirstCodeBlock(text);
-  if (!code) return;
-  pendingCodeChange = { code, type: isBig ? 'big' : 'small' };
-  const prop = document.getElementById('code-proposal');
-  const lbl = document.getElementById('code-proposal-label');
-  const prev = document.getElementById('code-proposal-preview');
-  if (!prop) return;
-  lbl.textContent = isBig ? '⚠ BIG CHANGE — REQUIRES APPROVAL' : '✦ SMALL CHANGE';
-  lbl.className = 'code-proposal-label ' + (isBig ? 'big' : 'small');
-  prev.textContent = code.length > 600 ? code.slice(0,600)+'…' : code;
-  prop.style.display = 'block';
-  prop.scrollIntoView({behavior:'smooth', block:'nearest'});
-  if (isBig) sendTelegram(`⚠️ JARVIS CODE — BIG CHANGE needs your approval\n\nOpen JARVIS → CODE tab to review and approve or reject the proposed change.\n\nPreview:\n${code.slice(0,300)}${code.length>300?'…':''}`).catch(()=>{});
-}
-
 function approveCodeChange() {
   if (!pendingCodeChange) return;
   const ed = document.getElementById('code-editor');
@@ -3791,35 +3742,6 @@ function dismissProposal() {
   pendingCodeChange = null;
   const prop = document.getElementById('code-proposal');
   if (prop) prop.style.display = 'none';
-}
-
-async function sendCode() {
-  const inp = document.getElementById('code-inp');
-  const text = (inp ? inp.value : '').trim();
-  if (!text || busy) return;
-  if (inp) { inp.value = ''; inp.style.height = 'auto'; }
-  dismissProposal();
-  // Inject code editor context into the message
-  const code = document.getElementById('code-editor')?.value?.trim();
-  const lang = document.getElementById('code-lang')?.value || 'code';
-  const fullMsg = code ? `[Code Editor — ${lang}]\n\`\`\`\n${code.slice(0,4000)}\n\`\`\`\n\n${text}` : text;
-  // Route to JARVIS
-  switchTab('jarvis');
-  addMsg('jarvis','user', text);
-  sfx('send');
-  pushConvo('jarvis','user', fullMsg);
-  busy = true;
-  const el = mkStream('jarvis');
-  try {
-    const msgs = (convos['jarvis']||[]).slice(-16);
-    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
-    el?.fin(full);
-    pushConvo('jarvis','assistant', full);
-    handleCodeResponse(full);
-    saveCodeState();
-    sfx('recv');
-  } catch(e) { el?.fin('⚠ '+e.message); }
-  busy = false;
 }
 
 async function codeCmd(prompt) {
@@ -4021,27 +3943,6 @@ function markQPaid(q) {
   renderTax();
 }
 
-function sysPromptTax() {
-  const annualIncome = (cfg.income||0) * 12;
-  const totalDeductions = getTaxDeductTotal();
-  const tx = calcTax(annualIncome, totalDeductions);
-  return `You are a knowledgeable tax advisor specializing in self-employed digital product creators and solo entrepreneurs. You explain taxes clearly and practically — no generic disclaimers, real actionable guidance.
-
-Client profile:
-- Name: ${cfg.name}
-- Business: Digital product creator (selling ebooks, templates, courses, prompt packs on Gumroad)
-- Monthly income: $${(cfg.income||0).toLocaleString()}
-- Annual income estimate: $${annualIncome.toLocaleString()}
-- Logged deductions: $${totalDeductions.toFixed(2)}
-- Estimated annual tax: $${Math.round(tx.total).toLocaleString()} (SE: $${Math.round(tx.seTax).toLocaleString()} + Federal: $${Math.round(tx.fed).toLocaleString()})
-- Estimated quarterly payment: $${Math.round(tx.quarterly).toLocaleString()}
-- Effective rate: ${tx.effectiveRate.toFixed(1)}%
-
-You know: self-employment tax (15.3% on 92.35% of net income), federal income tax brackets, QBI deduction (20% for pass-through businesses), home office deduction, business expense deductions, estimated quarterly tax deadlines (Q1: Apr 15, Q2: Jun 16, Q3: Sep 15, Q4: Jan 15), Schedule C, LLC vs S-Corp considerations, Gumroad's 1099-K reporting threshold, and retirement account strategies (SEP-IRA, Solo 401k) to reduce taxable income.
-
-Always give specific numbers when you can. Address the user as ${cfg.name}.`;
-}
-
 function mkTaxStream() {
   const c = document.getElementById('tax-msgs');
   const div = document.createElement('div');
@@ -4052,28 +3953,6 @@ function mkTaxStream() {
   const upd = t => { div.innerHTML = fmt(t)+'<span class="cur"></span>'; c.scrollTop=c.scrollHeight; };
   const fin = t => { div.classList.remove('thinking'); div.innerHTML = fmt(t); c.scrollTop=c.scrollHeight; };
   return { upd, fin };
-}
-
-async function sendTax() {
-  const inp = document.getElementById('tax-inp');
-  const text = (inp ? inp.value : '').trim();
-  if (!text || busy) return;
-  if (inp) { inp.value = ''; inp.style.height = 'auto'; }
-  switchTab('jarvis');
-  addMsg('jarvis','user', text);
-  sfx('send');
-  pushConvo('jarvis','user', text);
-  busy = true;
-  const el = mkStream('jarvis');
-  try {
-    const msgs = (convos['jarvis']||[]).slice(-16);
-    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
-    el?.fin(full);
-    pushConvo('jarvis','assistant', full);
-    saveTax();
-    sfx('recv');
-  } catch(e) { el?.fin('⚠ '+e.message); }
-  busy = false;
 }
 
 async function taxCmd(prompt) {
@@ -4228,17 +4107,6 @@ function setPubStatus(msg, type='info') {
   if (type !== 'err') setTimeout(()=>{ el.textContent=''; el.className='pub-status'; }, 6000);
 }
 
-function sysPromptPublish() {
-  return `You are JARVIS PUBLISH, a digital product listing specialist. When asked to generate a product, output a [PRODUCT] JSON block EXACTLY like this:
-
-[PRODUCT]
-{
-  "name": "Complete TikTok Script Pack for Digital Product Sellers",
-  "price": 17,
-  "description": "<p><strong>Stop staring at a blank screen.</strong> Every script is written and ready to record.</p><p><strong>What's included:</strong></p><ul><li>50 proven TikTok scripts for digital product niches</li><li>Hook formulas that stop the scroll</li><li>CTA lines that drive clicks to Gumroad</li></ul><p><strong>Perfect for:</strong> creators building passive income with digital products.</p>",
-  "tags": "tiktok, digital products, scripts"
-}
-[/PRODUCT]
 
 Rules:
 - name: clear, specific, benefit-driven (not generic)
@@ -4268,126 +4136,6 @@ function showProductProposal(prod) {
   const card = document.getElementById('pub-proposal');
   if (card) { card.style.display = 'block'; card.scrollIntoView({behavior:'smooth',block:'nearest'}); }
   document.getElementById('pub-form').style.display = 'none';
-}
-
-function rejectProduct() {
-  pendingProduct = null;
-  const card = document.getElementById('pub-proposal');
-  if (card) card.style.display = 'none';
-  setPubStatus('Rejected.', 'info');
-}
-
-function openPubEdit() {
-  if (!pendingProduct) return;
-  document.getElementById('pub-edit-name').value = pendingProduct.name || '';
-  document.getElementById('pub-edit-price').value = pendingProduct.price || '';
-  document.getElementById('pub-edit-desc').value = pendingProduct.description || '';
-  document.getElementById('pub-form').style.display = 'block';
-  document.getElementById('pub-proposal').style.display = 'none';
-}
-
-function closePubEdit() {
-  document.getElementById('pub-form').style.display = 'none';
-  if (pendingProduct) document.getElementById('pub-proposal').style.display = 'block';
-}
-
-function publishFromForm() {
-  const name  = document.getElementById('pub-edit-name').value.trim();
-  const price = parseFloat(document.getElementById('pub-edit-price').value)||0;
-  const desc  = document.getElementById('pub-edit-desc').value.trim();
-  if (!name) { setPubStatus('Product name is required.', 'err'); return; }
-  pendingProduct = { name, price, description: desc };
-  showProductProposal(pendingProduct);
-  document.getElementById('pub-form').style.display = 'none';
-}
-
-async function publishToGumroad(prod) {
-  if (!cfg.gumKey) throw new Error('No Gumroad token — add it in ⚙ Settings → Integrations');
-  const params = new URLSearchParams();
-  params.append('access_token', cfg.gumKey);
-  params.append('name', prod.name);
-  params.append('description', prod.description || '');
-  params.append('price', Math.round((parseFloat(prod.price)||0) * 100));
-  params.append('published', 'true');
-  if (prod.tags) params.append('tags', prod.tags);
-  const res = await fetch('https://api.gumroad.com/v2/products', {
-    method: 'POST',
-    headers: {'Content-Type':'application/x-www-form-urlencoded'},
-    body: params.toString()
-  });
-  if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`Gumroad ${res.status}: ${t.slice(0,120)}`); }
-  const data = await res.json();
-  if (!data.success) throw new Error(data.message || 'Gumroad API error');
-  return data.product;
-}
-
-async function approveAndPublish() {
-  if (!pendingProduct) return;
-  setPubStatus('Publishing to Gumroad…', 'info');
-  const prod = { ...pendingProduct };
-  try {
-    const result = await publishToGumroad(prod);
-    document.getElementById('pub-proposal').style.display = 'none';
-    const record = { id: Date.now(), name: prod.name, price: prod.price, status:'live', url: result.short_url || result.url || 'https://gumroad.com', date: Date.now() };
-    publishedProducts.unshift(record);
-    savePublish(); renderPubHistory();
-    setPubStatus('Published to Gumroad ✓', 'ok');
-    await sendTelegram(`✅ PRODUCT LIVE ON GUMROAD\n\n${prod.name}\n$${prod.price}\n\n${record.url}`).catch(()=>{});
-    sfx('send'); pendingProduct = null;
-  } catch(e) {
-    // CORS or API error — save as draft and send details to Telegram
-    const isCors = e.message.includes('Failed to fetch') || e.message.includes('NetworkError');
-    const record = { id: Date.now(), name: prod.name, price: prod.price, status:'draft', url:'', date: Date.now(), description: prod.description };
-    publishedProducts.unshift(record);
-    savePublish(); renderPubHistory();
-    if (isCors) {
-      setPubStatus('Browser blocked direct API call — details sent to Telegram + saved as draft.', 'info');
-      const msg = `📦 READY TO PUBLISH ON GUMROAD\n\n*${prod.name}*\nPrice: $${prod.price}\n\nGo to: https://app.gumroad.com/products/new\n\nDescription:\n${prod.description.replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim().slice(0,500)}`;
-      await sendTelegram(msg).catch(()=>{});
-    } else {
-      setPubStatus('Error: ' + e.message, 'err');
-    }
-  }
-}
-
-function renderPubHistory() {
-  const list = document.getElementById('pub-history');
-  const cnt = document.getElementById('pub-count');
-  if (!list) return;
-  if (cnt) cnt.textContent = publishedProducts.length ? `(${publishedProducts.length})` : '';
-  list.innerHTML = '';
-  if (!publishedProducts.length) {
-    list.innerHTML = '<div style="font-size:10px;color:var(--text-d);padding:8px 2px;letter-spacing:1px">No products published yet. Describe a product above and hit GENERATE.</div>';
-    return;
-  }
-  publishedProducts.forEach(p => {
-    const div = document.createElement('div'); div.className = 'pub-item';
-    const date = new Date(p.date).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    div.innerHTML = `<div class="pub-item-name">${p.name}</div>
-      <div class="pub-item-meta">
-        <span class="pub-item-price">$${p.price}</span>
-        <span class="pub-item-status ${p.status}">${p.status.toUpperCase()}</span>
-        <span class="pub-item-date">${date}</span>
-        ${p.url ? `<a class="pub-item-link" href="${p.url}" target="_blank">VIEW ↗</a>` : ''}
-      </div>`;
-    list.appendChild(div);
-  });
-}
-
-async function generateProduct() {
-  const idea = (document.getElementById('pub-idea')?.value||'').trim();
-  if (!idea) { setPubStatus('Describe your product idea first.', 'err'); return; }
-  if (busy) return;
-  setPubStatus('JARVIS is generating your listing…', 'info');
-  busy = true;
-  try {
-    let full = '';
-    await callAPIWithPrompt(sysPromptPublish(), [{role:'user',content:`Generate a complete Gumroad product listing for: ${idea}`}], t => { full = t; });
-    const prod = parseProductBlock(full);
-    if (prod) { showProductProposal(prod); setPubStatus(''); }
-    else setPubStatus('Could not parse product — try again.', 'err');
-  } catch(e) { setPubStatus('Error: '+e.message, 'err'); }
-  busy = false;
 }
 
 // ═══════════════════════════════════════════════
@@ -4484,46 +4232,6 @@ function clearMelody() {
   melPattern = melNotes.map(() => new Array(16).fill(false));
   renderMelGrid();
   saveBeatData();
-}
-
-function renderMelGrid() {
-  melNotes = computeMelNotes();
-  // Preserve existing pattern, extend if scale changed
-  const oldPat = melPattern;
-  melPattern = melNotes.map((_, i) => oldPat[i] ? [...oldPat[i]] : new Array(16).fill(false));
-  const grid = document.getElementById('mel-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  // Header
-  const hdr = document.createElement('div');
-  hdr.className = 'beats-track';
-  hdr.innerHTML = '<div class="beats-track-lbl" style="color:var(--gold)"></div>';
-  for (let s = 0; s < 16; s++) {
-    const n = document.createElement('div');
-    n.style.cssText = `font-size:7px;color:rgba(138,104,0,.5);text-align:center;padding-bottom:2px${s===3||s===7||s===11?';margin-right:4px':''}`;
-    n.textContent = s + 1;
-    hdr.appendChild(n);
-  }
-  grid.appendChild(hdr);
-  melNotes.forEach((note, ni) => {
-    const row = document.createElement('div');
-    row.className = 'beats-track';
-    const lbl = document.createElement('div');
-    lbl.className = 'beats-track-lbl mel-lbl';
-    lbl.textContent = note.name;
-    row.appendChild(lbl);
-    for (let si = 0; si < 16; si++) {
-      const btn = document.createElement('button');
-      const isOn = melPattern[ni][si];
-      btn.className = 'beat-step mel-step' + (isOn ? ' on' : '');
-      if (isOn) { btn.style.background = 'rgba(138,104,0,.55)'; btn.style.borderColor = 'var(--gold)'; }
-      if (si === 3 || si === 7 || si === 11) btn.style.marginRight = '4px';
-      btn.dataset.ni = ni; btn.dataset.si = si;
-      btn.addEventListener('click', () => toggleMelStep(ni, si));
-      row.appendChild(btn);
-    }
-    grid.appendChild(row);
-  });
 }
 
 function updateMelSettings() {
@@ -4708,40 +4416,6 @@ function toggleStep(ti, si) {
   if (btn) btn.classList.toggle('on', beatPattern[ti][si]);
 }
 
-function renderBeatGrid() {
-  const grid = document.getElementById('beats-grid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  // Header row with step numbers
-  const hdr = document.createElement('div');
-  hdr.className = 'beats-track';
-  hdr.innerHTML = '<div class="beats-track-lbl"></div>';
-  for (let s = 0; s < 16; s++) {
-    const n = document.createElement('div');
-    n.style.cssText = `font-size:7px;color:var(--text-d);text-align:center;padding-bottom:2px${s===3||s===7||s===11?';margin-right:4px':''}`;
-    n.textContent = s + 1;
-    hdr.appendChild(n);
-  }
-  grid.appendChild(hdr);
-  BEAT_TRACKS.forEach((name, ti) => {
-    const row = document.createElement('div');
-    row.className = 'beats-track';
-    const lbl = document.createElement('div');
-    lbl.className = 'beats-track-lbl';
-    lbl.textContent = name === 'HIHAT' ? 'HH' : name === 'OPEN' ? 'OPEN' : name;
-    row.appendChild(lbl);
-    for (let si = 0; si < 16; si++) {
-      const btn = document.createElement('button');
-      btn.className = 'beat-step' + (beatPattern[ti][si] ? ' on' : '');
-      if (si === 3 || si === 7 || si === 11) btn.style.marginRight = '4px';
-      btn.dataset.track = ti; btn.dataset.step = si;
-      btn.addEventListener('click', () => toggleStep(ti, si));
-      row.appendChild(btn);
-    }
-    grid.appendChild(row);
-  });
-}
-
 function uploadSample(trackName) {
   const inp = document.createElement('input');
   inp.type = 'file'; inp.accept = 'audio/*';
@@ -4795,25 +4469,6 @@ function delRef(i) {
   saveBeatData(); renderRefs();
 }
 
-function renderRefs() {
-  const list = document.getElementById('beats-ref-list');
-  if (!list) return;
-  list.innerHTML = '';
-  if (!beatRefs.length) {
-    list.innerHTML = '<div style="font-size:10px;color:var(--text-d);padding:6px 2px;letter-spacing:1px">No references yet. Upload a track to sample from or compare against your beat.</div>';
-    return;
-  }
-  beatRefs.forEach((ref, i) => {
-    const div = document.createElement('div'); div.className = 'beats-ref-item';
-    const playing = activeRefAudio && !activeRefAudio.paused;
-    div.innerHTML = `<span class="beats-ref-name">${ref.name}</span>
-      <button class="beats-ref-ctrl" id="ref-btn-${i}">${playing ? '■ STOP' : '▶ PLAY'}</button>
-      <button class="beats-ref-del" onclick="delRef(${i})">×</button>`;
-    div.querySelector(`#ref-btn-${i}`).onclick = () => { if (activeRefAudio && !activeRefAudio.paused) stopRef(); else playRef(i); };
-    list.appendChild(div);
-  });
-}
-
 function saveBeat() {
   const nameEl = document.getElementById('beat-save-name');
   const name = (nameEl ? nameEl.value.trim() : '') || `Beat ${savedBeats.length + 1}`;
@@ -4836,20 +4491,6 @@ function deleteBeat(id) {
   saveBeatData(); renderSavedBeats();
 }
 
-function renderSavedBeats() {
-  const list = document.getElementById('beats-saved-list'); if (!list) return;
-  list.innerHTML = '';
-  if (!savedBeats.length) { list.innerHTML = '<div style="font-size:10px;color:var(--text-d);padding:5px 2px;letter-spacing:1px">No saved beats yet.</div>'; return; }
-  savedBeats.forEach(b => {
-    const div = document.createElement('div'); div.className = 'beats-saved-item';
-    div.innerHTML = `<span class="beats-saved-name">${b.name}</span>
-      <span class="beats-saved-bpm">${b.bpm} BPM</span>
-      <button class="beats-load-btn" onclick="loadBeat(${b.id})">LOAD</button>
-      <button class="beats-del-btn" onclick="deleteBeat(${b.id})">×</button>`;
-    list.appendChild(div);
-  });
-}
-
 function saveBeatData() {
   try { localStorage.setItem('jv-beats', JSON.stringify({ beats: savedBeats, refs: beatRefs.map(r=>({name:r.name})), convo: beatConvo.slice(-30), melPat: melPattern, melKey, melScale, melWave, melNoteDur })); } catch(e) {}
 }
@@ -4868,41 +4509,6 @@ function loadBeats() {
   renderBeatGrid(); renderMelGrid(); renderSavedBeats(); renderRefs();
 }
 
-function sysPromptBeat() {
-  const patternStr = BEAT_TRACKS.map((name, i) =>
-    `${name}: ${beatPattern[i].map((on,s) => on ? (s+1).toString() : '·').join(' ')}`
-  ).join('\n');
-  return `You are JARVIS BEATS, an expert music producer inside a live beat sequencer. You specialize in trap, hip-hop, R&B, drill, and lo-fi.
-
-User's current setup — BPM: ${beatBpm} | Key: ${melKey} | Scale: ${melScale}
-Current drums: ${patternStr}
-
-CRITICAL — When the user asks you to MAKE, CREATE, BUILD, or GENERATE a beat (type beat or otherwise), you MUST output a [BEAT_PATTERN] block. This auto-programs the sequencer — the user does NOT tap anything manually.
-
-Format EXACTLY like this (1 = step active, 0 = inactive, 16 values per track):
-
-[BEAT_PATTERN]
-{
-  "bpm": 140,
-  "key": "C",
-  "scale": "Min Penta",
-  "wave": "sine",
-  "drums": {
-    "KICK":  [1,0,0,1,0,0,1,0,0,0,1,0,0,1,0,0],
-    "SNARE": [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
-    "HIHAT": [1,1,0,1,1,0,1,1,0,1,0,1,1,0,1,0],
-    "OPEN":  [0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0],
-    "CLAP":  [0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0],
-    "PERC":  [0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0]
-  },
-  "melody": {
-    "C4":  [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0],
-    "Eb4": [0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0],
-    "G4":  [0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0],
-    "Bb4": [0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0]
-  }
-}
-[/BEAT_PATTERN]
 
 Valid scale values: "Min Penta", "Maj Penta", "Minor", "Major", "Blues"
 Valid wave values: "sine", "triangle", "sawtooth", "square"
@@ -4911,18 +4517,6 @@ Use sharps not flats for note names (C#, D#, F#, G#, A# — NOT Db, Eb, Gb, Ab, 
 After the block, briefly describe the vibe and what makes it sound like that artist/style.
 
 You know: drum programming, trap patterns, 808s, melody construction, music theory, sampling law, mixing basics. Address the user as ${cfg.name || 'Commander'}.`;
-}
-
-function renderBeatMsgs() {
-  const c = document.getElementById('beat-msgs'); if (!c) return;
-  c.innerHTML = '';
-  beatConvo.forEach(m => {
-    const d = document.createElement('div');
-    d.className = 'beats-msg ' + (m.role === 'user' ? 'user' : 'ai');
-    d.innerHTML = fmt(m.content);
-    c.appendChild(d);
-  });
-  c.scrollTop = c.scrollHeight;
 }
 
 function mkBeatStream() {
@@ -5034,46 +4628,6 @@ function applyBeatPattern(pat) {
   toast('Beat loaded — tap play in chat');
 }
 
-async function sendBeatMsg() {
-  const inp = document.getElementById('beat-inp');
-  const text = (inp ? inp.value : '').trim();
-  if (!text || busy) return;
-  if (inp) { inp.value = ''; inp.style.height = 'auto'; }
-  switchTab('jarvis');
-  addMsg('jarvis','user', text);
-  sfx('send');
-  pushConvo('jarvis','user', text);
-  busy = true;
-  const el = mkStream('jarvis');
-  try {
-    const msgs = (convos['jarvis']||[]).slice(-16);
-    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
-    el?.fin(full);
-    pushConvo('jarvis','assistant', full);
-    saveBeatData(); sfx('recv');
-    const pat = parseBeatPattern(full);
-    if (pat) applyBeatPattern(pat);
-  } catch(e) { el?.fin('⚠ ' + e.message); }
-  busy = false;
-}
-
-async function beatCmd(prompt) {
-  switchTab('jarvis');
-  addMsg('jarvis','user', prompt);
-  sfx('send');
-  pushConvo('jarvis','user', prompt);
-  busy = true;
-  const el = mkStream('jarvis');
-  try {
-    const msgs = (convos['jarvis']||[]).slice(-16);
-    const full = await callAPI('jarvis', msgs, t => el?.upd(t));
-    el?.fin(full); pushConvo('jarvis','assistant', full);
-    saveBeatData(); sfx('recv');
-    const pat = parseBeatPattern(full);
-    if (pat) applyBeatPattern(pat);
-  } catch(e) { el?.fin('⚠ ' + e.message); }
-  busy = false;
-}
 
 async function genTypeBeat() {
   const inp = document.getElementById('beat-type-inp');
@@ -5089,6 +4643,30 @@ function handleBeatKey(e) {
 // ═══════════════════════════════════════════════
 // GO
 // ═══════════════════════════════════════════════
+// ── STUBS for removed panels (safe no-ops) ──
+function renderBeatGrid() {}
+function renderMelGrid() {}
+function renderSavedBeats() {}
+function renderRefs() {}
+function renderBeatMsgs() {}
+function renderPubHistory() {}
+function handleCodeResponse() {}
+function sendCode() { send('jarvis'); }
+function sendTax() { send('jarvis'); }
+function sendBeatMsg() { send('jarvis'); }
+
+// ── CONTEXT CLEANER ──
+function cleanJarvis() {
+  if (!convos['jarvis']) return;
+  const max = 20; // keep 10 exchanges
+  if (convos['jarvis'].length > max) {
+    convos['jarvis'] = convos['jarvis'].slice(-max);
+    saveConvos();
+  }
+  toast('Memory cleared — JARVIS running fresh');
+}
+
+
 init();
 </script>
 </body>
