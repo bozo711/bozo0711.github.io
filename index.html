@@ -131,6 +131,13 @@ textarea.inp::placeholder{color:rgba(190,150,160,.2)}
 .attach-chip .ac-name{flex:1;font-size:11px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .attach-chip .ac-rm{color:var(--text-d);font-size:18px;line-height:1;cursor:pointer;padding:0 3px}
 
+/* ── AGENT REDIRECT ── */
+.agent-redirect{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:24px 20px;text-align:center}
+.agent-redirect-txt{font-size:10px;letter-spacing:2px;color:rgba(190,150,160,.3);text-transform:uppercase;line-height:1.8}
+.agent-redirect-txt strong{color:var(--live);display:block;font-size:12px;letter-spacing:4px;margin-bottom:6px;text-shadow:0 0 10px rgba(204,34,68,.4)}
+.agent-jump-btn{padding:9px 22px;background:rgba(100,0,28,.15);border:1px solid rgba(204,34,68,.35);border-radius:2px;color:var(--live);font-family:inherit;font-size:9px;letter-spacing:3px;cursor:pointer;clip-path:polygon(0 0,calc(100% - 7px) 0,100% 7px,100% 100%,0 100%);transition:all .15s}
+.agent-jump-btn:active{background:rgba(150,0,35,.35)}
+
 /* ── AGENT CARD ── */
 .agent-card{flex-shrink:0;border-bottom:1px solid rgba(70,0,20,.4)}
 .agent-hdr{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;background:linear-gradient(90deg,rgba(80,0,20,.25),rgba(40,0,10,.1),transparent);position:relative}
@@ -1032,13 +1039,12 @@ strong{color:#e8d4b0}
           </div>
         </div>
       </div>
-      <div class="msgs" id="m-atlas"></div>
-      <div class="inp-area">
-        <div class="inp-wrap" id="iw-atlas">
-          <textarea class="inp" id="i-atlas" placeholder="Ask ATLAS about any niche or product idea…" rows="1"
-            oninput="autoH(this)" onkeydown="handleKey(event,'atlas')"></textarea>
+      <div class="agent-redirect">
+        <div class="agent-redirect-txt">
+          <strong>▸ ATLAS IS INSIDE JARVIS</strong>
+          Research, niche validation, and launch plans<br>all live in your JARVIS chat now
         </div>
-        <button class="send-btn" onclick="send('atlas')">▶</button>
+        <button class="agent-jump-btn" onclick="switchTab('jarvis')">OPEN JARVIS CHAT →</button>
       </div>
     </div>
 
@@ -1059,13 +1065,12 @@ strong{color:#e8d4b0}
           </div>
         </div>
       </div>
-      <div class="msgs" id="m-scribe"></div>
-      <div class="inp-area">
-        <div class="inp-wrap" id="iw-scribe">
-          <textarea class="inp" id="i-scribe" placeholder="Tell SCRIBE what to create…" rows="1"
-            oninput="autoH(this)" onkeydown="handleKey(event,'scribe')"></textarea>
+      <div class="agent-redirect">
+        <div class="agent-redirect-txt">
+          <strong>▸ SCRIBE IS INSIDE JARVIS</strong>
+          Full ebooks, prompt packs, guides, and cheat sheets<br>all written in your JARVIS chat now
         </div>
-        <button class="send-btn" onclick="send('scribe')">▶</button>
+        <button class="agent-jump-btn" onclick="switchTab('jarvis')">OPEN JARVIS CHAT →</button>
       </div>
     </div>
 
@@ -1086,13 +1091,12 @@ strong{color:#e8d4b0}
           </div>
         </div>
       </div>
-      <div class="msgs" id="m-hunter"></div>
-      <div class="inp-area">
-        <div class="inp-wrap" id="iw-hunter">
-          <textarea class="inp" id="i-hunter" placeholder="Ask HUNTER to write listings or launch content…" rows="1"
-            oninput="autoH(this)" onkeydown="handleKey(event,'hunter')"></textarea>
+      <div class="agent-redirect">
+        <div class="agent-redirect-txt">
+          <strong>▸ HUNTER IS INSIDE JARVIS</strong>
+          Gumroad listings, launch posts, TikTok scripts,<br>and Twitter threads — all in JARVIS chat now
         </div>
-        <button class="send-btn" onclick="send('hunter')">▶</button>
+        <button class="agent-jump-btn" onclick="switchTab('jarvis')">OPEN JARVIS CHAT →</button>
       </div>
     </div>
 
@@ -1113,13 +1117,12 @@ strong{color:#e8d4b0}
           </div>
         </div>
       </div>
-      <div class="msgs" id="m-ledger"></div>
-      <div class="inp-area">
-        <div class="inp-wrap" id="iw-ledger">
-          <textarea class="inp" id="i-ledger" placeholder="Ask LEDGER about pricing or revenue…" rows="1"
-            oninput="autoH(this)" onkeydown="handleKey(event,'ledger')"></textarea>
+      <div class="agent-redirect">
+        <div class="agent-redirect-txt">
+          <strong>▸ LEDGER IS INSIDE JARVIS</strong>
+          Pricing, revenue projections, income goals,<br>and product ladders — all in JARVIS chat now
         </div>
-        <button class="send-btn" onclick="send('ledger')">▶</button>
+        <button class="agent-jump-btn" onclick="switchTab('jarvis')">OPEN JARVIS CHAT →</button>
       </div>
     </div>
 
@@ -1939,13 +1942,13 @@ function loadNiche() {
 function qpNiche(agent, prompt) {
   const n = getNiche();
   if (!n || n === 'digital products') { toast('Type your niche in the bar above first'); document.getElementById('niche-inp')?.focus(); return; }
-  qp(agent, prompt + n);
+  qp('jarvis', prompt + n);
 }
 
 function runAgentNiche(agent, prompt) {
   const n = getNiche();
   if (!n || n === 'digital products') { toast('Type your niche in the bar above first'); document.getElementById('niche-inp')?.focus(); return; }
-  runAgent(agent, prompt.replace(/NICHE/g, n));
+  runAgent('jarvis', prompt.replace(/NICHE/g, n));
 }
 
 function init() {
@@ -2273,34 +2276,21 @@ Current Income: $${(cfg.income||0).toLocaleString()}/month
 Products Launched: ${(cfg.done||[]).length}
 Business Context: ${cfg.ctx||'Building a digital product business selling on Gumroad'}${brainFacts?'\n\nKnowledge Base:\n'+brainFacts:''}${activeTasks?'\n\nPending Tasks:\n'+activeTasks:''}`;
 
-  const p = {
-    jarvis:`You are JARVIS, a sharp AI operations commander. You help build real digital product businesses that make real money on Gumroad. You are direct, specific, and never give generic advice. When the user asks for ideas, give specific product titles and price points. When they ask what to do next, give them the single clearest next action. Address the user as "${cfg.name}".
+  const jarvisFull = `You are JARVIS — a full-stack digital empire AI built for ${cfg.name}. You combine the power of five specialized agents:
+
+▸ ATLAS (Research): Find what sells, validate niches, build launch plans. Know Gumroad inside out — formats (ebooks, prompt packs, templates, guides), price points ($7-$47), demand signals.
+▸ SCRIBE (Create): Write complete sellable products — NOT outlines, the ACTUAL content. Full ebooks, every prompt in a pack, complete guides. Paste-ready into Google Docs, export as PDF, upload to Gumroad.
+▸ HUNTER (Launch): Gumroad listings that convert, social posts that drive clicks, TikTok/Reels scripts word for word, Twitter threads. Everything copy-paste ready — no placeholders.
+▸ LEDGER (Money): Real numbers. Gumroad fees (~10% + $0.30). Revenue projections at 10/50/100/500 sales. Daily/weekly targets to hit income goals. Product ladders to maximize revenue per customer.
+▸ JARVIS (Command): Direct, specific next actions. Never generic. When asked for ideas — give specific titles and price points. When asked what to do next — give the single clearest action.
+
+You are sharp, direct, and results-focused. Address the user as "${cfg.name}". Never say "I'd suggest" — say what to do. Never give outlines when asked to write — write the thing.
 
 ${base}
 
-Commands:
-• "status" → income and products summary
-• "list" → list launched products
-• "add product X" → record a launched product
-• "set income X" → update current income`,
+Commands: "status" · "list" · "add product X" · "set income X"`;
 
-    atlas:`You are ATLAS, a digital product research and strategy AI. Your job: find what sells, validate niches, and build launch plans. You know Gumroad inside out — what formats sell (ebooks, prompt packs, templates, guides, checklists), what price points work ($7-$47), and what topics have demand. You give specific product titles, not generic advice. You always output ready-to-act information.
-
-${base}`,
-
-    scribe:`You are SCRIBE, a digital product creation AI. You write complete, sellable digital products — NOT outlines, NOT descriptions, the ACTUAL content people pay for. When asked to write an ebook, write the full ebook. When asked to create a prompt pack, write every prompt. When asked to write a guide, write the complete guide. Make it genuinely valuable. Format clearly so the user can paste it into a Google Doc, export as PDF, and sell it on Gumroad today.
-
-${base}`,
-
-    hunter:`You are HUNTER, a digital product launch and sales AI. You write Gumroad listings that convert, social media posts that drive clicks, TikTok/Reels scripts, and Twitter threads. Everything you produce is ready to copy-paste and publish — no placeholders, no [your product here], real finished copy. Your Gumroad listings follow this structure: magnetic title → hook paragraph → what's inside bullets → who it's for → price justification → CTA.
-
-${base}`,
-
-    ledger:`You are LEDGER, a digital product revenue AI. You give real numbers. You know Gumroad's fee structure (~10% + $0.30/sale). When pricing, give specific recommendations with revenue projections at 10/50/100/500 sales. When building to an income goal, break it down to daily/weekly sales targets. You help build product ladders (low-ticket → mid-ticket → bundle) to maximize revenue per customer.
-
-${base}`,
-  };
-  return p[agent]||p.jarvis;
+  return jarvisFull;
 }
 
 async function callAPI(agent, messages, onToken) {
@@ -2443,28 +2433,30 @@ function cmd(text) {
 // SEND
 // ═══════════════════════════════════════════════
 async function send(agent) {
-  const inp = document.getElementById(`i-${agent}`);
+  const target = ['atlas','scribe','hunter','ledger'].includes(agent) ? 'jarvis' : agent;
+  const inp = document.getElementById(`i-${agent}`) || document.getElementById('i-jarvis');
   const text = inp.value.trim();
   const attach = pendingAttachment;
 
   if (!text && !attach || busy) return;
-  if (agent==='jarvis' && text && cmd(text)) { inp.value=''; autoH(inp); return; }
+  if (target==='jarvis' && text && cmd(text)) { inp.value=''; autoH(inp); return; }
 
   inp.value=''; autoH(inp);
   if (attach) clearAttachment(agent);
+  if (target !== agent) switchTab(target);
 
   const displayText = text + (attach ? `\n📎 ${attach.name}` : '');
-  addMsg(agent,'user', displayText);
+  addMsg(target,'user', displayText);
   sfx('send');
-  pushConvo(agent,'user', text || `[Attached: ${attach?.name}]`);
+  pushConvo(target,'user', text || `[Attached: ${attach?.name}]`);
 
   busy = true;
   const sb = document.getElementById(`sb-${agent}`);
   if (sb) sb.disabled = true;
 
-  const el = mkStream(agent);
+  const el = mkStream(target);
   try {
-    const msgs = (convos[agent]||[]).slice(-20);
+    const msgs = (convos[target]||[]).slice(-20);
     // Inject attachment into the last user message for this API call only
     if (attach && msgs.length > 0) {
       const last = msgs[msgs.length - 1];
@@ -2477,9 +2469,9 @@ async function send(agent) {
         last.content = `[File: ${attach.name}]\n${attach.data.slice(0,8000)}\n[/File]\n\n${text || 'Analyze this file and give me actionable insights.'}`;
       }
     }
-    const full = await callAPI(agent, msgs, t => el?.upd(t));
+    const full = await callAPI(target, msgs, t => el?.upd(t));
     el?.fin(full);
-    pushConvo(agent,'assistant',full);
+    pushConvo(target,'assistant',full);
     sfx('recv');
     if (voiceOut && agent==='jarvis') speak(full);
   } catch(e) {
@@ -2502,7 +2494,7 @@ function initAttach() {
   fi.addEventListener('change', () => { handleAttach(fi.files); fi.value = ''; });
   document.body.appendChild(fi);
 
-  ['jarvis','atlas','scribe','hunter','ledger'].forEach(ag => {
+  ['jarvis'].forEach(ag => {
     const area = document.querySelector(`#p-${ag} .inp-area`);
     if (!area) return;
     const btn = document.createElement('button');
@@ -2570,18 +2562,20 @@ async function qp(agent, prompt) {
 }
 
 async function runAgent(agent, prompt) {
-  switchTab(agent);
-  pushConvo(agent,'user',prompt);
-  renderMsg(agent,'user',prompt);
+  // All sub-agents route through JARVIS chat
+  const target = ['atlas','scribe','hunter','ledger'].includes(agent) ? 'jarvis' : agent;
+  switchTab(target);
+  pushConvo(target,'user',prompt);
+  renderMsg(target,'user',prompt);
   sfx('send');
 
   busy = true;
-  const el = mkStream(agent);
+  const el = mkStream(target);
   try {
-    const msgs = (convos[agent]||[]).slice(-10);
-    const full = await callAPI(agent, msgs, t => el?.upd(t));
+    const msgs = (convos[target]||[]).slice(-10);
+    const full = await callAPI(target, msgs, t => el?.upd(t));
     el?.fin(full);
-    pushConvo(agent,'assistant',full);
+    pushConvo(target,'assistant',full);
     sfx('recv');
     return full;
   } catch(e) {
