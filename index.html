@@ -1207,37 +1207,17 @@ function init() {
   loadCfg();
   loadNiche();
   loadConvos();
-  loadSales();
-  loadIdeas();
-  loadVault();
-  loadStreak();
-  loadWarRoom();
-  loadFreedom();
-  loadCalendar();
-  loadTTScripts();
-  loadEmail();
-  loadBundles();
-  loadPlatforms();
-  loadScans();
-  loadTrends();
-  loadProof();
   loadBrain();
   loadTasks2();
-  loadLaunchPad();
-  loadCodeState();
-  loadTax();
-  loadBlastLog();
-  loadPublish();
   loadBeats();
+  loadCodeState();
   initAttach();
-  renderSubTabs('agents');
   startClock();
   updateStats();
   initSpeech();
   showIOSBanner();
   boot();
 
-  // Focus styles for JARVIS input
   const iw = document.getElementById('iw-jarvis');
   const inp = document.getElementById('i-jarvis');
   inp.addEventListener('focus', () => iw.classList.add('focus'));
@@ -1249,24 +1229,17 @@ function init() {
 // ═══════════════════════════════════════════════
 async function boot() {
   const el = document.getElementById('boot-log');
-  const seq = [
-    'ENTERING THE UNDERWORLD…',
-    'UNLOCKING THE VAULT…',
-    'ASSEMBLING THE COUNCIL…',
-    `THE THRONE AWAITS, ${(cfg.name||'COMMANDER').toUpperCase()}`,
-    'ALL OPERATIVES STANDING BY',
-  ];
-  for (const s of seq) { el.textContent = s; await delay(550); }
-  await delay(350);
+  el.textContent = `ONLINE, ${(cfg.name||'COMMANDER').toUpperCase()}`;
+  await delay(180);
   document.getElementById('boot').classList.add('out');
   setTimeout(() => {
     document.getElementById('boot').style.display = 'none';
     addMsg('jarvis','assistant',
       `JARVIS online. Good ${tod()}, ${cfg.name}. ` +
       ((cfg.provider==='ollama'?cfg.url:cfg.apikey)
-        ? `API connected. Type a niche in the bar above and tap BUILD to create your first product.`
-        : 'Tap ⚙ to add your Groq API key, then type a niche and hit BUILD.'));
-  }, 700);
+        ? `API connected. What do you need?`
+        : 'Tap ⚙ to add your Groq API key to get started.'));
+  }, 400);
 }
 
 function tod() {
