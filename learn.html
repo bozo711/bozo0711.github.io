@@ -127,27 +127,6 @@ html,body{height:100%;overflow:hidden;background:#050010;color:#e8e0f0;font-fami
 .em{font-size:72px;line-height:1;animation:glow 3s ease-in-out infinite}
 
 @media(prefers-reduced-motion:reduce){*{animation:.01ms!important;transition:.01ms!important}}
-
-/* ── VIDEO CARDS ────────────────────────────────────────────────── */
-.vcard{justify-content:flex-start!important}
-.varea{position:relative;width:100%;height:55vh;overflow:hidden;flex-shrink:0}
-.varea::after{content:'';position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(to bottom,transparent,rgba(5,0,16,.98));z-index:3;pointer-events:none}
-.vthumb,.vsrch{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.vsrch{flex-direction:column;gap:10px;text-decoration:none;color:#fff;background:rgba(0,0,0,.1)}
-.vimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.vplay{position:relative;z-index:2;width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;transition:transform .15s}
-.vthumb:active .vplay,.vsrch:active .vplay{transform:scale(.88)}
-.ptri{font-size:24px;margin-left:5px;color:#fff}
-.vdurb{position:absolute;bottom:10px;right:12px;z-index:2;background:rgba(0,0,0,.72);padding:3px 8px;border-radius:4px;font-size:11px;font-family:'Space Mono',monospace}
-.vid-frame{width:100%;height:100%;border:none;position:absolute;inset:0;z-index:4;background:#000}
-.vsrch-ico{font-size:44px;position:relative;z-index:1}
-.vsrch-lbl{font-size:14px;font-weight:600;text-align:center;position:relative;z-index:1;opacity:.85}
-.vsrch-q{font-size:10px;color:rgba(200,190,220,.5);font-style:italic;position:relative;z-index:1;letter-spacing:.5px}
-.vinfo{position:relative;z-index:2;padding:14px 20px 0;flex:1;overflow:hidden}
-.vtitle{font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.25}
-.vchan{font-size:12px;color:rgba(200,190,220,.55);margin-bottom:10px;letter-spacing:.3px}
-.vdesc{font-size:13.5px;line-height:1.62;color:rgba(225,215,242,.85)}
-.vcard .acts{bottom:16px}
 </style>
 </head>
 <body>
@@ -501,118 +480,10 @@ const CARDS = [
    apply:"This week: introduce two people who should know each other. Share one useful resource with no expectation. Be radically useful to one person in your world."},
 ];
 
-// ── VIDEO CARDS ────────────────────────────────────────────────────
-// videoId = embed via YouTube nocookie iframe
-// query   = opens YouTube search in new tab (used when ID not certain)
-const VIDEOS = [
-  {id:'vq1',t:'quantum',type:'video',badge:'⚛️ Quantum Physics',
-   query:'quantum mechanics lecture MIT OpenCourseWare professor',
-   title:'Quantum Mechanics — University Lectures',
-   channel:'MIT OpenCourseWare & Stanford Online',duration:'Series',
-   desc:'Full quantum mechanics lecture series from MIT and Stanford. Top physicists explain wave functions, measurement, and the math behind the observations that shatter classical physics.'},
-
-  {id:'vd1',t:'double-slit',type:'video',badge:'🔬 Double Slit',
-   query:'double slit experiment explained observer effect quantum',
-   title:'The Double Slit Experiment Explained',
-   channel:'Top Physics Educators',duration:'10–30 min',
-   desc:'Multiple physicists and professors break down exactly what happens when you observe a quantum particle — and why the observer effect is the most disturbing result in the history of science.'},
-
-  {id:'va1',t:'assumption',type:'video',badge:'✨ Law of Assumption',
-   query:'Neville Goddard law of assumption original lecture',
-   title:'Neville Goddard — Original Lectures',
-   channel:'Neville Goddard Archive',duration:'Various',
-   desc:'Original recorded lectures from Neville Goddard — the philosopher who developed the Law of Assumption. Hear his teachings directly on assumption, SATS, revision, and living in the end.'},
-
-  {id:'vs1',t:'subconscious',type:'video',badge:'🧠 Subconscious Mind',
-   query:'Bruce Lipton subconscious mind reprogramming biology of belief',
-   title:'Reprogram Your Subconscious Mind',
-   channel:'Dr. Bruce Lipton & Dr. Joe Dispenza',duration:'Various',
-   desc:'Cell biologist Bruce Lipton and neuroscientist Joe Dispenza explain the science of reprogramming the subconscious — how your biology literally responds to your deepest beliefs.'},
-
-  {id:'vu1',t:'universe',type:'video',badge:'🌌 Laws of Universe',
-   query:'seven hermetic principles Kybalion laws of universe explained',
-   title:'The 7 Hermetic Principles Explained',
-   channel:'Hermetic Philosophy Scholars',duration:'Various',
-   desc:'Deep dives into the seven laws from the Kybalion — Mentalism, Correspondence, Vibration, Polarity, Rhythm, Cause & Effect, and Gender. The complete operating system of reality.'},
-
-  {id:'ve1',t:'emerald',type:'video',badge:'📜 Emerald Tablets',
-   query:'Emerald Tablets of Thoth decoded ancient wisdom explained',
-   title:'The Emerald Tablets Decoded',
-   channel:'Ancient Wisdom Scholars',duration:'Various',
-   desc:'Scholars and philosophers decode the Emerald Tablets — the most compressed map of consciousness and cosmos ever written. From "As above, so below" to the Great Work of transformation.'},
-
-  {id:'vf1',t:'finance',type:'video',badge:'💰 Personal Finance',
-   videoId:'PHe0bXAIuk0',
-   title:'How The Economic Machine Works',
-   channel:'Ray Dalio · Bridgewater Associates',duration:'31 min',
-   desc:'One of the most important 31 minutes in financial education. Ray Dalio breaks down how credit, debt cycles, and deleveraging actually work — the template for understanding any economy.'},
-
-  {id:'vi1',t:'investing',type:'video',badge:'📈 Investing',
-   query:'Warren Buffett investing advice annual meeting Berkshire beginners',
-   title:'Warren Buffett on Investing',
-   channel:'Berkshire Hathaway · Annual Meetings',duration:'Various',
-   desc:'The world\'s greatest investor explains his philosophy in plain language: buy great businesses at fair prices, think decades ahead, and let compound interest do the heavy lifting.'},
-
-  {id:'vb1',t:'business',type:'video',badge:'🚀 Business',
-   query:'Y Combinator how to start a startup Sam Altman lecture Stanford',
-   title:'How to Start a Startup',
-   channel:'Y Combinator · Stanford CS183B',duration:'Series',
-   desc:'The famous Stanford/Y Combinator lecture series. Sam Altman, Paul Graham, and top founders explain what actually makes startups succeed — from idea validation to product-market fit.'},
-
-  {id:'vm1',t:'mindset',type:'video',badge:'💪 Mindset',
-   videoId:'_X0mgOOSpLU',
-   title:'The Power of Believing You Can Improve',
-   channel:'Carol Dweck · TED',duration:'10 min',
-   desc:'Stanford psychologist Carol Dweck\'s landmark TED talk on growth vs. fixed mindset. Why the word "not yet" might be the most transformative two words in education and self-development.'},
-
-  {id:'vm2',t:'mindset',type:'video',badge:'💪 Mindset',
-   videoId:'H14bBuluwB8',
-   title:'Grit: The Power of Passion and Perseverance',
-   channel:'Angela Duckworth · TED',duration:'6 min',
-   desc:'What predicts success better than IQ, talent, or social background? Grit. Angela Duckworth\'s research shows that passion plus perseverance — not talent — is the real secret to achievement.'},
-
-  {id:'vh1',t:'health',type:'video',badge:'🌿 Health',
-   videoId:'5MuIMqhT8cs',
-   title:'Sleep Is Your Superpower',
-   channel:'Matthew Walker · TED',duration:'19 min',
-   desc:'Sleep scientist Matthew Walker reveals the terrifying consequences of sleep deprivation and the extraordinary life benefits of prioritizing sleep. The most important 19 minutes you\'ll spend on your health.'},
-
-  {id:'vp1',t:'productivity',type:'video',badge:'⚡ Productivity',
-   query:'Cal Newport deep work focus single tasking productivity lecture',
-   title:'Deep Work & Radical Focus',
-   channel:'Cal Newport & Productivity Researchers',duration:'Various',
-   desc:'Computer scientist and bestselling author Cal Newport explains why deep, focused work is the most valuable skill of the 21st century — and exactly how to build it in a world designed to distract you.'},
-
-  {id:'vr1',t:'relationships',type:'video',badge:'🤝 Relationships',
-   videoId:'iCvmsMzlF7o',
-   title:'The Power of Vulnerability',
-   channel:'Brené Brown · TED',duration:'20 min',
-   desc:'Research professor Brené Brown spent 12 years studying vulnerability, courage, shame, and connection. This talk changed how millions understand relationships — and why authentic connection requires courage.'},
-];
-
-// ── Build visible list (lessons + videos interspersed) ─────────────
-function buildVisible(f) {
-  const lessons = f === 'all' ? [...CARDS] : CARDS.filter(c => c.t === f);
-  const vids    = f === 'all' ? [...VIDEOS] : VIDEOS.filter(v => v.t === f);
-  if (f !== 'all') return [...lessons, ...vids];
-  // In "all" view: insert each topic's video(s) right after that topic's last lesson
-  const vidsByTopic = {};
-  vids.forEach(v => { (vidsByTopic[v.t] = vidsByTopic[v.t]||[]).push(v); });
-  const result = [];
-  lessons.forEach((card, i) => {
-    result.push(card);
-    const next = lessons[i+1];
-    if (!next || next.t !== card.t) {
-      (vidsByTopic[card.t]||[]).forEach(v => result.push(v));
-    }
-  });
-  return result;
-}
-
 // ── State ──────────────────────────────────────────────────────────
 const saved  = new Set(JSON.parse(localStorage.getItem('elev-saved')||'[]'));
 let filter   = 'all';
-let visible  = buildVisible('all');
+let visible  = [...CARDS];
 let curIdx   = 0;
 
 const feed   = document.getElementById('feed');
@@ -621,70 +492,31 @@ const cntEl  = document.getElementById('cnt');
 
 function persist(){ localStorage.setItem('elev-saved', JSON.stringify([...saved])) }
 
-// ── Render helpers ─────────────────────────────────────────────────
-function renderLesson(c, i){
-  const isSaved = saved.has(c.id);
-  return `<div class="card" data-t="${c.t}" data-i="${i}">
-    <div class="bg"></div>
-    <div class="vis"><div class="em">${c.em}</div></div>
-    <div class="inner">
-      <div class="cnum">${String(i+1).padStart(2,'0')} &middot; ${visible.length} CARDS</div>
-      <div class="badge">${c.badge}</div>
-      <h1 class="title">${c.title}</h1>
-      <div class="sub">${c.sub}</div>
-      <p class="body">${c.body}</p>
-      <div class="key"><span class="key-ico">${c.key.split(' ')[0]}</span><span>${c.key.split(' ').slice(1).join(' ')}</span></div>
-      <div class="apply"><span class="albl">Apply&nbsp;it</span><span>${c.apply}</span></div>
-    </div>
-    <div class="acts">
-      <button class="abtn${isSaved?' saved':''}" onclick="toggleSave(this,'${c.id}')">
-        ${isSaved?'🔖':'🏷️'}<span>${isSaved?'Saved':'Save'}</span>
-      </button>
-      <button class="abtn" onclick="doShare(${i})">↑<span>Share</span></button>
-    </div>
-    ${i===0?'<div class="hint"><div class="harrow">↑</div><div class="htxt">Swipe up</div></div>':''}
-  </div>`;
-}
-
-function renderVideo(c, i){
-  const isSaved = saved.has(c.id);
-  const isEmbed = !!c.videoId;
-  const media = isEmbed
-    ? `<div class="vthumb" onclick="playVid(this,'${c.videoId}')">
-         <img class="vimg" src="https://i.ytimg.com/vi/${c.videoId}/hqdefault.jpg"
-              alt="${c.title}" loading="lazy" onerror="this.style.display='none'">
-         <div class="vplay"><div class="ptri">▶</div></div>
-         <div class="vdurb">${c.duration}</div>
-       </div>`
-    : `<a class="vsrch" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c.query)}" target="_blank" rel="noopener noreferrer">
-         <div class="vsrch-ico">🎬</div>
-         <div class="vplay"><div class="ptri">▶</div></div>
-         <div class="vsrch-lbl">Search on YouTube</div>
-         <div class="vsrch-q">${c.query}</div>
-       </a>`;
-  return `<div class="card vcard" data-t="${c.t}" data-i="${i}" data-vid="${c.videoId||''}">
-    <div class="bg"></div>
-    <div class="varea">${media}</div>
-    <div class="vinfo">
-      <div class="badge">${c.badge}</div>
-      <div class="vtitle">${c.title}</div>
-      <div class="vchan">📺 ${c.channel} · ${c.duration}</div>
-      <p class="vdesc">${c.desc}</p>
-    </div>
-    <div class="acts">
-      <button class="abtn${isSaved?' saved':''}" onclick="toggleSave(this,'${c.id}')">
-        ${isSaved?'🔖':'🏷️'}<span>${isSaved?'Saved':'Save'}</span>
-      </button>
-      <button class="abtn" onclick="doShare(${i})">↑<span>Share</span></button>
-    </div>
-  </div>`;
-}
-
 // ── Render ─────────────────────────────────────────────────────────
 function renderAll(){
-  feed.innerHTML = visible.map((c, i) =>
-    c.type === 'video' ? renderVideo(c, i) : renderLesson(c, i)
-  ).join('');
+  feed.innerHTML = visible.map((c, i) => {
+    const isSaved = saved.has(c.id);
+    return `<div class="card" data-t="${c.t}" data-i="${i}">
+      <div class="bg"></div>
+      <div class="vis"><div class="em">${c.em}</div></div>
+      <div class="inner">
+        <div class="cnum">${String(i+1).padStart(2,'0')} &middot; ${visible.length} LESSONS</div>
+        <div class="badge">${c.badge}</div>
+        <h1 class="title">${c.title}</h1>
+        <div class="sub">${c.sub}</div>
+        <p class="body">${c.body}</p>
+        <div class="key"><span class="key-ico">${c.key.split(' ')[0]}</span><span>${c.key.split(' ').slice(1).join(' ')}</span></div>
+        <div class="apply"><span class="albl">Apply&nbsp;it</span><span>${c.apply}</span></div>
+      </div>
+      <div class="acts">
+        <button class="abtn${isSaved?' saved':''}" onclick="toggleSave(this,'${c.id}')">
+          ${isSaved?'🔖':'🏷️'}<span>${isSaved?'Saved':'Save'}</span>
+        </button>
+        <button class="abtn" onclick="doShare(${i})">↑<span>Share</span></button>
+      </div>
+      ${i===0?'<div class="hint"><div class="harrow">↑</div><div class="htxt">Swipe up</div></div>':''}
+    </div>`;
+  }).join('');
 
   progEl.innerHTML = visible.map((_,i)=>
     `<div class="dot${i===0?' on':''}"></div>`
@@ -714,9 +546,8 @@ document.querySelectorAll('.fbtn').forEach(btn => {
     document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
     btn.classList.add('on');
     filter  = btn.dataset.f;
-    visible = buildVisible(filter);
+    visible = filter === 'all' ? [...CARDS] : CARDS.filter(c => c.t === filter);
     renderAll();
-    setupVideoObserver();
     feed.scrollTop = 0;
   });
 });
@@ -743,29 +574,6 @@ function doShare(idx){
   else navigator.clipboard?.writeText(text).then(()=>alert('Copied to clipboard!'));
 }
 
-// ── Video play / auto-pause ────────────────────────────────────────
-function playVid(thumb, videoId){
-  const varea = thumb.closest('.varea');
-  const iframe = document.createElement('iframe');
-  iframe.className = 'vid-frame';
-  iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
-  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-  iframe.allowFullscreen = true;
-  varea.appendChild(iframe);
-}
-
-function setupVideoObserver(){
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if(!entry.isIntersecting){
-        const frame = entry.target.querySelector('.vid-frame');
-        if(frame) frame.remove();
-      }
-    });
-  }, {threshold: 0.4});
-  document.querySelectorAll('.vcard').forEach(card => obs.observe(card));
-}
-
 // ── Keyboard ───────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if(e.key==='ArrowDown') feed.scrollBy({top: window.innerHeight, behavior:'smooth'});
@@ -774,7 +582,6 @@ document.addEventListener('keydown', e => {
 
 // ── Init ───────────────────────────────────────────────────────────
 renderAll();
-setupVideoObserver();
 </script>
 </body>
 </html>
