@@ -127,34 +127,13 @@ html,body{height:100%;overflow:hidden;background:#050010;color:#e8e0f0;font-fami
 .em{font-size:72px;line-height:1;animation:glow 3s ease-in-out infinite}
 
 @media(prefers-reduced-motion:reduce){*{animation:.01ms!important;transition:.01ms!important}}
-
-/* ── VIDEO CARDS ────────────────────────────────────────────────── */
-.vcard{justify-content:flex-start!important}
-.varea{position:relative;width:100%;height:55vh;overflow:hidden;flex-shrink:0}
-.varea::after{content:'';position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(to bottom,transparent,rgba(5,0,16,.98));z-index:3;pointer-events:none}
-.vthumb,.vsrch{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.vsrch{flex-direction:column;gap:10px;text-decoration:none;color:#fff;background:rgba(0,0,0,.1)}
-.vimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.vplay{position:relative;z-index:2;width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;transition:transform .15s}
-.vthumb:active .vplay,.vsrch:active .vplay{transform:scale(.88)}
-.ptri{font-size:24px;margin-left:5px;color:#fff}
-.vdurb{position:absolute;bottom:10px;right:12px;z-index:2;background:rgba(0,0,0,.72);padding:3px 8px;border-radius:4px;font-size:11px;font-family:'Space Mono',monospace}
-.vid-frame{width:100%;height:100%;border:none;position:absolute;inset:0;z-index:4;background:#000}
-.vsrch-ico{font-size:44px;position:relative;z-index:1}
-.vsrch-lbl{font-size:14px;font-weight:600;text-align:center;position:relative;z-index:1;opacity:.85}
-.vsrch-q{font-size:10px;color:rgba(200,190,220,.5);font-style:italic;position:relative;z-index:1;letter-spacing:.5px}
-.vinfo{position:relative;z-index:2;padding:14px 20px 0;flex:1;overflow:hidden}
-.vtitle{font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.25}
-.vchan{font-size:12px;color:rgba(200,190,220,.55);margin-bottom:10px;letter-spacing:.3px}
-.vdesc{font-size:13.5px;line-height:1.62;color:rgba(225,215,242,.85)}
-.vcard .acts{bottom:16px}
 </style>
 </head>
 <body>
 
 <div id="top">
   <div class="logo">ELEVATE</div>
-  <div class="cnt" id="cnt">01 / 73</div>
+  <div class="cnt" id="cnt">01 / 59</div>
 </div>
 
 <div id="feed"></div>
@@ -179,6 +158,7 @@ html,body{height:100%;overflow:hidden;background:#050010;color:#e8e0f0;font-fami
 
 <script>
 const CARDS = [
+  // ── QUANTUM PHYSICS ──────────────────────────────────────────────
   {id:'q1',t:'quantum',badge:'⚛️ Quantum Physics',em:'⚛️',
    title:'You Are Not Solid',sub:'The reality of matter',
    body:"Your body appears solid, but it's 99.9999% empty space. The atoms that make you up are mostly void — electrons orbiting a nucleus that's the size of a marble inside a football stadium.",
@@ -204,6 +184,8 @@ const CARDS = [
    body:"Light and matter behave as both waves and particles depending on how they're measured. Reality doesn't have a fixed nature — it responds to the instrument of observation. The question shapes the answer.",
    key:"👁️ Reality isn't fixed. It's a response. The universe literally shapes itself around the question you're asking it.",
    apply:"Ask 'why does this always happen to me?' and get evidence of that. Ask 'how is this serving me?' and get entirely different evidence."},
+
+  // ── DOUBLE SLIT ──────────────────────────────────────────────────
   {id:'d1',t:'double-slit',badge:'🔬 Double Slit',em:'🔬',
    title:'The Experiment That Changed Everything',sub:"Science's greatest mystery",
    body:"Fire electrons at a wall with two slits. Without observation, they create an interference pattern — like waves. The same particle goes through both slits at once. This violates every rule of classical physics.",
@@ -229,6 +211,8 @@ const CARDS = [
    body:"Physics, neuroscience, and every major wisdom tradition converge here: your inner state shapes outer reality. The universe is not a machine running without you. It's participatory. You are part of the creation.",
    key:"✨ You are not watching the universe. You are participating in creating it, moment by moment, with the quality of your attention.",
    apply:"Raise your awareness. Choose your focus deliberately. The scientific case for intentional living is stronger than it has ever been."},
+
+  // ── LAW OF ASSUMPTION ────────────────────────────────────────────
   {id:'a1',t:'assumption',badge:'✨ Law of Assumption',em:'🪞',
    title:'Your Assumptions Are Your Reality',sub:"Neville Goddard's core teaching",
    body:"Neville Goddard taught one principle above all: your assumptions — not your actions, not your circumstances — are the cause of your experience. What you assume to be true about yourself shapes everything.",
@@ -254,6 +238,8 @@ const CARDS = [
    body:"Revision means returning to any event that didn't go as you wanted — and re-experiencing it as you wish it had happened. This rewrites the emotional charge and reprograms future outcomes from it.",
    key:"⏪ The past is stored as feeling, not fact. Change the feeling, change the imprint, change the future that grows from that root.",
    apply:"Each night before SATS: revise one event from your day. See it as you wanted it. Feel the satisfaction. Then move to your main scene."},
+
+  // ── SUBCONSCIOUS MIND ────────────────────────────────────────────
   {id:'s1',t:'subconscious',badge:'🧠 Subconscious Mind',em:'🧊',
    title:'The Iceberg of Your Mind',sub:'5% conscious, 95% subconscious',
    body:"The conscious mind is about 5% of your total mind. The subconscious is the 95% beneath the surface, running continuously, processing 40 million bits of information per second without your awareness.",
@@ -279,6 +265,8 @@ const CARDS = [
    body:"Your identity — your self-image — is the most powerful subconscious program running. Every action is a vote for the person you believe yourself to be. Change the identity and everything else changes automatically.",
    key:"👑 Don't try to DO what successful people do. Become the person for whom those results are natural. Identity first. Actions follow effortlessly.",
    apply:"Ask: 'What would a person who already has this believe about themselves?' Start being that person today. The subconscious will align."},
+
+  // ── LAWS OF THE UNIVERSE ─────────────────────────────────────────
   {id:'u1',t:'universe',badge:'🌌 Laws of Universe',em:'🎵',
    title:'Everything Vibrates',sub:'The Law of Vibration',
    body:"Nothing is at rest. Everything — from the densest rock to your lightest thought — is in constant motion, vibrating at a specific frequency. Thoughts are things, and they vibrate at their own measurable rate.",
@@ -304,6 +292,8 @@ const CARDS = [
    body:"Everything has its opposite. Hot/cold, dark/light, fear/love. They are not different things — they are different degrees of the same thing. You can mentally move along any spectrum at will.",
    key:"🌓 You don't eliminate fear — you move along the spectrum toward love. You don't escape darkness. You add light. The pole is your tool.",
    apply:"Whatever negative state you feel — find its opposite pole. Gratitude is the opposite of lack. Move deliberately along the spectrum today."},
+
+  // ── EMERALD TABLETS ──────────────────────────────────────────────
   {id:'e1',t:'emerald',badge:'📜 Emerald Tablets',em:'📜',
    title:'The Most Ancient Wisdom',sub:'What are the Emerald Tablets?',
    body:"The Emerald Tablets are attributed to Hermes Trismegistus (Thoth in Egyptian tradition), encoding the principles underlying all reality, consciousness, and alchemy — written for those with eyes to see.",
@@ -329,6 +319,8 @@ const CARDS = [
    body:"The Great Work (Magnum Opus) is the alchemist's ultimate goal: transform lead into gold. Not literally — symbolically. Transform the base, reactive self into a fully realized, conscious, sovereign being.",
    key:"🔥 You are the alchemist. Your base nature is the lead. Your highest self is the gold. The Great Work is the work of becoming who you truly are.",
    apply:"Every challenge is material for the Great Work. Ask of every difficulty: 'How does this serve my transformation?' This reframes everything."},
+
+  // ── PERSONAL FINANCE ─────────────────────────────────────────────
   {id:'f1',t:'finance',badge:'💰 Personal Finance',em:'💰',
    title:'Pay Yourself First',sub:'The foundation of wealth building',
    body:"Most people pay bills, lifestyle, and expenses first — then save whatever's left. Wealthy people do the opposite. The moment income arrives, 20% goes to savings and investments before anything else.",
@@ -354,6 +346,8 @@ const CARDS = [
    body:"Invest $300/month from age 20 at 10% return = $1.9M by 60. Wait until 30 to start? $710K. A single decade costs you $1.2 million. Einstein called compound interest the 8th wonder of the world.",
    key:"⏰ The most important variable in wealth-building is not how much you invest — it's when you start. Every year you wait compounds the cost.",
    apply:"Start a Roth IRA or index fund account this week. Even $25/month builds the habit. Time is the engine. Let it work for you starting now."},
+
+  // ── INVESTING ────────────────────────────────────────────────────
   {id:'i1',t:'investing',badge:'📈 Investing',em:'📈',
    title:'Index Funds — The Simple Path',sub:'How the wealthy actually invest',
    body:"An index fund buys a tiny piece of every company in an index (like the S&P 500). It returns ~10% per year on average over time — consistently beating 90%+ of professional money managers.",
@@ -374,6 +368,8 @@ const CARDS = [
    body:"Alex invests $200/month at 22. Ben starts at 32. Both earn 8% annually. At age 62: Alex has $702,000. Ben has $299,000. Alex invested only $24K more but ended up with $403,000 more. That's compound interest.",
    key:"⏳ The time you're waiting for the 'right moment' is the most expensive delay of your financial life. The best time was yesterday. Second best: now.",
    apply:"Stop waiting until you 'understand it better.' Start with $25. Learn while your money grows. The habit is worth more than the amount."},
+
+  // ── BUSINESS & ENTREPRENEURSHIP ──────────────────────────────────
   {id:'b1',t:'business',badge:'🚀 Business',em:'💡',
    title:'Solve a Real Problem',sub:'Where every great business starts',
    body:"Every great business is a problem solver. Uber solved 'I can't find a taxi.' Airbnb solved 'hotels are too expensive.' The bigger the problem and the more desperate people are to solve it, the more valuable your business.",
@@ -394,6 +390,8 @@ const CARDS = [
    body:"Employers Google you. Clients look you up. Investors search your name. Your online presence builds or destroys opportunities before you even meet. A personal brand is simply: what you're known for, demonstrated consistently in public.",
    key:"🌐 The internet gives everyone a global megaphone for free. Most people consume. A small minority build. The builders capture all the opportunities.",
    apply:"Pick one platform. Post value in your area once a week for 6 months. Consistency compounds. Your future opportunities will find your past content."},
+
+  // ── MINDSET ──────────────────────────────────────────────────────
   {id:'m1',t:'mindset',badge:'💪 Mindset',em:'🌱',
    title:'Growth Mindset',sub:"Carol Dweck's defining research",
    body:"Fixed mindset: talent is fixed, you either have it or you don't. Growth mindset: talent is developed through effort. Growth mindset people achieve dramatically more because every challenge becomes an opportunity to grow.",
@@ -414,6 +412,8 @@ const CARDS = [
    body:"The Stanford Marshmallow Experiment: children who could wait 15 minutes before eating a marshmallow scored higher on SATs, had better health, and higher income as adults decades later. Self-control at 4 predicted outcomes at 40.",
    key:"🍬 The ability to sacrifice what you want NOW for what you want MOST is the single most predictive trait of long-term success in any domain.",
    apply:"Practice in small ways daily: wait before buying, pause before reacting, train when you don't feel like it. Small acts rebuild the muscle."},
+
+  // ── HEALTH ───────────────────────────────────────────────────────
   {id:'h1',t:'health',badge:'🌿 Health',em:'😴',
    title:'Sleep is Your Superpower',sub:'Matthew Walker\'s research',
    body:"Sleep deprivation below 7 hours increases cancer risk, reduces testosterone by 10-15%, destroys immune function, doubles accident risk, and collapses emotional regulation. No supplement, diet, or workout compensates for bad sleep.",
@@ -434,6 +434,8 @@ const CARDS = [
    body:"The brain is 73% water. A 2% drop in hydration reduces cognitive performance by 10-15%. Most people wake up dehydrated, then drink coffee (a diuretic), and spend the day mildly cognitively impaired without knowing it.",
    key:"💧 Drink 500ml of water before coffee, before food, before checking your phone. Your brain needs water first. Then everything else.",
    apply:"Put a full water bottle next to your bed tonight. Drink it when you wake up tomorrow before anything else. Do this for 7 days."},
+
+  // ── PRODUCTIVITY ─────────────────────────────────────────────────
   {id:'p1',t:'productivity',badge:'⚡ Productivity',em:'🎯',
    title:'The 80/20 Principle',sub:"Pareto's Law of results",
    body:"80% of results come from 20% of effort. 20% of your clients generate 80% of revenue. 20% of your habits drive 80% of your success. Stop doing more. Start identifying the critical 20% and go all in.",
@@ -454,6 +456,8 @@ const CARDS = [
    body:"Buffett: 'The difference between successful people and very successful people is that very successful people say no to almost everything.' Every yes to something unimportant is an automatic no to something important.",
    key:"🚫 No is not a closed door. No is how you keep your most important doors open. Say no to good things so you can say yes to the great ones.",
    apply:"Identify something you said yes to this week that deserved a no. Practice: 'I can't take that on right now.' No explanation required."},
+
+  // ── RELATIONSHIPS ────────────────────────────────────────────────
   {id:'r1',t:'relationships',badge:'🤝 Relationships',em:'🤝',
    title:'Your Network is Your Net Worth',sub:'The relationship economy',
    body:"70-80% of jobs are never publicly posted — filled through relationships. Your next client, opportunity, or breakthrough will likely come through someone you know. Who you know matters as much as what you know.",
@@ -476,99 +480,10 @@ const CARDS = [
    apply:"This week: introduce two people who should know each other. Share one useful resource with no expectation. Be radically useful to one person in your world."},
 ];
 
-const VIDEOS = [
-  {id:'vq1',t:'quantum',type:'video',badge:'⚛️ Quantum Physics',
-   query:'quantum mechanics lecture MIT OpenCourseWare professor',
-   title:'Quantum Mechanics — University Lectures',
-   channel:'MIT OpenCourseWare & Stanford Online',duration:'Series',
-   desc:'Full quantum mechanics lecture series from MIT and Stanford. Top physicists explain wave functions, measurement, and the math behind the observations that shatter classical physics.'},
-  {id:'vd1',t:'double-slit',type:'video',badge:'🔬 Double Slit',
-   query:'double slit experiment explained observer effect quantum',
-   title:'The Double Slit Experiment Explained',
-   channel:'Top Physics Educators',duration:'10–30 min',
-   desc:'Multiple physicists and professors break down exactly what happens when you observe a quantum particle — and why the observer effect is the most disturbing result in the history of science.'},
-  {id:'va1',t:'assumption',type:'video',badge:'✨ Law of Assumption',
-   query:'Neville Goddard law of assumption original lecture',
-   title:'Neville Goddard — Original Lectures',
-   channel:'Neville Goddard Archive',duration:'Various',
-   desc:'Original recorded lectures from Neville Goddard — the philosopher who developed the Law of Assumption. Hear his teachings directly on assumption, SATS, revision, and living in the end.'},
-  {id:'vs1',t:'subconscious',type:'video',badge:'🧠 Subconscious Mind',
-   query:'Bruce Lipton subconscious mind reprogramming biology of belief',
-   title:'Reprogram Your Subconscious Mind',
-   channel:'Dr. Bruce Lipton & Dr. Joe Dispenza',duration:'Various',
-   desc:'Cell biologist Bruce Lipton and neuroscientist Joe Dispenza explain the science of reprogramming the subconscious — how your biology literally responds to your deepest beliefs.'},
-  {id:'vu1',t:'universe',type:'video',badge:'🌌 Laws of Universe',
-   query:'seven hermetic principles Kybalion laws of universe explained',
-   title:'The 7 Hermetic Principles Explained',
-   channel:'Hermetic Philosophy Scholars',duration:'Various',
-   desc:'Deep dives into the seven laws from the Kybalion — Mentalism, Correspondence, Vibration, Polarity, Rhythm, Cause & Effect, and Gender. The complete operating system of reality.'},
-  {id:'ve1',t:'emerald',type:'video',badge:'📜 Emerald Tablets',
-   query:'Emerald Tablets of Thoth decoded ancient wisdom explained',
-   title:'The Emerald Tablets Decoded',
-   channel:'Ancient Wisdom Scholars',duration:'Various',
-   desc:'Scholars and philosophers decode the Emerald Tablets — the most compressed map of consciousness and cosmos ever written. From "As above, so below" to the Great Work of transformation.'},
-  {id:'vf1',t:'finance',type:'video',badge:'💰 Personal Finance',
-   videoId:'PHe0bXAIuk0',
-   title:'How The Economic Machine Works',
-   channel:'Ray Dalio · Bridgewater Associates',duration:'31 min',
-   desc:'One of the most important 31 minutes in financial education. Ray Dalio breaks down how credit, debt cycles, and deleveraging actually work — the template for understanding any economy.'},
-  {id:'vi1',t:'investing',type:'video',badge:'📈 Investing',
-   query:'Warren Buffett investing advice annual meeting Berkshire beginners',
-   title:'Warren Buffett on Investing',
-   channel:'Berkshire Hathaway · Annual Meetings',duration:'Various',
-   desc:"The world's greatest investor explains his philosophy in plain language: buy great businesses at fair prices, think decades ahead, and let compound interest do the heavy lifting."},
-  {id:'vb1',t:'business',type:'video',badge:'🚀 Business',
-   query:'Y Combinator how to start a startup Sam Altman lecture Stanford',
-   title:'How to Start a Startup',
-   channel:'Y Combinator · Stanford CS183B',duration:'Series',
-   desc:'The famous Stanford/Y Combinator lecture series. Sam Altman, Paul Graham, and top founders explain what actually makes startups succeed — from idea validation to product-market fit.'},
-  {id:'vm1',t:'mindset',type:'video',badge:'💪 Mindset',
-   videoId:'_X0mgOOSpLU',
-   title:'The Power of Believing You Can Improve',
-   channel:'Carol Dweck · TED',duration:'10 min',
-   desc:'Stanford psychologist Carol Dweck\'s landmark TED talk on growth vs. fixed mindset. Why the word "not yet" might be the most transformative two words in education and self-development.'},
-  {id:'vm2',t:'mindset',type:'video',badge:'💪 Mindset',
-   videoId:'H14bBuluwB8',
-   title:'Grit: The Power of Passion and Perseverance',
-   channel:'Angela Duckworth · TED',duration:'6 min',
-   desc:'What predicts success better than IQ, talent, or social background? Grit. Angela Duckworth\'s research shows that passion plus perseverance — not talent — is the real secret to achievement.'},
-  {id:'vh1',t:'health',type:'video',badge:'🌿 Health',
-   videoId:'5MuIMqhT8cs',
-   title:'Sleep Is Your Superpower',
-   channel:'Matthew Walker · TED',duration:'19 min',
-   desc:'Sleep scientist Matthew Walker reveals the terrifying consequences of sleep deprivation and the extraordinary life benefits of prioritizing sleep. The most important 19 minutes you\'ll spend on your health.'},
-  {id:'vp1',t:'productivity',type:'video',badge:'⚡ Productivity',
-   query:'Cal Newport deep work focus single tasking productivity lecture',
-   title:'Deep Work & Radical Focus',
-   channel:'Cal Newport & Productivity Researchers',duration:'Various',
-   desc:'Computer scientist and bestselling author Cal Newport explains why deep, focused work is the most valuable skill of the 21st century — and exactly how to build it in a world designed to distract you.'},
-  {id:'vr1',t:'relationships',type:'video',badge:'🤝 Relationships',
-   videoId:'iCvmsMzlF7o',
-   title:'The Power of Vulnerability',
-   channel:'Brené Brown · TED',duration:'20 min',
-   desc:'Research professor Brené Brown spent 12 years studying vulnerability, courage, shame, and connection. This talk changed how millions understand relationships — and why authentic connection requires courage.'},
-];
-
-function buildVisible(f) {
-  const lessons = f === 'all' ? [...CARDS] : CARDS.filter(c => c.t === f);
-  const vids    = f === 'all' ? [...VIDEOS] : VIDEOS.filter(v => v.t === f);
-  if (f !== 'all') return [...lessons, ...vids];
-  const vidsByTopic = {};
-  vids.forEach(v => { (vidsByTopic[v.t] = vidsByTopic[v.t]||[]).push(v); });
-  const result = [];
-  lessons.forEach((card, i) => {
-    result.push(card);
-    const next = lessons[i+1];
-    if (!next || next.t !== card.t) {
-      (vidsByTopic[card.t]||[]).forEach(v => result.push(v));
-    }
-  });
-  return result;
-}
-
+// ── State ──────────────────────────────────────────────────────────
 const saved  = new Set(JSON.parse(localStorage.getItem('elev-saved')||'[]'));
 let filter   = 'all';
-let visible  = buildVisible('all');
+let visible  = [...CARDS];
 let curIdx   = 0;
 
 const feed   = document.getElementById('feed');
@@ -577,75 +492,41 @@ const cntEl  = document.getElementById('cnt');
 
 function persist(){ localStorage.setItem('elev-saved', JSON.stringify([...saved])) }
 
-function renderLesson(c, i){
-  const isSaved = saved.has(c.id);
-  return `<div class="card" data-t="${c.t}" data-i="${i}">
-    <div class="bg"></div>
-    <div class="vis"><div class="em">${c.em}</div></div>
-    <div class="inner">
-      <div class="cnum">${String(i+1).padStart(2,'0')} &middot; ${visible.length} CARDS</div>
-      <div class="badge">${c.badge}</div>
-      <h1 class="title">${c.title}</h1>
-      <div class="sub">${c.sub}</div>
-      <p class="body">${c.body}</p>
-      <div class="key"><span class="key-ico">${c.key.split(' ')[0]}</span><span>${c.key.split(' ').slice(1).join(' ')}</span></div>
-      <div class="apply"><span class="albl">Apply&nbsp;it</span><span>${c.apply}</span></div>
-    </div>
-    <div class="acts">
-      <button class="abtn${isSaved?' saved':''}" onclick="toggleSave(this,'${c.id}')">
-        ${isSaved?'🔖':'🏷️'}<span>${isSaved?'Saved':'Save'}</span>
-      </button>
-      <button class="abtn" onclick="doShare(${i})">↑<span>Share</span></button>
-    </div>
-    ${i===0?'<div class="hint"><div class="harrow">↑</div><div class="htxt">Swipe up</div></div>':''}
-  </div>`;
-}
-
-function renderVideo(c, i){
-  const isSaved = saved.has(c.id);
-  const isEmbed = !!c.videoId;
-  const media = isEmbed
-    ? `<div class="vthumb" onclick="playVid(this,'${c.videoId}')">
-         <img class="vimg" src="https://i.ytimg.com/vi/${c.videoId}/hqdefault.jpg"
-              alt="${c.title}" loading="lazy" onerror="this.style.display='none'">
-         <div class="vplay"><div class="ptri">▶</div></div>
-         <div class="vdurb">${c.duration}</div>
-       </div>`
-    : `<a class="vsrch" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c.query)}" target="_blank" rel="noopener noreferrer">
-         <div class="vsrch-ico">🎬</div>
-         <div class="vplay"><div class="ptri">▶</div></div>
-         <div class="vsrch-lbl">Search on YouTube</div>
-         <div class="vsrch-q">${c.query}</div>
-       </a>`;
-  return `<div class="card vcard" data-t="${c.t}" data-i="${i}" data-vid="${c.videoId||''}">
-    <div class="bg"></div>
-    <div class="varea">${media}</div>
-    <div class="vinfo">
-      <div class="badge">${c.badge}</div>
-      <div class="vtitle">${c.title}</div>
-      <div class="vchan">📺 ${c.channel} · ${c.duration}</div>
-      <p class="vdesc">${c.desc}</p>
-    </div>
-    <div class="acts">
-      <button class="abtn${isSaved?' saved':''}" onclick="toggleSave(this,'${c.id}')">
-        ${isSaved?'🔖':'🏷️'}<span>${isSaved?'Saved':'Save'}</span>
-      </button>
-      <button class="abtn" onclick="doShare(${i})">↑<span>Share</span></button>
-    </div>
-  </div>`;
-}
-
+// ── Render ─────────────────────────────────────────────────────────
 function renderAll(){
-  feed.innerHTML = visible.map((c, i) =>
-    c.type === 'video' ? renderVideo(c, i) : renderLesson(c, i)
-  ).join('');
+  feed.innerHTML = visible.map((c, i) => {
+    const isSaved = saved.has(c.id);
+    return `<div class="card" data-t="${c.t}" data-i="${i}">
+      <div class="bg"></div>
+      <div class="vis"><div class="em">${c.em}</div></div>
+      <div class="inner">
+        <div class="cnum">${String(i+1).padStart(2,'0')} &middot; ${visible.length} LESSONS</div>
+        <div class="badge">${c.badge}</div>
+        <h1 class="title">${c.title}</h1>
+        <div class="sub">${c.sub}</div>
+        <p class="body">${c.body}</p>
+        <div class="key"><span class="key-ico">${c.key.split(' ')[0]}</span><span>${c.key.split(' ').slice(1).join(' ')}</span></div>
+        <div class="apply"><span class="albl">Apply&nbsp;it</span><span>${c.apply}</span></div>
+      </div>
+      <div class="acts">
+        <button class="abtn${isSaved?' saved':''}" onclick="toggleSave(this,'${c.id}')">
+          ${isSaved?'🔖':'🏷️'}<span>${isSaved?'Saved':'Save'}</span>
+        </button>
+        <button class="abtn" onclick="doShare(${i})">↑<span>Share</span></button>
+      </div>
+      ${i===0?'<div class="hint"><div class="harrow">↑</div><div class="htxt">Swipe up</div></div>':''}
+    </div>`;
+  }).join('');
+
   progEl.innerHTML = visible.map((_,i)=>
     `<div class="dot${i===0?' on':''}"></div>`
   ).join('');
+
   curIdx = 0;
   setCount(0);
 }
 
+// ── Scroll tracking ────────────────────────────────────────────────
 feed.addEventListener('scroll', () => {
   const idx = Math.round(feed.scrollTop / window.innerHeight);
   if(idx !== curIdx){
@@ -659,18 +540,19 @@ function setCount(idx){
   cntEl.textContent = String(idx+1).padStart(2,'0') + ' / ' + String(visible.length).padStart(2,'0');
 }
 
+// ── Filter ─────────────────────────────────────────────────────────
 document.querySelectorAll('.fbtn').forEach(btn => {
   btn.addEventListener('click', () => {
     document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
     btn.classList.add('on');
     filter  = btn.dataset.f;
-    visible = buildVisible(filter);
+    visible = filter === 'all' ? [...CARDS] : CARDS.filter(c => c.t === filter);
     renderAll();
-    setupVideoObserver();
     feed.scrollTop = 0;
   });
 });
 
+// ── Save ───────────────────────────────────────────────────────────
 function toggleSave(btn, id){
   if(saved.has(id)){
     saved.delete(id);
@@ -684,42 +566,22 @@ function toggleSave(btn, id){
   persist();
 }
 
+// ── Share ──────────────────────────────────────────────────────────
 function doShare(idx){
   const c = visible[idx];
-  const text = (c.key ? c.key.split(' ').slice(1).join(' ') : c.title) + ' — ELEVATE';
+  const text = c.key.split(' ').slice(1).join(' ') + ' — ELEVATE';
   if(navigator.share) navigator.share({title:'ELEVATE', text}).catch(()=>{});
   else navigator.clipboard?.writeText(text).then(()=>alert('Copied to clipboard!'));
 }
 
-function playVid(thumb, videoId){
-  const varea = thumb.closest('.varea');
-  const iframe = document.createElement('iframe');
-  iframe.className = 'vid-frame';
-  iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
-  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-  iframe.allowFullscreen = true;
-  varea.appendChild(iframe);
-}
-
-function setupVideoObserver(){
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if(!entry.isIntersecting){
-        const frame = entry.target.querySelector('.vid-frame');
-        if(frame) frame.remove();
-      }
-    });
-  }, {threshold: 0.4});
-  document.querySelectorAll('.vcard').forEach(card => obs.observe(card));
-}
-
+// ── Keyboard ───────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if(e.key==='ArrowDown') feed.scrollBy({top: window.innerHeight, behavior:'smooth'});
   if(e.key==='ArrowUp')   feed.scrollBy({top:-window.innerHeight, behavior:'smooth'});
 });
 
+// ── Init ───────────────────────────────────────────────────────────
 renderAll();
-setupVideoObserver();
 </script>
 </body>
 </html>
