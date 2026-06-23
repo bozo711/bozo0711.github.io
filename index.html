@@ -860,13 +860,13 @@ strong{color:#e8d4b0}
 .code-send-btn{background:linear-gradient(135deg,rgba(0,80,0,.5),rgba(0,50,0,.3));border:1px solid #004400;border-radius:8px;color:#00cc44;font-size:18px;width:42px;height:42px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
 .code-send-btn:hover{background:rgba(0,100,0,.5)}
 
-/* ── TOP TABS (JARVIS ↔ ACADEMY) ── */
-.top-tabs{flex-shrink:0;display:flex;background:rgba(2,0,6,.99);border-bottom:1px solid rgba(110,0,30,.3);gap:0}
-.ttab{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px 8px;background:none;border:none;border-bottom:2px solid transparent;color:rgba(190,150,160,.3);font-family:inherit;font-size:9px;letter-spacing:3px;cursor:pointer;transition:all .2s;text-transform:uppercase;-webkit-tap-highlight-color:transparent;position:relative}
-.ttab .ttico{font-size:15px;line-height:1}
-.ttab.on{color:var(--live);border-bottom-color:var(--live);text-shadow:0 0 10px rgba(204,34,68,.4)}
-.ttab.on .ttico{filter:drop-shadow(0 0 4px rgba(204,34,68,.5))}
-.ttab:active{opacity:.7}
+/* ── BOTTOM NAV ── */
+.bot-nav{flex-shrink:0;display:flex;border-top:1px solid rgba(110,0,30,.35);background:rgba(2,0,7,.99)}
+.bot-nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;padding-bottom:max(8px,env(safe-area-inset-bottom));background:none;border:none;color:rgba(190,150,160,.3);font-family:inherit;font-size:7px;letter-spacing:2.5px;cursor:pointer;transition:all .2s;text-transform:uppercase;-webkit-tap-highlight-color:transparent}
+.bot-nav-btn .nav-ico{font-size:18px;line-height:1;transition:filter .2s}
+.bot-nav-btn.on{color:var(--live);text-shadow:0 0 8px rgba(204,34,68,.4)}
+.bot-nav-btn.on .nav-ico{filter:drop-shadow(0 0 5px rgba(204,34,68,.55))}
+.bot-nav-btn:active{opacity:.7}
 
 /* ── ELEVATE PANEL ── */
 #p-elevate{display:none;flex-direction:column;height:100%;position:relative;background:#050010}
@@ -1002,16 +1002,6 @@ strong{color:#e8d4b0}
     </div>
   </div>
 
-  <!-- Top tabs -->
-  <div class="top-tabs">
-    <button class="ttab on" data-view="jarvis" onclick="switchView('jarvis')">
-      <span class="ttico">🤖</span><span>JARVIS</span>
-    </button>
-    <button class="ttab" data-view="elevate" onclick="switchView('elevate')">
-      <span class="ttico">📚</span><span>ACADEMY</span>
-    </button>
-  </div>
-
   <!-- Status strip -->
   <div class="strip">
     <div class="stat"><div class="stat-l">Streak</div><div class="stat-v" id="s-streak">🔥0</div></div>
@@ -1043,6 +1033,7 @@ strong{color:#e8d4b0}
         <button class="qbtn" onclick="qp('jarvis','Motivate me. I need to push through right now.')">Motivate</button>
         <button class="qbtn" onclick="cmd('status')">Status</button>
         <button class="qbtn" onclick="cleanJarvis()" style="color:rgba(204,34,68,.6)">🧹 Clean</button>
+        <button class="qbtn" onclick="switchView('elevate')" style="color:rgba(100,180,255,.75)">📚 ELEVATE</button>
       </div>
       <div class="inp-area">
         <button class="mic-btn" id="mic"
@@ -1062,6 +1053,18 @@ strong{color:#e8d4b0}
     </div>
 
   </div><!-- /content -->
+
+  <!-- Bottom nav -->
+  <div class="bot-nav">
+    <button class="bot-nav-btn on" data-view="jarvis" onclick="switchView('jarvis')">
+      <span class="nav-ico">🤖</span>
+      <span>JARVIS</span>
+    </button>
+    <button class="bot-nav-btn" data-view="elevate" onclick="switchView('elevate')">
+      <span class="nav-ico">📚</span>
+      <span>ELEVATE</span>
+    </button>
+  </div>
 
 </div><!-- /app -->
 
@@ -4672,13 +4675,11 @@ function cleanJarvis() {
 // VIEW SWITCHER (JARVIS ↔ ELEVATE)
 // ═══════════════════════════════════════════════
 function switchView(v) {
-  document.querySelectorAll('.ttab').forEach(b => b.classList.toggle('on', b.dataset.view === v));
-  document.getElementById('p-jarvis').classList.toggle('on', v === 'jarvis');
-  document.getElementById('p-elevate').classList.toggle('on', v === 'elevate');
-  ['.strip', '.niche-bar', '#mode-ind'].forEach(sel => {
-    const el = document.querySelector(sel);
-    if (el) el.style.display = v === 'jarvis' ? '' : 'none';
-  });
+  document.querySelectorAll('.bot-nav-btn').forEach(b => b.classList.toggle('on', b.dataset.view === v));
+  const jarvisPanel = document.getElementById('p-jarvis');
+  const elevatePanel = document.getElementById('p-elevate');
+  jarvisPanel.classList.toggle('on', v === 'jarvis');
+  elevatePanel.classList.toggle('on', v === 'elevate');
   if (v === 'elevate') {
     const frame = document.getElementById('elevate-frame');
     if (!frame.src) frame.src = 'learn.html';
