@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#050010">
+<title>ELEVATE — Learn What Matters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:#050010;color:#e8e0f0;font-family:'Space Grotesk',system-ui,sans-serif;touch-action:pan-y}
+
+#feed{height:100vh;overflow-y:scroll;overflow-x:hidden;scroll-snap-type:y mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+#feed::-webkit-scrollbar{display:none}
+
+.card{height:100vh;width:100%;scroll-snap-align:start;scroll-snap-stop:always;position:relative;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden}
+
+.bg{position:absolute;inset:0;z-index:0}
+.bg::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(5,0,16,.4) 30%,rgba(5,0,16,.82) 62%,rgba(5,0,16,.97) 100%)}
+
+[data-t=quantum] .bg{background:radial-gradient(ellipse at 25% 20%,rgba(0,130,255,.45) 0%,transparent 55%),radial-gradient(ellipse at 75% 75%,rgba(0,60,200,.3) 0%,transparent 55%),#030018}
+[data-t=double-slit] .bg{background:radial-gradient(ellipse at 65% 20%,rgba(160,0,255,.45) 0%,transparent 55%),radial-gradient(ellipse at 30% 75%,rgba(90,0,220,.3) 0%,transparent 55%),#080018}
+[data-t=assumption] .bg{background:radial-gradient(ellipse at 45% 20%,rgba(240,165,0,.4) 0%,transparent 55%),radial-gradient(ellipse at 20% 75%,rgba(180,100,0,.25) 0%,transparent 55%),#100800}
+[data-t=subconscious] .bg{background:radial-gradient(ellipse at 40% 25%,rgba(0,210,180,.35) 0%,transparent 55%),radial-gradient(ellipse at 75% 70%,rgba(0,150,120,.25) 0%,transparent 55%),#001210}
+[data-t=universe] .bg{background:radial-gradient(ellipse at 55% 20%,rgba(255,60,60,.35) 0%,transparent 55%),radial-gradient(ellipse at 25% 75%,rgba(180,30,30,.25) 0%,transparent 55%),#120005}
+[data-t=emerald] .bg{background:radial-gradient(ellipse at 35% 25%,rgba(0,210,80,.35) 0%,transparent 55%),radial-gradient(ellipse at 70% 70%,rgba(0,150,50,.25) 0%,transparent 55%),#001208}
+[data-t=finance] .bg{background:radial-gradient(ellipse at 50% 20%,rgba(0,200,230,.35) 0%,transparent 55%),radial-gradient(ellipse at 25% 75%,rgba(0,140,180,.25) 0%,transparent 55%),#001018}
+[data-t=investing] .bg{background:radial-gradient(ellipse at 60% 25%,rgba(140,100,255,.4) 0%,transparent 55%),radial-gradient(ellipse at 30% 70%,rgba(90,50,200,.3) 0%,transparent 55%),#080014}
+[data-t=business] .bg{background:radial-gradient(ellipse at 40% 20%,rgba(255,140,0,.4) 0%,transparent 55%),radial-gradient(ellipse at 70% 75%,rgba(200,80,0,.3) 0%,transparent 55%),#120800}
+[data-t=mindset] .bg{background:radial-gradient(ellipse at 55% 25%,rgba(240,80,250,.35) 0%,transparent 55%),radial-gradient(ellipse at 25% 70%,rgba(180,40,200,.25) 0%,transparent 55%),#100015}
+[data-t=health] .bg{background:radial-gradient(ellipse at 40% 20%,rgba(80,220,120,.35) 0%,transparent 55%),radial-gradient(ellipse at 70% 75%,rgba(40,160,80,.25) 0%,transparent 55%),#001508}
+[data-t=productivity] .bg{background:radial-gradient(ellipse at 50% 20%,rgba(255,210,0,.35) 0%,transparent 55%),radial-gradient(ellipse at 25% 75%,rgba(200,150,0,.25) 0%,transparent 55%),#100c00}
+[data-t=relationships] .bg{background:radial-gradient(ellipse at 45% 20%,rgba(255,130,130,.35) 0%,transparent 55%),radial-gradient(ellipse at 70% 75%,rgba(200,80,80,.25) 0%,transparent 55%),#120505}
+
+.inner{position:relative;z-index:2;padding:20px 20px 0;animation:fadein .45s ease both}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border:1px solid currentColor;margin-bottom:14px;backdrop-filter:blur(8px)}
+
+[data-t=quantum] .badge{color:#4fc3ff;background:rgba(0,100,200,.15)}
+[data-t=double-slit] .badge{color:#c084fc;background:rgba(120,0,200,.15)}
+[data-t=assumption] .badge{color:#fbbf24;background:rgba(180,100,0,.15)}
+[data-t=subconscious] .badge{color:#34d399;background:rgba(0,150,100,.15)}
+[data-t=universe] .badge{color:#f87171;background:rgba(180,30,30,.15)}
+[data-t=emerald] .badge{color:#4ade80;background:rgba(0,160,50,.15)}
+[data-t=finance] .badge{color:#22d3ee;background:rgba(0,140,180,.15)}
+[data-t=investing] .badge{color:#a78bfa;background:rgba(90,50,200,.15)}
+[data-t=business] .badge{color:#fb923c;background:rgba(200,80,0,.15)}
+[data-t=mindset] .badge{color:#e879f9;background:rgba(160,40,200,.15)}
+[data-t=health] .badge{color:#86efac;background:rgba(40,160,80,.15)}
+[data-t=productivity] .badge{color:#fde68a;background:rgba(180,130,0,.15)}
+[data-t=relationships] .badge{color:#fca5a5;background:rgba(180,60,60,.15)}
+
+.cnum{font-size:10px;letter-spacing:2px;color:rgba(200,190,220,.38);font-family:'Space Mono',monospace;margin-bottom:6px}
+.title{font-size:clamp(20px,5.5vw,28px);font-weight:700;line-height:1.15;color:#fff;margin-bottom:9px;text-shadow:0 2px 20px rgba(0,0,0,.6)}
+.sub{font-size:12px;font-weight:600;letter-spacing:.5px;margin-bottom:10px;opacity:.7}
+.body{font-size:14.5px;line-height:1.65;color:rgba(228,218,244,.88);margin-bottom:14px}
+
+.key{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:10px;background:rgba(255,255,255,.06);margin-bottom:12px;font-size:14px;line-height:1.55;backdrop-filter:blur(4px)}
+.key-ico{font-size:17px;flex-shrink:0;margin-top:1px}
+
+[data-t=quantum] .key{border-left:3px solid #4fc3ff}
+[data-t=double-slit] .key{border-left:3px solid #c084fc}
+[data-t=assumption] .key{border-left:3px solid #fbbf24}
+[data-t=subconscious] .key{border-left:3px solid #34d399}
+[data-t=universe] .key{border-left:3px solid #f87171}
+[data-t=emerald] .key{border-left:3px solid #4ade80}
+[data-t=finance] .key{border-left:3px solid #22d3ee}
+[data-t=investing] .key{border-left:3px solid #a78bfa}
+[data-t=business] .key{border-left:3px solid #fb923c}
+[data-t=mindset] .key{border-left:3px solid #e879f9}
+[data-t=health] .key{border-left:3px solid #86efac}
+[data-t=productivity] .key{border-left:3px solid #fde68a}
+[data-t=relationships] .key{border-left:3px solid #fca5a5}
+
+.apply{font-size:13px;color:rgba(200,190,220,.7);padding:10px 0 0;border-top:1px solid rgba(255,255,255,.08);display:flex;align-items:flex-start;gap:8px;line-height:1.55;margin-bottom:4px}
+.albl{font-size:9px;letter-spacing:2px;text-transform:uppercase;white-space:nowrap;margin-top:2px;opacity:.5;flex-shrink:0}
+
+.acts{position:absolute;right:14px;bottom:100px;z-index:10;display:flex;flex-direction:column;align-items:center;gap:16px}
+.abtn{background:none;border:none;color:rgba(255,255,255,.75);cursor:pointer;font-size:24px;line-height:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:2px}
+.abtn span{font-size:10px;font-family:'Space Mono',monospace;color:rgba(255,255,255,.45)}
+.abtn.saved{color:#fbbf24}
+.abtn:active{transform:scale(.85)}
+
+.vis{position:absolute;top:12%;right:18px;z-index:1;pointer-events:none}
+
+#prog{position:fixed;right:5px;top:50%;transform:translateY(-50%);z-index:100;display:flex;flex-direction:column;gap:4px;pointer-events:none}
+.dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .3s}
+.dot.on{height:16px;border-radius:2px;background:rgba(255,255,255,.88)}
+
+#top{position:fixed;top:0;left:0;right:0;z-index:200;padding:max(12px,env(safe-area-inset-top)) 16px 10px;background:linear-gradient(to bottom,rgba(5,0,16,.96),transparent);display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+.logo{font-family:'Space Mono',monospace;font-size:15px;font-weight:700;letter-spacing:4px;color:#fff;text-shadow:0 0 20px rgba(160,100,255,.5)}
+.cnt{font-size:10px;letter-spacing:2px;color:rgba(200,185,230,.45);font-family:'Space Mono',monospace}
+
+#fil{position:fixed;bottom:0;left:0;right:0;z-index:200;background:linear-gradient(to top,rgba(5,0,16,.97) 55%,transparent);padding:10px 14px max(14px,env(safe-area-inset-bottom));display:flex;gap:7px;overflow-x:auto;scrollbar-width:none}
+#fil::-webkit-scrollbar{display:none}
+.fbtn{flex-shrink:0;padding:6px 13px;border-radius:20px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:rgba(255,255,255,.55);font-size:11.5px;font-weight:600;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .2s;white-space:nowrap}
+.fbtn.on{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.38);color:#fff}
+
+.hint{position:absolute;bottom:95px;left:50%;transform:translateX(-50%);z-index:10;display:flex;flex-direction:column;align-items:center;gap:5px;animation:hfade 3.5s ease 1.5s both}
+@keyframes hfade{0%{opacity:0;transform:translateX(-50%) translateY(8px)}15%{opacity:.7;transform:translateX(-50%) translateY(0)}85%{opacity:.7}100%{opacity:0}}
+.harrow{width:26px;height:26px;border:2px solid rgba(255,255,255,.35);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;animation:bup .8s ease infinite alternate}
+@keyframes bup{from{transform:translateY(0)}to{transform:translateY(-5px)}}
+.htxt{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.35)}
+
+@keyframes glow{0%,100%{filter:drop-shadow(0 0 6px var(--tc))}50%{filter:drop-shadow(0 0 20px var(--tc)) drop-shadow(0 0 40px var(--tc))}}
+@keyframes fadein{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+[data-t=quantum]{--tc:#4fc3ff}
+[data-t=double-slit]{--tc:#c084fc}
+[data-t=assumption]{--tc:#fbbf24}
+[data-t=subconscious]{--tc:#34d399}
+[data-t=universe]{--tc:#f87171}
+[data-t=emerald]{--tc:#4ade80}
+[data-t=finance]{--tc:#22d3ee}
+[data-t=investing]{--tc:#a78bfa}
+[data-t=business]{--tc:#fb923c}
+[data-t=mindset]{--tc:#e879f9}
+[data-t=health]{--tc:#86efac}
+[data-t=productivity]{--tc:#fde68a}
+[data-t=relationships]{--tc:#fca5a5}
+
+.em{font-size:72px;line-height:1;animation:glow 3s ease-in-out infinite}
+
+@media(prefers-reduced-motion:reduce){*{animation:.01ms!important;transition:.01ms!important}}
+
+/* ── VIDEO CARDS ────────────────────────────────────────────────── */
+.vcard{justify-content:flex-start!important}
+.varea{position:relative;width:100%;height:55vh;overflow:hidden;flex-shrink:0}
+.varea::after{content:'';position:absolute;bottom:0;left:0;right:0;height:70px;background:linear-gradient(to bottom,transparent,rgba(5,0,16,.98));z-index:3;pointer-events:none}
+.vthumb,.vsrch{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.vsrch{flex-direction:column;gap:10px;text-decoration:none;color:#fff;background:rgba(0,0,0,.1)}
+.vimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.vplay{position:relative;z-index:2;width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.18);backdrop-filter:blur(8px);border:2px solid rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;transition:transform .15s}
+.vthumb:active .vplay,.vsrch:active .vplay{transform:scale(.88)}
+.ptri{font-size:24px;margin-left:5px;color:#fff}
+.vdurb{position:absolute;bottom:10px;right:12px;z-index:2;background:rgba(0,0,0,.72);padding:3px 8px;border-radius:4px;font-size:11px;font-family:'Space Mono',monospace}
+.vid-frame{width:100%;height:100%;border:none;position:absolute;inset:0;z-index:4;background:#000}
+.vsrch-ico{font-size:44px;position:relative;z-index:1}
+.vsrch-lbl{font-size:14px;font-weight:600;text-align:center;position:relative;z-index:1;opacity:.85}
+.vsrch-q{font-size:10px;color:rgba(200,190,220,.5);font-style:italic;position:relative;z-index:1;letter-spacing:.5px}
+.vinfo{position:relative;z-index:2;padding:14px 20px 0;flex:1;overflow:hidden}
+.vtitle{font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;line-height:1.25}
+.vchan{font-size:12px;color:rgba(200,190,220,.55);margin-bottom:10px;letter-spacing:.3px}
+.vdesc{font-size:13.5px;line-height:1.62;color:rgba(225,215,242,.85)}
+.vcard .acts{bottom:16px}
+</style>
+</head>
+<body>
+
+<div id="top">
+  <div class="logo">ELEVATE</div>
+  <div class="cnt" id="cnt">01 / 73</div>
+</div>
+
+<div id="feed"></div>
+<div id="prog"></div>
+
+<div id="fil">
+  <button class="fbtn on" data-f="all">All</button>
+  <button class="fbtn" data-f="quantum">⚛️ Quantum</button>
+  <button class="fbtn" data-f="double-slit">🔬 Double Slit</button>
+  <button class="fbtn" data-f="assumption">✨ Assumption</button>
+  <button class="fbtn" data-f="subconscious">🧠 Subconscious</button>
+  <button class="fbtn" data-f="universe">🌌 Universe</button>
+  <button class="fbtn" data-f="emerald">📜 Emerald</button>
+  <button class="fbtn" data-f="finance">💰 Finance</button>
+  <button class="fbtn" data-f="investing">📈 Investing</button>
+  <button class="fbtn" data-f="business">🚀 Business</button>
+  <button class="fbtn" data-f="mindset">💪 Mindset</button>
+  <button class="fbtn" data-f="health">🌿 Health</button>
+  <button class="fbtn" data-f="productivity">⚡ Productivity</button>
+  <button class="fbtn" data-f="relationships">🤝 Relationships</button>
+</div>
+
+<script>
+const CARDS = [
+  {id:'q1',t:'quantum',badge:'⚛️ Quantum Physics',em:'⚛️',
+   title:'You Are Not Solid',sub:'The reality of matter',
+   body:"Your body appears solid, but it's 99.9999% empty space. The atoms that make you up are mostly void — electrons orbiting a nucleus that's the size of a marble inside a football stadium.",
+   key:"⚡ You are not matter. You are a pattern of energy vibrating at a frequency that creates the illusion of solidity.",
+   apply:"When you feel stuck or heavy — remember: you are mostly space. You can always shift."},
+  {id:'q2',t:'quantum',badge:'⚛️ Quantum Physics',em:'⚡',
+   title:'Energy Cannot Be Destroyed',sub:'The Law of Conservation',
+   body:"Energy cannot be created or destroyed — only transformed. This means everything you are, every thought, every feeling, is a form of energy that can never cease to exist.",
+   key:"♾️ You are eternal energy temporarily housed in a physical form. The 'you' that thinks and feels cannot die — it only transforms.",
+   apply:"Stop fearing failure. Energy just transforms. Every loss is a transformation, not an ending."},
+  {id:'q3',t:'quantum',badge:'⚛️ Quantum Physics',em:'🌀',
+   title:'Superposition',sub:'All possibilities exist until you choose',
+   body:"Until a quantum particle is observed, it exists in all possible states simultaneously. A particle is literally everywhere at once — until the moment you look at it. Then it collapses into one reality.",
+   key:"🎯 Before you decide who you are, you are all possibilities. Observation — your focused attention — collapses infinite potential into a single reality.",
+   apply:"Your identity is not fixed. Who you observe yourself to be is who you become. Choose your self-image deliberately."},
+  {id:'q4',t:'quantum',badge:'⚛️ Quantum Physics',em:'🔗',
+   title:'Quantum Entanglement',sub:"The universe's hidden connection",
+   body:"Two entangled particles, no matter how far apart, instantly affect each other. Einstein called it 'spooky action at a distance.' Change one, the other changes — faster than the speed of light.",
+   key:"🔗 The boundaries between you and the universe — between you and others — are not as solid as they appear. We are all entangled.",
+   apply:"Your thoughts and emotions don't just affect you. They ripple outward into the field of everything. Choose your inner state like it matters."},
+  {id:'q5',t:'quantum',badge:'⚛️ Quantum Physics',em:'🌊',
+   title:'Wave-Particle Duality',sub:'Reality responds to the observer',
+   body:"Light and matter behave as both waves and particles depending on how they're measured. Reality doesn't have a fixed nature — it responds to the instrument of observation. The question shapes the answer.",
+   key:"👁️ Reality isn't fixed. It's a response. The universe literally shapes itself around the question you're asking it.",
+   apply:"Ask 'why does this always happen to me?' and get evidence of that. Ask 'how is this serving me?' and get entirely different evidence."},
+  {id:'d1',t:'double-slit',badge:'🔬 Double Slit',em:'🔬',
+   title:'The Experiment That Changed Everything',sub:"Science's greatest mystery",
+   body:"Fire electrons at a wall with two slits. Without observation, they create an interference pattern — like waves. The same particle goes through both slits at once. This violates every rule of classical physics.",
+   key:"🌊 A particle with no observer behaves like a wave of infinite possibility — spreading out, existing everywhere at once.",
+   apply:"Without your conscious focus, your life stays a wave of potential. Observation — intention — turns potential into reality."},
+  {id:'d2',t:'double-slit',badge:'🔬 Double Slit',em:'👁️',
+   title:'Watching Changes Everything',sub:'The Observer Effect',
+   body:"Place a detector at the slits to see which one the particle goes through — and the interference pattern vanishes instantly. The mere act of watching changed how matter behaves.",
+   key:"👁️ Consciousness affects physical reality. This isn't metaphor. It's the result of the most replicated experiment in the history of physics.",
+   apply:"What you focus on changes. This is why visualization works. Why attention is currency. Why intention shapes outcomes."},
+  {id:'d3',t:'double-slit',badge:'🔬 Double Slit',em:'⏪',
+   title:'The Quantum Eraser',sub:'The past is not fixed',
+   body:"If you delete the observation data AFTER the fact, the interference pattern returns — retroactively. The past changes based on what you know now. This experiment has been run. The results are real.",
+   key:"⏪ The past is not fixed in stone. What you believe about your past shapes what your past becomes neurologically.",
+   apply:"This is the science behind revision. Revisiting a memory with a new emotion rewires your neurological past and changes your future."},
+  {id:'d4',t:'double-slit',badge:'🔬 Double Slit',em:'🧠',
+   title:'Consciousness Creates Reality',sub:'The deepest implication',
+   body:"John von Neumann concluded that the only thing that collapses a quantum wave function is a conscious observer. Not a camera. Not a machine. Consciousness itself collapses possibility into actuality.",
+   key:"🧠 The universe requires a conscious observer to become real. You are not in the universe — the universe is happening through you.",
+   apply:"You are not a passive observer of life. You are an active creator. Every moment you observe with intention, you collapse possibility into reality."},
+  {id:'d5',t:'double-slit',badge:'🔬 Double Slit',em:'✨',
+   title:'The Participatory Universe',sub:'What this means for your life',
+   body:"Physics, neuroscience, and every major wisdom tradition converge here: your inner state shapes outer reality. The universe is not a machine running without you. It's participatory. You are part of the creation.",
+   key:"✨ You are not watching the universe. You are participating in creating it, moment by moment, with the quality of your attention.",
+   apply:"Raise your awareness. Choose your focus deliberately. The scientific case for intentional living is stronger than it has ever been."},
+  {id:'a1',t:'assumption',badge:'✨ Law of Assumption',em:'🪞',
+   title:'Your Assumptions Are Your Reality',sub:"Neville Goddard's core teaching",
+   body:"Neville Goddard taught one principle above all: your assumptions — not your actions, not your circumstances — are the cause of your experience. What you assume to be true about yourself shapes everything.",
+   key:"🪞 Assumption is not positive thinking. It's a deep inner conviction. Not 'I hope I'm wealthy' — the felt sense of already being wealthy.",
+   apply:"Audit your assumptions today. What do you assume about money? Love? Your potential? Those assumptions are your operating system."},
+  {id:'a2',t:'assumption',badge:'✨ Law of Assumption',em:'🏁',
+   title:'Live in the End',sub:'The technique of the fulfilled wish',
+   body:"'Go to the end' — Neville's most powerful instruction. Don't visualize the journey. Assume the feeling of the wish already fulfilled and live from that state, as if it's already done.",
+   key:"🏁 The end contains everything needed for its own realization. When you live FROM the end, the universe arranges the path to it.",
+   apply:"Choose one desire. How would you feel if it were already done? Not 'I want it' — 'I have it.' Hold that feeling for 10 minutes today."},
+  {id:'a3',t:'assumption',badge:'✨ Law of Assumption',em:'💛',
+   title:'The Feeling Is the Secret',sub:'Why emotion is the key',
+   body:"It is not the mental picture alone, but the feeling it generates that impresses the subconscious mind. The subconscious responds to feeling-tone, not intellectual understanding.",
+   key:"💛 Feeling is the secret language of the subconscious. One minute of genuine feeling outweighs a thousand hollow affirmations.",
+   apply:"Stop repeating affirmations you don't feel. Instead, recall a real moment of success or gratitude. Amplify that feeling. THAT is the signal."},
+  {id:'a4',t:'assumption',badge:'✨ Law of Assumption',em:'😴',
+   title:'SATS — State Akin to Sleep',sub:'Your nightly programming window',
+   body:"The hypnagogic state — the drowsy moment just before sleep — is when the conscious mind relaxes its guard and the subconscious becomes receptive. Neville called this SATS. It's your nightly reprogramming window.",
+   key:"😴 What you hold in mind as you drift to sleep is directly planted in your subconscious. Use this window intentionally every night.",
+   apply:"Tonight: choose one short scene that implies your wish fulfilled. Loop it gently as you fall asleep. No force — just drift into it."},
+  {id:'a5',t:'assumption',badge:'✨ Law of Assumption',em:'✍️',
+   title:'Revision',sub:'Rewrite the past, change the future',
+   body:"Revision means returning to any event that didn't go as you wanted — and re-experiencing it as you wish it had happened. This rewrites the emotional charge and reprograms future outcomes from it.",
+   key:"⏪ The past is stored as feeling, not fact. Change the feeling, change the imprint, change the future that grows from that root.",
+   apply:"Each night before SATS: revise one event from your day. See it as you wanted it. Feel the satisfaction. Then move to your main scene."},
+  {id:'s1',t:'subconscious',badge:'🧠 Subconscious Mind',em:'🧊',
+   title:'The Iceberg of Your Mind',sub:'5% conscious, 95% subconscious',
+   body:"The conscious mind is about 5% of your total mind. The subconscious is the 95% beneath the surface, running continuously, processing 40 million bits of information per second without your awareness.",
+   key:"🧊 Your conscious goals mean almost nothing if your subconscious beliefs contradict them. The 95% always wins the long game.",
+   apply:"Don't fight the symptom. If you're not getting what you want, look at what you believe at the subconscious level."},
+  {id:'s2',t:'subconscious',badge:'🧠 Subconscious Mind',em:'🔄',
+   title:'The 95% That Runs Your Life',sub:'Dr. Bruce Lipton\'s research',
+   body:"By age 7, your subconscious beliefs are already set — running automatically like a program. Most of what you do, think, and feel is running on autopilot from childhood programming you didn't consciously choose.",
+   key:"🔄 You are running programs you didn't choose, from a childhood you barely remember. Recognizing you're on autopilot is the first step to freedom.",
+   apply:"Notice your automatic reactions today. Every frustrated or self-defeating response is a clue to a subconscious program running in the background."},
+  {id:'s3',t:'subconscious',badge:'🧠 Subconscious Mind',em:'🌀',
+   title:'The Theta Window',sub:'When reprogramming actually works',
+   body:"The brain operates at Beta (awake), Alpha (relaxed), Theta (drowsy/meditative), and Delta (deep sleep). Theta is the state where the subconscious accepts new programming — the state children are in until age 7.",
+   key:"🌀 Theta is the master key. In theta, your mind shifts from analytical to receptive. This is when meditation, SATS, and hypnosis work deeply.",
+   apply:"Access theta daily: 10-minute meditation, binaural beats, or SATS. Even 10 minutes in theta beats hours of conscious affirmation."},
+  {id:'s4',t:'subconscious',badge:'🧠 Subconscious Mind',em:'⚙️',
+   title:'How to Actually Reprogram',sub:'The complete method',
+   body:"Reprogramming requires repetition (builds new neural pathways), emotional charge (feeling makes it stick), theta state access, and identity-level belief shifts — not surface affirmations repeated robotically.",
+   key:"⚙️ The formula: emotion + repetition + theta state + identity shift. Remove any one element and it becomes far less effective.",
+   apply:"State as identity: 'I am...' Saturate with genuine emotion. Repeat at sleep. Then act AS IF — behavior trains the subconscious too."},
+  {id:'s5',t:'subconscious',badge:'🧠 Subconscious Mind',em:'👑',
+   title:'You Become Your Identity',sub:'The deepest level of change',
+   body:"Your identity — your self-image — is the most powerful subconscious program running. Every action is a vote for the person you believe yourself to be. Change the identity and everything else changes automatically.",
+   key:"👑 Don't try to DO what successful people do. Become the person for whom those results are natural. Identity first. Actions follow effortlessly.",
+   apply:"Ask: 'What would a person who already has this believe about themselves?' Start being that person today. The subconscious will align."},
+  {id:'u1',t:'universe',badge:'🌌 Laws of Universe',em:'🎵',
+   title:'Everything Vibrates',sub:'The Law of Vibration',
+   body:"Nothing is at rest. Everything — from the densest rock to your lightest thought — is in constant motion, vibrating at a specific frequency. Thoughts are things, and they vibrate at their own measurable rate.",
+   key:"🎵 Your dominant emotional state is a frequency you broadcast. The universe responds by matching that frequency — returning experiences that vibrate the same way.",
+   apply:"Guard your emotional state like your greatest asset. Gratitude, love, and joy are high frequencies. Fear and resentment are low. Choose your broadcast."},
+  {id:'u2',t:'universe',badge:'🌌 Laws of Universe',em:'🧲',
+   title:'Like Attracts Like',sub:'The Law of Attraction',
+   body:"Energy attracts energy of the same frequency. This is not wishful thinking — it's the natural consequence of vibration. What you broadcast, you receive back amplified. The universe operates as a mirror.",
+   key:"🧲 Attraction isn't about wanting. It's about BEING. You don't attract what you want. You attract what you ARE at your core.",
+   apply:"Stop asking 'how do I get it?' Start asking 'how do I become someone who naturally has this?' Your state of being is the magnet."},
+  {id:'u3',t:'universe',badge:'🌌 Laws of Universe',em:'🔁',
+   title:'As Above, So Below',sub:'The Law of Correspondence',
+   body:"The universe operates at every scale by the same principles. The patterns in galaxies mirror patterns in atoms. What happens in your inner world corresponds directly to what manifests in your outer world.",
+   key:"🔁 Your outer world is a mirror of your inner world. Always. Without exception. Change within, and the without must change to reflect it.",
+   apply:"When external reality frustrates you, don't fight it — look inward. What inner belief is being mirrored? Change that belief first."},
+  {id:'u4',t:'universe',badge:'🌌 Laws of Universe',em:'⚖️',
+   title:'Cause and Effect',sub:'The Law of Cause and Effect',
+   body:"Nothing happens by accident. Every result has a cause. Every thought, word, and action you put into the field sets a chain of effects in motion. The law is impersonal, consistent, and absolute.",
+   key:"⚖️ You are always at cause or at effect. Victims live at effect — things happen TO them. Creators live at cause — they happen TO things.",
+   apply:"Take radical responsibility. Ask: 'How did I contribute to this outcome?' This is the most empowering question you can ever ask."},
+  {id:'u5',t:'universe',badge:'🌌 Laws of Universe',em:'🌓',
+   title:'The Law of Polarity',sub:'Everything exists on a spectrum',
+   body:"Everything has its opposite. Hot/cold, dark/light, fear/love. They are not different things — they are different degrees of the same thing. You can mentally move along any spectrum at will.",
+   key:"🌓 You don't eliminate fear — you move along the spectrum toward love. You don't escape darkness. You add light. The pole is your tool.",
+   apply:"Whatever negative state you feel — find its opposite pole. Gratitude is the opposite of lack. Move deliberately along the spectrum today."},
+  {id:'e1',t:'emerald',badge:'📜 Emerald Tablets',em:'📜',
+   title:'The Most Ancient Wisdom',sub:'What are the Emerald Tablets?',
+   body:"The Emerald Tablets are attributed to Hermes Trismegistus (Thoth in Egyptian tradition), encoding the principles underlying all reality, consciousness, and alchemy — written for those with eyes to see.",
+   key:"📜 The Emerald Tablets are a compressed map of the cosmos and the mind. Every major mystical tradition traces back to this source.",
+   apply:"Approach these teachings as a living map, not history. The question isn't 'did this literally happen?' but 'what does this awaken in me?'"},
+  {id:'e2',t:'emerald',badge:'📜 Emerald Tablets',em:'👁️',
+   title:'Thoth — Master of Masters',sub:'The source of all wisdom traditions',
+   body:"Thoth represents the fully realized human potential — mastery of consciousness, transcendence of limitation, and the encoding of cosmic secrets for future generations capable of receiving them.",
+   key:"👁️ Thoth embodies what becomes possible when a human fully masters their consciousness. This is your potential, encoded symbolically.",
+   apply:"The Tablets speak in symbols because the deepest truths cannot be stated literally. Ask what each symbol means to you personally."},
+  {id:'e3',t:'emerald',badge:'📜 Emerald Tablets',em:'⚗️',
+   title:'"As Above, So Below"',sub:'The central axiom of Hermeticism',
+   body:"'That which is above is like that which is below, and that which is below is like that which is above.' The universe is self-similar at every scale. Solve the inner, and the outer is solved.",
+   key:"🌐 Microcosm mirrors macrocosm. Self-mastery is the highest and only real work because all outer change follows from inner change.",
+   apply:"Study the patterns of your inner life. Your fears, desires, cycles, and beliefs are exact maps to your outer reality. Master the inner map."},
+  {id:'e4',t:'emerald',badge:'📜 Emerald Tablets',em:'7️⃣',
+   title:'The Seven Hermetic Principles',sub:'The laws behind all laws',
+   body:"The Kybalion describes seven principles governing everything: Mentalism, Correspondence, Vibration, Polarity, Rhythm, Cause & Effect, and Gender. Learn all seven — they form a complete operating manual for reality.",
+   key:"7️⃣ 'THE ALL is Mind; the Universe is Mental.' If all is mind, mastery of mind is mastery of everything. This is where it all begins.",
+   apply:"Meditate on the first principle for one week: everything that exists is a manifestation of mind. Let that land. Then move to the next."},
+  {id:'e5',t:'emerald',badge:'📜 Emerald Tablets',em:'🔥',
+   title:'The Great Work',sub:'Your purpose encoded in alchemy',
+   body:"The Great Work (Magnum Opus) is the alchemist's ultimate goal: transform lead into gold. Not literally — symbolically. Transform the base, reactive self into a fully realized, conscious, sovereign being.",
+   key:"🔥 You are the alchemist. Your base nature is the lead. Your highest self is the gold. The Great Work is the work of becoming who you truly are.",
+   apply:"Every challenge is material for the Great Work. Ask of every difficulty: 'How does this serve my transformation?' This reframes everything."},
+  {id:'f1',t:'finance',badge:'💰 Personal Finance',em:'💰',
+   title:'Pay Yourself First',sub:'The foundation of wealth building',
+   body:"Most people pay bills, lifestyle, and expenses first — then save whatever's left. Wealthy people do the opposite. The moment income arrives, 20% goes to savings and investments before anything else.",
+   key:"💰 Treat savings like a non-negotiable bill. Automate it so you never have a choice. Wealth is built in the margin between income and spending.",
+   apply:"Open a separate savings account today. Set up an automatic transfer on payday. Even $50/week becomes $2,600/year — and that compounds."},
+  {id:'f2',t:'finance',badge:'💰 Personal Finance',em:'📊',
+   title:'The 50/30/20 Rule',sub:'A simple framework for your money',
+   body:"50% of income to needs (rent, food, transport), 30% to wants (entertainment, dining), 20% to savings and investing. Most people spend 90% on needs and wants, leaving nothing to build actual wealth.",
+   key:"📊 A budget isn't restriction. It's telling your money where to go instead of wondering where it went. The 50/30/20 rule is where to start.",
+   apply:"Track every dollar you spent last month. Categorize it. Which bucket is overflowing? That's your first leak to fix immediately."},
+  {id:'f3',t:'finance',badge:'💰 Personal Finance',em:'💳',
+   title:'Your Credit Score',sub:'Your financial reputation number',
+   body:"Your credit score (300-850) determines loan interest rates, apartment approvals, and sometimes even job offers. It's built from: payment history (35%), utilization (30%), history length (15%), credit mix (10%), new credit (10%).",
+   key:"💳 Two habits build great credit: pay on time, every time — and keep credit card usage below 30% of your limit. Consistency over years creates excellence.",
+   apply:"Check your free credit score today via Credit Karma or Experian. Dispute any errors — they're more common than most people know."},
+  {id:'f4',t:'finance',badge:'💰 Personal Finance',em:'🏠',
+   title:'Assets vs. Liabilities',sub:'Rich Dad Poor Dad\'s core lesson',
+   body:"An asset puts money IN your pocket. A liability takes money OUT. A car is a liability (costs you monthly). An investment property is an asset (pays you monthly). Most people accumulate liabilities and call them assets.",
+   key:"🏠 Use income to acquire assets. Use assets to fund your lifestyle. Never use income directly to buy luxuries. This one shift changes everything.",
+   apply:"List everything you own. Mark each A (asset) or L (liability). What's your ratio? What is one asset you could start building this month?"},
+  {id:'f5',t:'finance',badge:'💰 Personal Finance',em:'⏰',
+   title:'Compound Interest — The 8th Wonder',sub:'Time is the engine, money is just fuel',
+   body:"Invest $300/month from age 20 at 10% return = $1.9M by 60. Wait until 30 to start? $710K. A single decade costs you $1.2 million. Einstein called compound interest the 8th wonder of the world.",
+   key:"⏰ The most important variable in wealth-building is not how much you invest — it's when you start. Every year you wait compounds the cost.",
+   apply:"Start a Roth IRA or index fund account this week. Even $25/month builds the habit. Time is the engine. Let it work for you starting now."},
+  {id:'i1',t:'investing',badge:'📈 Investing',em:'📈',
+   title:'Index Funds — The Simple Path',sub:'How the wealthy actually invest',
+   body:"An index fund buys a tiny piece of every company in an index (like the S&P 500). It returns ~10% per year on average over time — consistently beating 90%+ of professional money managers.",
+   key:"📈 You don't need to pick stocks. Buy the whole market and wait. Simplicity consistently beats complexity in long-term investing.",
+   apply:"Look up VTSAX, VOO, or SPY. These are the most recommended starting index funds. Open a Fidelity or Vanguard account — both are free to start."},
+  {id:'i2',t:'investing',badge:'📈 Investing',em:'🔢',
+   title:'The Rule of 72',sub:'How fast does your money double?',
+   body:"Divide 72 by your interest rate to find how long it takes to double your money. At 7%: 10 years. At 10%: 7.2 years. At 1% savings account: 72 years. This formula alone shows why savings accounts are wealth traps.",
+   key:"🔢 72 ÷ return rate = years to double. At 10%, $10,000 becomes $80,000 in 21 years — without adding a single additional dollar.",
+   apply:"Calculate how long your current savings takes to double. Now calculate what 10% index fund returns would do instead. See the difference."},
+  {id:'i3',t:'investing',badge:'📈 Investing',em:'📅',
+   title:'Dollar-Cost Averaging',sub:'Remove the timing trap entirely',
+   body:"Instead of trying to buy at the 'perfect' time (which nobody can predict), invest the same fixed amount every month, regardless of price. When prices drop, you automatically buy more shares. Over time, you average out favorably.",
+   key:"📅 DCA removes the biggest investing mistake: emotional timing. Automate the investment. Remove the decision. Time IN the market beats timing the market.",
+   apply:"Set up an automatic monthly investment — any amount you can manage. Consistency beats intelligence in long-term investing."},
+  {id:'i4',t:'investing',badge:'📈 Investing',em:'⏳',
+   title:'The Real Cost of Waiting',sub:'One decade changes everything',
+   body:"Alex invests $200/month at 22. Ben starts at 32. Both earn 8% annually. At age 62: Alex has $702,000. Ben has $299,000. Alex invested only $24K more but ended up with $403,000 more. That's compound interest.",
+   key:"⏳ The time you're waiting for the 'right moment' is the most expensive delay of your financial life. The best time was yesterday. Second best: now.",
+   apply:"Stop waiting until you 'understand it better.' Start with $25. Learn while your money grows. The habit is worth more than the amount."},
+  {id:'b1',t:'business',badge:'🚀 Business',em:'💡',
+   title:'Solve a Real Problem',sub:'Where every great business starts',
+   body:"Every great business is a problem solver. Uber solved 'I can't find a taxi.' Airbnb solved 'hotels are too expensive.' The bigger the problem and the more desperate people are to solve it, the more valuable your business.",
+   key:"💡 Don't start with 'what business do I want?' Start with 'what problem do people desperately need solved?' Find the pain first. Build the solution second.",
+   apply:"Pay attention to frustrations this week — yours, your friends', people around you. Every frustration is a potential business. Write them all down."},
+  {id:'b2',t:'business',badge:'🚀 Business',em:'🧪',
+   title:'The MVP',sub:'Test before you build',
+   body:"Most failed businesses built a full product before validating the idea. The Minimum Viable Product approach: build the smallest possible version, launch immediately, get real feedback, then improve. Fail fast and cheap.",
+   key:"🧪 The goal in month one is NOT to make money. It's to learn whether people actually want what you're building. Validate before you invest.",
+   apply:"Before building anything: can you sell it manually first? Get 5 strangers to pay before spending a dollar on development. That's your test."},
+  {id:'b3',t:'business',badge:'🚀 Business',em:'💵',
+   title:'Cash Flow is King',sub:'Profit is opinion, cash is reality',
+   body:"Many 'profitable' businesses go bankrupt because they ran out of cash. Know at all times: money coming in this month, money going out, and the gap. Revenue is vanity. Profit is sanity. Cash is survival.",
+   key:"💵 A business with no cash is a dead business regardless of what the spreadsheet says. Manage cash flow obsessively — not just profit and loss.",
+   apply:"Track your personal cash flow like a business: income minus expenses equals what's left. Know your number every single month."},
+  {id:'b4',t:'business',badge:'🚀 Business',em:'🌐',
+   title:'Build Your Personal Brand',sub:'You are the product',
+   body:"Employers Google you. Clients look you up. Investors search your name. Your online presence builds or destroys opportunities before you even meet. A personal brand is simply: what you're known for, demonstrated consistently in public.",
+   key:"🌐 The internet gives everyone a global megaphone for free. Most people consume. A small minority build. The builders capture all the opportunities.",
+   apply:"Pick one platform. Post value in your area once a week for 6 months. Consistency compounds. Your future opportunities will find your past content."},
+  {id:'m1',t:'mindset',badge:'💪 Mindset',em:'🌱',
+   title:'Growth Mindset',sub:"Carol Dweck's defining research",
+   body:"Fixed mindset: talent is fixed, you either have it or you don't. Growth mindset: talent is developed through effort. Growth mindset people achieve dramatically more because every challenge becomes an opportunity to grow.",
+   key:"🌱 The word 'yet' is the most powerful word in your mindset. Not 'I can't do this' — 'I can't do this YET.' That one word opens the door fixed mindset slams shut.",
+   apply:"Every time you say 'I'm not good at X,' add 'yet.' Feel how different that lands. Practice this daily until it becomes automatic."},
+  {id:'m2',t:'mindset',badge:'💪 Mindset',em:'📈',
+   title:'1% Better Every Day',sub:"James Clear's compounding insight",
+   body:"Get 1% better each day for a year and you end up 37 times better. Get 1% worse each day and you decay to nearly zero. Tiny improvements, consistently repeated, compound into transformative change over time.",
+   key:"📈 You don't need massive changes. You need tiny changes, consistently repeated. The gap between who you are and who you'll be is 365 small improvements.",
+   apply:"Choose one skill. What does a 1% improvement look like today? Just that. Not the transformation — just today's 1%."},
+  {id:'m3',t:'mindset',badge:'💪 Mindset',em:'⚡',
+   title:'Discipline Over Motivation',sub:'The real engine of achievement',
+   body:"Motivation is an emotion — it comes and goes. Discipline is a decision — it shows up regardless of how you feel. Every high performer knows: waiting to feel motivated is a strategy for mediocrity.",
+   key:"⚡ Motivation gets you started. Discipline keeps you going. Build systems, not willpower. Make the action automatic so it stops being a daily negotiation.",
+   apply:"Identify one thing you wait to be motivated for. How can you make it a system instead? Schedule it. Make it non-negotiable. Remove the choice."},
+  {id:'m4',t:'mindset',badge:'💪 Mindset',em:'🍬',
+   title:'Delayed Gratification',sub:'The most predictive trait of success',
+   body:"The Stanford Marshmallow Experiment: children who could wait 15 minutes before eating a marshmallow scored higher on SATs, had better health, and higher income as adults decades later. Self-control at 4 predicted outcomes at 40.",
+   key:"🍬 The ability to sacrifice what you want NOW for what you want MOST is the single most predictive trait of long-term success in any domain.",
+   apply:"Practice in small ways daily: wait before buying, pause before reacting, train when you don't feel like it. Small acts rebuild the muscle."},
+  {id:'h1',t:'health',badge:'🌿 Health',em:'😴',
+   title:'Sleep is Your Superpower',sub:'Matthew Walker\'s research',
+   body:"Sleep deprivation below 7 hours increases cancer risk, reduces testosterone by 10-15%, destroys immune function, doubles accident risk, and collapses emotional regulation. No supplement, diet, or workout compensates for bad sleep.",
+   key:"😴 Sleep is not downtime. It's when your brain repairs, consolidates memory, clears toxins, and optimizes every body system. Sacrifice sleep, sacrifice everything.",
+   apply:"Set a consistent bedtime — same time every night, including weekends. This single change dramatically improves sleep quality within 2 weeks."},
+  {id:'h2',t:'health',badge:'🌿 Health',em:'🏃',
+   title:'Exercise Changes Your Brain',sub:'John Ratey\'s research in Spark',
+   body:"Exercise increases BDNF — 'Miracle-Gro for your brain.' It creates new neurons, improves focus and mood as effectively as antidepressants, and protects against cognitive decline. The brain benefits alone are worth it.",
+   key:"🏃 You don't exercise to look good. You exercise to think better, feel better, and live longer. The cognitive benefits justify every single workout.",
+   apply:"20 minutes of moderate cardio 3x per week is the minimum dose for significant cognitive improvement. Start with a brisk 20-minute walk."},
+  {id:'h3',t:'health',badge:'🌿 Health',em:'🥗',
+   title:'Food is Information',sub:'What you eat programs your cells',
+   body:"Every cell in your body is built from what you eat. Your gut produces 90% of your serotonin. The gut-brain axis means food directly impacts your focus, mood, and mental clarity every single day.",
+   key:"🥗 Food is information, not just fuel. Every meal sends signals to your genes, your brain, and your cells. Choose what you tell your body to become.",
+   apply:"Remove one ultra-processed food this week. Add one whole food. Track your energy and mental clarity for 7 days. The data will convince you."},
+  {id:'h4',t:'health',badge:'🌿 Health',em:'💧',
+   title:'Water Before Everything',sub:'Hydration and cognitive performance',
+   body:"The brain is 73% water. A 2% drop in hydration reduces cognitive performance by 10-15%. Most people wake up dehydrated, then drink coffee (a diuretic), and spend the day mildly cognitively impaired without knowing it.",
+   key:"💧 Drink 500ml of water before coffee, before food, before checking your phone. Your brain needs water first. Then everything else.",
+   apply:"Put a full water bottle next to your bed tonight. Drink it when you wake up tomorrow before anything else. Do this for 7 days."},
+  {id:'p1',t:'productivity',badge:'⚡ Productivity',em:'🎯',
+   title:'The 80/20 Principle',sub:"Pareto's Law of results",
+   body:"80% of results come from 20% of effort. 20% of your clients generate 80% of revenue. 20% of your habits drive 80% of your success. Stop doing more. Start identifying the critical 20% and go all in.",
+   key:"🎯 The question isn't 'what should I add?' It's 'what 20% creates 80% of my results, and how do I double down on exactly that?'",
+   apply:"List everything you do in a week. Circle the 20% that creates the most value. What would happen if you doubled it and cut the rest?"},
+  {id:'p2',t:'productivity',badge:'⚡ Productivity',em:'📆',
+   title:'Time Blocking',sub:'Own your calendar or someone else will',
+   body:"Elon Musk, Bill Gates, and Cal Newport all time block — scheduling every hour in advance. Without it, you react to everyone else's agenda. Reactive scheduling is how average, unfulfilled days happen.",
+   key:"📆 Your calendar is your strategy. If your priorities aren't scheduled, they're not priorities — they're wishes. Block deep work first, then let the rest fill in.",
+   apply:"Tomorrow: block 2 hours in the morning for your most important project before checking any messages. Guard it like a flight you can't miss."},
+  {id:'p3',t:'productivity',badge:'⚡ Productivity',em:'🎧',
+   title:'Single-Tasking',sub:'Multitasking is a proven myth',
+   body:"Research shows multitasking reduces productivity by 40% and drops effective IQ by up to 15 points per task switch. The brain doesn't actually multitask — it rapidly switches, and each switch costs time and energy.",
+   key:"🎯 One thing at a time, with complete focus. The people producing remarkable work aren't doing more — they're doing less, with total concentration.",
+   apply:"Next work session: one task, phone on airplane mode, all tabs closed except what's needed. 25-minute timer. Feel the difference in output."},
+  {id:'p4',t:'productivity',badge:'⚡ Productivity',em:'🚫',
+   title:'The Power of No',sub:"Warren Buffett's actual secret",
+   body:"Buffett: 'The difference between successful people and very successful people is that very successful people say no to almost everything.' Every yes to something unimportant is an automatic no to something important.",
+   key:"🚫 No is not a closed door. No is how you keep your most important doors open. Say no to good things so you can say yes to the great ones.",
+   apply:"Identify something you said yes to this week that deserved a no. Practice: 'I can't take that on right now.' No explanation required."},
+  {id:'r1',t:'relationships',badge:'🤝 Relationships',em:'🤝',
+   title:'Your Network is Your Net Worth',sub:'The relationship economy',
+   body:"70-80% of jobs are never publicly posted — filled through relationships. Your next client, opportunity, or breakthrough will likely come through someone you know. Who you know matters as much as what you know.",
+   key:"🤝 Network before you need to. Give first, consistently, without expectation. Invest in relationships during good times so they're there during hard ones.",
+   apply:"Reach out to one person in your network this week with no agenda — just a genuine check-in. Relationships need consistent small contact to stay alive."},
+  {id:'r2',t:'relationships',badge:'🤝 Relationships',em:'👂',
+   title:'The Art of Real Listening',sub:'The most underrated skill in the world',
+   body:"Most people listen to reply, not to understand. They're forming their response while the other person is still talking. Real listening means being fully present and resisting the urge to fix, compare, or redirect.",
+   key:"👂 The most important social skill is making people feel genuinely heard. People don't remember what you said. They remember how you made them feel.",
+   apply:"In your next conversation: go 2 full minutes saying nothing except 'tell me more' or a thoughtful follow-up. Watch what opens up."},
+  {id:'r3',t:'relationships',badge:'🤝 Relationships',em:'🛡️',
+   title:'Boundaries are Self-Respect',sub:'The foundation of every good relationship',
+   body:"Boundaries are not walls — they're the rules of engagement for how you allow yourself to be treated. Without them, resentment builds, energy drains, and relationships deteriorate from the inside out.",
+   key:"🛡️ You teach people how to treat you. Every time you say yes when you mean no, you set a precedent. Boundaries are how you train the world to respect you.",
+   apply:"Identify one relationship where you feel drained or resentful. What boundary is missing? Practice saying it clearly, kindly, and without apology."},
+  {id:'r4',t:'relationships',badge:'🤝 Relationships',em:'🎁',
+   title:'Be the Rare Giver',sub:"Adam Grant's research on achievement",
+   body:"Adam Grant's research: most people are matchers (give = get) or takers. But the highest achievers in every field are givers — providing value without keeping score. Givers who protect their energy are the most successful.",
+   key:"🎁 In a world of takers and matchers, genuine givers stand out immediately. Be useful. Share knowledge. Connect people. The returns aren't immediate — they're massive.",
+   apply:"This week: introduce two people who should know each other. Share one useful resource with no expectation. Be radically useful to one person in your world."},
+];
+
+const VIDEOS = [
+  {id:'vq1',t:'quantum',type:'video',badge:'⚛️ Quantum Physics',
+   query:'quantum mechanics lecture MIT OpenCourseWare professor',
+   title:'Quantum Mechanics — University Lectures',
+   channel:'MIT OpenCourseWare & Stanford Online',duration:'Series',
+   desc:'Full quantum mechanics lecture series from MIT and Stanford. Top physicists explain wave functions, measurement, and the math behind the observations that shatter classical physics.'},
+  {id:'vd1',t:'double-slit',type:'video',badge:'🔬 Double Slit',
+   query:'double slit experiment explained observer effect quantum',
+   title:'The Double Slit Experiment Explained',
+   channel:'Top Physics Educators',duration:'10–30 min',
+   desc:'Multiple physicists and professors break down exactly what happens when you observe a quantum particle — and why the observer effect is the most disturbing result in the history of science.'},
+  {id:'va1',t:'assumption',type:'video',badge:'✨ Law of Assumption',
+   query:'Neville Goddard law of assumption original lecture',
+   title:'Neville Goddard — Original Lectures',
+   channel:'Neville Goddard Archive',duration:'Various',
+   desc:'Original recorded lectures from Neville Goddard — the philosopher who developed the Law of Assumption. Hear his teachings directly on assumption, SATS, revision, and living in the end.'},
+  {id:'vs1',t:'subconscious',type:'video',badge:'🧠 Subconscious Mind',
+   query:'Bruce Lipton subconscious mind reprogramming biology of belief',
+   title:'Reprogram Your Subconscious Mind',
+   channel:'Dr. Bruce Lipton & Dr. Joe Dispenza',duration:'Various',
+   desc:'Cell biologist Bruce Lipton and neuroscientist Joe Dispenza explain the science of reprogramming the subconscious — how your biology literally responds to your deepest beliefs.'},
+  {id:'vu1',t:'universe',type:'video',badge:'🌌 Laws of Universe',
+   query:'seven hermetic principles Kybalion laws of universe explained',
+   title:'The 7 Hermetic Principles Explained',
+   channel:'Hermetic Philosophy Scholars',duration:'Various',
+   desc:'Deep dives into the seven laws from the Kybalion — Mentalism, Correspondence, Vibration, Polarity, Rhythm, Cause & Effect, and Gender. The complete operating system of reality.'},
+  {id:'ve1',t:'emerald',type:'video',badge:'📜 Emerald Tablets',
+   query:'Emerald Tablets of Thoth decoded ancient wisdom explained',
+   title:'The Emerald Tablets Decoded',
+   channel:'Ancient Wisdom Scholars',duration:'Various',
+   desc:'Scholars and philosophers decode the Emerald Tablets — the most compressed map of consciousness and cosmos ever written. From "As above, so below" to the Great Work of transformation.'},
+  {id:'vf1',t:'finance',type:'video',badge:'💰 Personal Finance',
+   videoId:'PHe0bXAIuk0',
+   title:'How The Economic Machine Works',
+   channel:'Ray Dalio · Bridgewater Associates',duration:'31 min',
+   desc:'One of the most important 31 minutes in financial education. Ray Dalio breaks down how credit, debt cycles, and deleveraging actually work — the template for understanding any economy.'},
+  {id:'vi1',t:'investing',type:'video',badge:'📈 Investing',
+   query:'Warren Buffett investing advice annual meeting Berkshire beginners',
+   title:'Warren Buffett on Investing',
+   channel:'Berkshire Hathaway · Annual Meetings',duration:'Various',
+   desc:"The world's greatest investor explains his philosophy in plain language: buy great businesses at fair prices, think decades ahead, and let compound interest do the heavy lifting."},
+  {id:'vb1',t:'business',type:'video',badge:'🚀 Business',
+   query:'Y Combinator how to start a startup Sam Altman lecture Stanford',
+   title:'How to Start a Startup',
+   channel:'Y Combinator · Stanford CS183B',duration:'Series',
+   desc:'The famous Stanford/Y Combinator lecture series. Sam Altman, Paul Graham, and top founders explain what actually makes startups succeed — from idea validation to product-market fit.'},
+  {id:'vm1',t:'mindset',type:'video',badge:'💪 Mindset',
+   videoId:'_X0mgOOSpLU',
+   title:'The Power of Believing You Can Improve',
+   channel:'Carol Dweck · TED',duration:'10 min',
+   desc:'Stanford psychologist Carol Dweck\'s landmark TED talk on growth vs. fixed mindset. Why the word "not yet" might be the most transformative two words in education and self-development.'},
+  {id:'vm2',t:'mindset',type:'video',badge:'💪 Mindset',
+   videoId:'H14bBuluwB8',
+   title:'Grit: The Power of Passion and Perseverance',
+   channel:'Angela Duckworth · TED',duration:'6 min',
+   desc:'What predicts success better than IQ, talent, or social background? Grit. Angela Duckworth\'s research shows that passion plus perseverance — not talent — is the real secret to achievement.'},
+  {id:'vh1',t:'health',type:'video',badge:'🌿 Health',
+   videoId:'5MuIMqhT8cs',
+   title:'Sleep Is Your Superpower',
+   channel:'Matthew Walker · TED',duration:'19 min',
+   desc:'Sleep scientist Matthew Walker reveals the terrifying consequences of sleep deprivation and the extraordinary life benefits of prioritizing sleep. The most important 19 minutes you\'ll spend on your health.'},
+  {id:'vp1',t:'productivity',type:'video',badge:'⚡ Productivity',
+   query:'Cal Newport deep work focus single tasking productivity lecture',
+   title:'Deep Work & Radical Focus',
+   channel:'Cal Newport & Productivity Researchers',duration:'Various',
+   desc:'Computer scientist and bestselling author Cal Newport explains why deep, focused work is the most valuable skill of the 21st century — and exactly how to build it in a world designed to distract you.'},
+  {id:'vr1',t:'relationships',type:'video',badge:'🤝 Relationships',
+   videoId:'iCvmsMzlF7o',
+   title:'The Power of Vulnerability',
+   channel:'Brené Brown · TED',duration:'20 min',
+   desc:'Research professor Brené Brown spent 12 years studying vulnerability, courage, shame, and connection. This talk changed how millions understand relationships — and why authentic connection requires courage.'},
+];
+
+function buildVisible(f) {
+  const lessons = f === 'all' ? [...CARDS] : CARDS.filter(c => c.t === f);
+  const vids    = f === 'all' ? [...VIDEOS] : VIDEOS.filter(v => v.t === f);
+  if (f !== 'all') return [...lessons, ...vids];
+  const vidsByTopic = {};
+  vids.forEach(v => { (vidsByTopic[v.t] = vidsByTopic[v.t]||[]).push(v); });
+  const result = [];
+  lessons.forEach((card, i) => {
+    result.push(card);
+    const next = lessons[i+1];
+    if (!next || next.t !== card.t) {
+      (vidsByTopic[card.t]||[]).forEach(v => result.push(v));
+    }
+  });
+  return result;
+}
+
+const saved  = new Set(JSON.parse(localStorage.getItem('elev-saved')||'[]'));
+let filter   = 'all';
+let visible  = buildVisible('all');
+let curIdx   = 0;
+
+const feed   = document.getElementById('feed');
+const progEl = document.getElementById('prog');
+const cntEl  = document.getElementById('cnt');
+
+function persist(){ localStorage.setItem('elev-saved', JSON.stringify([...saved])) }
+
+function renderLesson(c, i){
+  const isSaved = saved.has(c.id);
+  return `<div class="card" data-t="${c.t}" data-i="${i}">
+    <div class="bg"></div>
+    <div class="vis"><div class="em">${c.em}</div></div>
+    <div class="inner">
+      <div class="cnum">${String(i+1).padStart(2,'0')} &middot; ${visible.length} CARDS</div>
+      <div class="badge">${c.badge}</div>
+      <h1 class="title">${c.title}</h1>
+      <div class="sub">${c.sub}</div>
+      <p class="body">${c.body}</p>
+      <div class="key"><span class="key-ico">${c.key.split(' ')[0]}</span><span>${c.key.split(' ').slice(1).join(' ')}</span></div>
+      <div class="apply"><span class="albl">Apply&nbsp;it</span><span>${c.apply}</span></div>
+    </div>
+    <div class="acts">
+      <button class="abtn${isSaved?' saved':''}" onclick="toggleSave(this,'${c.id}')">
+        ${isSaved?'🔖':'🏷️'}<span>${isSaved?'Saved':'Save'}</span>
+      </button>
+      <button class="abtn" onclick="doShare(${i})">↑<span>Share</span></button>
+    </div>
+    ${i===0?'<div class="hint"><div class="harrow">↑</div><div class="htxt">Swipe up</div></div>':''}
+  </div>`;
+}
+
+function renderVideo(c, i){
+  const isSaved = saved.has(c.id);
+  const isEmbed = !!c.videoId;
+  const media = isEmbed
+    ? `<div class="vthumb" onclick="playVid(this,'${c.videoId}')">
+         <img class="vimg" src="https://i.ytimg.com/vi/${c.videoId}/hqdefault.jpg"
+              alt="${c.title}" loading="lazy" onerror="this.style.display='none'">
+         <div class="vplay"><div class="ptri">▶</div></div>
+         <div class="vdurb">${c.duration}</div>
+       </div>`
+    : `<a class="vsrch" href="https://www.youtube.com/results?search_query=${encodeURIComponent(c.query)}" target="_blank" rel="noopener noreferrer">
+         <div class="vsrch-ico">🎬</div>
+         <div class="vplay"><div class="ptri">▶</div></div>
+         <div class="vsrch-lbl">Search on YouTube</div>
+         <div class="vsrch-q">${c.query}</div>
+       </a>`;
+  return `<div class="card vcard" data-t="${c.t}" data-i="${i}" data-vid="${c.videoId||''}">
+    <div class="bg"></div>
+    <div class="varea">${media}</div>
+    <div class="vinfo">
+      <div class="badge">${c.badge}</div>
+      <div class="vtitle">${c.title}</div>
+      <div class="vchan">📺 ${c.channel} · ${c.duration}</div>
+      <p class="vdesc">${c.desc}</p>
+    </div>
+    <div class="acts">
+      <button class="abtn${isSaved?' saved':''}" onclick="toggleSave(this,'${c.id}')">
+        ${isSaved?'🔖':'🏷️'}<span>${isSaved?'Saved':'Save'}</span>
+      </button>
+      <button class="abtn" onclick="doShare(${i})">↑<span>Share</span></button>
+    </div>
+  </div>`;
+}
+
+function renderAll(){
+  feed.innerHTML = visible.map((c, i) =>
+    c.type === 'video' ? renderVideo(c, i) : renderLesson(c, i)
+  ).join('');
+  progEl.innerHTML = visible.map((_,i)=>
+    `<div class="dot${i===0?' on':''}"></div>`
+  ).join('');
+  curIdx = 0;
+  setCount(0);
+}
+
+feed.addEventListener('scroll', () => {
+  const idx = Math.round(feed.scrollTop / window.innerHeight);
+  if(idx !== curIdx){
+    curIdx = idx;
+    document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('on', i===idx));
+    setCount(idx);
+  }
+}, {passive:true});
+
+function setCount(idx){
+  cntEl.textContent = String(idx+1).padStart(2,'0') + ' / ' + String(visible.length).padStart(2,'0');
+}
+
+document.querySelectorAll('.fbtn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.fbtn').forEach(b => b.classList.remove('on'));
+    btn.classList.add('on');
+    filter  = btn.dataset.f;
+    visible = buildVisible(filter);
+    renderAll();
+    setupVideoObserver();
+    feed.scrollTop = 0;
+  });
+});
+
+function toggleSave(btn, id){
+  if(saved.has(id)){
+    saved.delete(id);
+    btn.classList.remove('saved');
+    btn.innerHTML = '🏷️<span>Save</span>';
+  } else {
+    saved.add(id);
+    btn.classList.add('saved');
+    btn.innerHTML = '🔖<span>Saved</span>';
+  }
+  persist();
+}
+
+function doShare(idx){
+  const c = visible[idx];
+  const text = (c.key ? c.key.split(' ').slice(1).join(' ') : c.title) + ' — ELEVATE';
+  if(navigator.share) navigator.share({title:'ELEVATE', text}).catch(()=>{});
+  else navigator.clipboard?.writeText(text).then(()=>alert('Copied to clipboard!'));
+}
+
+function playVid(thumb, videoId){
+  const varea = thumb.closest('.varea');
+  const iframe = document.createElement('iframe');
+  iframe.className = 'vid-frame';
+  iframe.src = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1`;
+  iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  iframe.allowFullscreen = true;
+  varea.appendChild(iframe);
+}
+
+function setupVideoObserver(){
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting){
+        const frame = entry.target.querySelector('.vid-frame');
+        if(frame) frame.remove();
+      }
+    });
+  }, {threshold: 0.4});
+  document.querySelectorAll('.vcard').forEach(card => obs.observe(card));
+}
+
+document.addEventListener('keydown', e => {
+  if(e.key==='ArrowDown') feed.scrollBy({top: window.innerHeight, behavior:'smooth'});
+  if(e.key==='ArrowUp')   feed.scrollBy({top:-window.innerHeight, behavior:'smooth'});
+});
+
+renderAll();
+setupVideoObserver();
+</script>
+</body>
+</html>
