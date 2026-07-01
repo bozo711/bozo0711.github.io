@@ -872,6 +872,63 @@ strong{color:#e8d4b0}
 #p-elevate{display:none;flex-direction:column;height:100%;position:relative;background:#050010}
 #p-elevate.on{display:flex}
 #elevate-frame{width:100%;flex:1;border:none;background:#050010;display:block}
+
+/* ═══ HUB PANELS (HUSTLE / MONEY / TOOLS) ═══ */
+#p-hustle,#p-money,#p-tools{display:none;flex-direction:column;height:100%;overflow-y:auto;scrollbar-width:none}
+#p-hustle.on,#p-money.on,#p-tools.on{display:flex}
+#p-hustle::-webkit-scrollbar,#p-money::-webkit-scrollbar,#p-tools::-webkit-scrollbar{display:none}
+.hub-panel{padding:12px;display:flex;flex-direction:column;gap:12px;padding-bottom:24px}
+.hub-section{background:rgba(4,0,14,.97);border:1px solid rgba(110,0,30,.3);border-radius:6px;overflow:hidden}
+.hub-sec-hdr{padding:10px 14px;font-size:8px;letter-spacing:4px;color:rgba(204,34,68,.7);text-transform:uppercase;border-bottom:1px solid rgba(100,0,30,.25);background:rgba(70,0,18,.12)}
+.hub-body{padding:12px;display:flex;flex-direction:column;gap:9px}
+.hub-field label{display:block;font-size:7px;letter-spacing:2.5px;color:rgba(190,150,160,.4);text-transform:uppercase;margin-bottom:4px}
+.hub-inp{width:100%;background:rgba(70,0,18,.08);border:1px solid rgba(110,0,30,.35);border-radius:3px;color:var(--text);font-family:inherit;font-size:12px;padding:8px 10px;outline:none;-webkit-appearance:none}
+.hub-inp:focus{border-color:rgba(204,34,68,.5)}
+textarea.hub-inp{resize:none;min-height:68px}
+.hub-select{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='rgba(204,34,68,0.5)'/></svg>");background-repeat:no-repeat;background-position:right 10px center}
+.hub-btn{width:100%;padding:11px;background:linear-gradient(135deg,rgba(140,0,32,.4),rgba(70,0,18,.5));border:1px solid rgba(204,34,68,.4);color:var(--live);font-family:inherit;font-size:9px;letter-spacing:3px;cursor:pointer;text-transform:uppercase;transition:all .15s;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,0 100%)}
+.hub-btn:active{background:rgba(180,0,40,.4);transform:scale(.98)}
+.hub-btn.sec{background:rgba(30,0,10,.4);border-color:rgba(130,80,90,.25);color:rgba(190,150,160,.4);font-size:8px;letter-spacing:2px}
+.hub-btn.grn{background:linear-gradient(135deg,rgba(0,90,0,.4),rgba(0,55,0,.5));border-color:rgba(0,180,0,.35);color:#88ff88}
+.hub-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.fmt-btns{display:flex;flex-wrap:wrap;gap:5px}
+.sfmt-btn{padding:5px 9px;background:rgba(60,0,16,.2);border:1px solid rgba(100,0,28,.3);border-radius:3px;color:rgba(190,140,150,.5);font-family:inherit;font-size:8px;letter-spacing:1.5px;cursor:pointer;transition:all .15s;text-transform:uppercase}
+.sfmt-btn.on{background:rgba(140,0,32,.3);border-color:rgba(204,34,68,.5);color:var(--live)}
+.hcat-btns{display:flex;gap:4px;flex-wrap:wrap;padding:9px 12px;border-bottom:1px solid rgba(100,0,30,.2)}
+.hcat-btn{padding:3px 9px;background:none;border:1px solid rgba(100,0,28,.3);border-radius:20px;color:rgba(180,140,150,.4);font-family:inherit;font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .15s;text-transform:uppercase}
+.hcat-btn.on{background:rgba(140,0,32,.25);border-color:rgba(204,34,68,.4);color:var(--live)}
+.hook-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:10px 12px}
+.hook-card{background:rgba(60,0,16,.25);border:1px solid rgba(100,0,28,.3);border-radius:4px;padding:9px 10px;cursor:pointer;transition:all .15s}
+.hook-card:active{background:rgba(140,0,32,.35);border-color:rgba(204,34,68,.5)}
+.hook-cat-tag{font-size:6px;letter-spacing:2px;color:rgba(204,34,68,.4);text-transform:uppercase;margin-bottom:3px}
+.hook-text{font-size:10px;color:var(--text);line-height:1.45;margin-bottom:5px}
+.hook-use{font-size:7px;letter-spacing:2px;color:rgba(204,34,68,.4);text-transform:uppercase}
+.offer-form{padding:12px;border-bottom:1px solid rgba(100,0,30,.2);display:flex;flex-direction:column;gap:8px}
+.offer-list{padding:10px 12px;display:flex;flex-direction:column;gap:7px}
+.offers-empty{text-align:center;color:rgba(190,150,160,.2);font-size:10px;letter-spacing:2px;padding:20px;text-transform:uppercase}
+.offer-card{background:rgba(60,0,16,.25);border:1px solid rgba(100,0,28,.3);border-radius:4px;padding:10px 12px}
+.offer-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:5px}
+.offer-name{font-size:12px;color:var(--text);font-weight:bold}
+.offer-meta{font-size:9px;color:rgba(190,150,160,.38);letter-spacing:1px;margin-top:1px;text-transform:uppercase}
+.offer-price-tag{font-size:16px;font-weight:bold;color:var(--gold);text-shadow:0 0 8px rgba(184,134,11,.4)}
+.offer-link{font-size:9px;color:rgba(204,34,68,.5);letter-spacing:1px;text-decoration:none;display:block;margin-bottom:6px}
+.offer-acts{display:flex;gap:6px}
+.offer-build-btn{flex:1;padding:5px;background:rgba(100,0,28,.2);border:1px solid rgba(204,34,68,.3);color:rgba(204,34,68,.65);font-family:inherit;font-size:8px;letter-spacing:2px;cursor:pointer;text-transform:uppercase}
+.offer-del-btn{padding:5px 10px;background:none;border:1px solid rgba(100,0,0,.3);color:rgba(150,50,50,.45);font-family:inherit;font-size:8px;cursor:pointer}
+.rev-result{display:flex;flex-direction:column;gap:5px;margin-top:8px}
+.rev-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid rgba(100,0,30,.12);font-size:12px}
+.rev-row span{color:rgba(190,150,160,.45);font-size:10px;letter-spacing:.5px}
+.rev-row strong{color:var(--gold)}
+.income-hero{padding:18px 16px 10px;text-align:center}
+.income-amount{font-size:38px;font-weight:700;color:var(--gold);text-shadow:0 0 22px rgba(184,134,11,.55);font-family:'Cinzel',serif;letter-spacing:2px}
+.income-goal-lbl{font-size:7px;letter-spacing:3px;color:rgba(190,150,160,.3);text-transform:uppercase;margin-top:3px}
+.goal-bar-wrap{margin:10px 16px 4px;background:rgba(100,0,0,.15);border-radius:20px;height:7px;overflow:hidden;border:1px solid rgba(100,0,30,.3)}
+.goal-bar{height:100%;background:linear-gradient(90deg,var(--live),var(--gold));border-radius:20px;transition:width .8s ease;min-width:3px;box-shadow:0 0 8px rgba(180,100,0,.4)}
+.goal-pct{font-size:8px;letter-spacing:2px;color:rgba(184,134,11,.55);text-align:center;padding-bottom:10px}
+.rfmt-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(100,0,30,.1);cursor:pointer}
+.rfmt-row input[type=checkbox]{accent-color:var(--live);width:14px;height:14px;cursor:pointer;flex-shrink:0}
+.rfmt-row label{font-size:10px;color:var(--text);cursor:pointer;flex:1}
+.rfmt-row .rfmt-cnt{font-size:8px;color:rgba(204,34,68,.4);letter-spacing:1px}
 </style>
 </head>
 <body>
@@ -1033,7 +1090,12 @@ strong{color:#e8d4b0}
         <button class="qbtn" onclick="qp('jarvis','Motivate me. I need to push through right now.')">Motivate</button>
         <button class="qbtn" onclick="cmd('status')">Status</button>
         <button class="qbtn" onclick="cleanJarvis()" style="color:rgba(204,34,68,.6)">🧹 Clean</button>
-        <button class="qbtn" onclick="switchView('elevate')" style="color:rgba(100,180,255,.75)">📚 ELEVATE</button>
+        <button class="qbtn" onclick="qpNiche('jarvis','Write me a high-converting weekly email newsletter for my audience in the niche of: ')">Newsletter</button>
+        <button class="qbtn" onclick="qpNiche('jarvis','Find me the top 5 affiliate programs I can promote in the niche of: ')">Affiliate</button>
+        <button class="qbtn" onclick="qpNiche('jarvis','Write me a professional UGC creator pitch email to send to brands in the niche of: ')">UGC Pitch</button>
+        <button class="qbtn" onclick="qpNiche('jarvis','Analyze what makes content go viral in the niche of: ')">Viral Spy</button>
+        <button class="qbtn" onclick="qp('jarvis','Help me plan a paid membership community. Give me: niche angle, pricing ($27-$97/mo), what to include monthly, how to get first 10 members, and 90-day launch plan.')">Membership</button>
+        <button class="qbtn" onclick="qp('jarvis','Suggest a micro SaaS idea I could build as a simple web app and sell for $9-$29/month. One painful problem, minimal build, clear monetization path.')">Micro SaaS</button>
       </div>
       <div class="inp-area">
         <button class="mic-btn" id="mic"
@@ -1052,6 +1114,222 @@ strong{color:#e8d4b0}
       <iframe id="elevate-frame" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
     </div>
 
+
+    <!-- HUSTLE PANEL -->
+    <div id="p-hustle" class="hub-panel">
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">✍️ SCRIPT GENERATOR</div>
+        <div class="hub-body">
+          <div class="hub-field">
+            <label>Format</label>
+            <div class="fmt-btns">
+              <button class="sfmt-btn on" data-fmt="tiktok" onclick="setScriptFmt(this)">TikTok</button>
+              <button class="sfmt-btn" data-fmt="reel" onclick="setScriptFmt(this)">Reel</button>
+              <button class="sfmt-btn" data-fmt="short" onclick="setScriptFmt(this)">YT Short</button>
+              <button class="sfmt-btn" data-fmt="thread" onclick="setScriptFmt(this)">Thread</button>
+              <button class="sfmt-btn" data-fmt="email" onclick="setScriptFmt(this)">Email</button>
+            </div>
+          </div>
+          <div class="hub-field">
+            <label>Topic (blank = use your niche)</label>
+            <input class="hub-inp" id="script-topic" placeholder="e.g. how I made $500 with one post…">
+          </div>
+          <div class="hub-field">
+            <label>Hook starter (tap a hook below or type your own)</label>
+            <input class="hub-inp" id="hook-starter" placeholder="e.g. Nobody told me this about…">
+          </div>
+          <button class="hub-btn" onclick="genScript()">▶ GENERATE SCRIPT → JARVIS</button>
+        </div>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">♻️ CONTENT REPURPOSER</div>
+        <div class="hub-body">
+          <div class="hub-field">
+            <label>Paste existing content (post, transcript, article…)</label>
+            <textarea class="hub-inp" id="repurpose-inp" placeholder="Paste your content here…"></textarea>
+          </div>
+          <div class="hub-field">
+            <label>Output formats</label>
+            <div class="rfmt-row"><input type="checkbox" class="rfmt-cb" id="rf1" value="5 TikTok scripts" checked><label for="rf1">5 TikTok Scripts</label><span class="rfmt-cnt">×5</span></div>
+            <div class="rfmt-row"><input type="checkbox" class="rfmt-cb" id="rf2" value="10 tweets/X posts"><label for="rf2">10 Tweets / X Posts</label><span class="rfmt-cnt">×10</span></div>
+            <div class="rfmt-row"><input type="checkbox" class="rfmt-cb" id="rf3" value="3 email subject lines + preview text"><label for="rf3">Email Subjects + Previews</label><span class="rfmt-cnt">×3</span></div>
+            <div class="rfmt-row"><input type="checkbox" class="rfmt-cb" id="rf4" value="1 carousel post outline (title + 7 slides)"><label for="rf4">Carousel Outline</label><span class="rfmt-cnt">×1</span></div>
+            <div class="rfmt-row"><input type="checkbox" class="rfmt-cb" id="rf5" value="5 Instagram caption variations"><label for="rf5">Instagram Captions</label><span class="rfmt-cnt">×5</span></div>
+          </div>
+          <button class="hub-btn" onclick="repurposeContent()">♻️ REPURPOSE → JARVIS</button>
+        </div>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">🪝 HOOK LIBRARY — tap any hook to use it</div>
+        <div class="hcat-btns">
+          <button class="hcat-btn on" data-cat="all" onclick="filterHooks(this)">ALL</button>
+          <button class="hcat-btn" data-cat="pain" onclick="filterHooks(this)">PAIN</button>
+          <button class="hcat-btn" data-cat="story" onclick="filterHooks(this)">STORY</button>
+          <button class="hcat-btn" data-cat="curiosity" onclick="filterHooks(this)">CURIOSITY</button>
+          <button class="hcat-btn" data-cat="value" onclick="filterHooks(this)">VALUE</button>
+          <button class="hcat-btn" data-cat="contrarian" onclick="filterHooks(this)">CONTRARIAN</button>
+        </div>
+        <div class="hook-grid" id="hook-grid"></div>
+      </div>
+
+    </div>
+
+    <!-- MONEY PANEL -->
+    <div id="p-money" class="hub-panel">
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">💰 INCOME DASHBOARD</div>
+        <div class="income-hero">
+          <div class="income-amount" id="dash-income">$0.00</div>
+          <div class="income-goal-lbl">monthly income</div>
+        </div>
+        <div class="goal-bar-wrap"><div class="goal-bar" id="dash-bar" style="width:0%"></div></div>
+        <div class="goal-pct" id="dash-pct">0% of $10,000 goal</div>
+        <div class="hub-body">
+          <div class="hub-row">
+            <div class="hub-field">
+              <label>Log a sale ($)</label>
+              <input class="hub-inp" id="dash-sale-amt" type="number" placeholder="97" min="0">
+            </div>
+            <div style="display:flex;align-items:flex-end">
+              <button class="hub-btn grn" onclick="dashLogSale()" style="margin:0">+ LOG SALE</button>
+            </div>
+          </div>
+          <button class="hub-btn sec" onclick="runAudit()">📊 RUN WEEKLY BUSINESS AUDIT → JARVIS</button>
+        </div>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">🏦 OFFER VAULT</div>
+        <div class="offer-form">
+          <div class="hub-row">
+            <div class="hub-field">
+              <label>Product name</label>
+              <input class="hub-inp" id="offer-name" placeholder="Beat Pack Vol.1">
+            </div>
+            <div class="hub-field">
+              <label>Price ($)</label>
+              <input class="hub-inp" id="offer-price" type="number" placeholder="27" min="0">
+            </div>
+          </div>
+          <div class="hub-row">
+            <div class="hub-field">
+              <label>Type</label>
+              <select class="hub-inp hub-select" id="offer-type">
+                <option>E-book</option><option>Prompt Pack</option><option>Template</option>
+                <option>Course</option><option>Coaching</option><option>Service</option>
+                <option>Membership</option><option>Beat Pack</option><option>Software</option><option>Other</option>
+              </select>
+            </div>
+            <div class="hub-field">
+              <label>Gumroad URL (optional)</label>
+              <input class="hub-inp" id="offer-url" placeholder="gumroad.com/l/…">
+            </div>
+          </div>
+          <button class="hub-btn" onclick="addOffer()">+ SAVE TO VAULT</button>
+        </div>
+        <div class="offer-list" id="offer-list"><div class="offers-empty">No products yet</div></div>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">📊 REVENUE PLANNER — path to $10k</div>
+        <div class="hub-body">
+          <div class="hub-field">
+            <label>Your product price ($)</label>
+            <input class="hub-inp" id="rev-price" type="number" placeholder="47" min="1">
+          </div>
+          <button class="hub-btn" onclick="calcRevenue()">CALCULATE WHAT I NEED</button>
+          <div class="rev-result" id="rev-result"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TOOLS PANEL -->
+    <div id="p-tools" class="hub-panel">
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">📱 TELEGRAM BLAST</div>
+        <div class="hub-body">
+          <div class="hub-field">
+            <label>Message</label>
+            <textarea class="hub-inp" id="tg-msg" placeholder="Write your blast message…"></textarea>
+          </div>
+          <button class="hub-btn sec" onclick="writeTgBlast()">✍️ WRITE WITH JARVIS</button>
+          <button class="hub-btn grn" id="tg-send-btn" onclick="sendTgBlast()">📤 SEND BLAST</button>
+        </div>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">🎮 DISCORD DROP</div>
+        <div class="hub-body">
+          <div class="hub-field">
+            <label>Announcement</label>
+            <textarea class="hub-inp" id="discord-msg" placeholder="Write your drop announcement…"></textarea>
+          </div>
+          <button class="hub-btn sec" onclick="writeDiscordDrop()">✍️ WRITE WITH JARVIS</button>
+          <button class="hub-btn grn" id="discord-send-btn" onclick="sendDiscordDrop()">🎮 SEND DROP</button>
+        </div>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">🚀 SALES PAGE BUILDER</div>
+        <div class="hub-body">
+          <div class="hub-row">
+            <div class="hub-field">
+              <label>Product name</label>
+              <input class="hub-inp" id="sp-name" placeholder="Beat Pack Vol.1">
+            </div>
+            <div class="hub-field">
+              <label>Price ($)</label>
+              <input class="hub-inp" id="sp-price" type="number" placeholder="27">
+            </div>
+          </div>
+          <button class="hub-btn" onclick="buildSalesPage()">🚀 BUILD FULL SALES PAGE → JARVIS</button>
+        </div>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">📋 CLIENT PROPOSAL GENERATOR</div>
+        <div class="hub-body">
+          <div class="hub-row">
+            <div class="hub-field">
+              <label>Client / company</label>
+              <input class="hub-inp" id="prop-client" placeholder="Nike, Local Gym…">
+            </div>
+            <div class="hub-field">
+              <label>Your price ($)</label>
+              <input class="hub-inp" id="prop-price" placeholder="1500">
+            </div>
+          </div>
+          <div class="hub-field">
+            <label>Their problem</label>
+            <input class="hub-inp" id="prop-prob" placeholder="No social media, low sales…">
+          </div>
+          <div class="hub-field">
+            <label>Your solution</label>
+            <input class="hub-inp" id="prop-sol" placeholder="30-day content strategy…">
+          </div>
+          <button class="hub-btn" onclick="genProposal()">📋 GENERATE PROPOSAL → JARVIS</button>
+        </div>
+      </div>
+
+      <div class="hub-section">
+        <div class="hub-sec-hdr">🕵️ COMPETITOR SPY</div>
+        <div class="hub-body">
+          <div class="hub-field">
+            <label>Competitor name / URL / handle</label>
+            <input class="hub-inp" id="comp-name" placeholder="@creatorname or brand.com">
+          </div>
+          <button class="hub-btn" onclick="spyCompetitor()">🕵️ ANALYZE COMPETITOR → JARVIS</button>
+        </div>
+      </div>
+
+    </div>
+
   </div><!-- /content -->
 
   <!-- Bottom nav -->
@@ -1060,9 +1338,21 @@ strong{color:#e8d4b0}
       <span class="nav-ico">🤖</span>
       <span>JARVIS</span>
     </button>
+    <button class="bot-nav-btn" data-view="hustle" onclick="switchView('hustle')">
+      <span class="nav-ico">🔥</span>
+      <span>HUSTLE</span>
+    </button>
+    <button class="bot-nav-btn" data-view="money" onclick="switchView('money')">
+      <span class="nav-ico">💰</span>
+      <span>MONEY</span>
+    </button>
+    <button class="bot-nav-btn" data-view="tools" onclick="switchView('tools')">
+      <span class="nav-ico">⚡</span>
+      <span>TOOLS</span>
+    </button>
     <button class="bot-nav-btn" data-view="elevate" onclick="switchView('elevate')">
       <span class="nav-ico">📚</span>
-      <span>ELEVATE</span>
+      <span>ACADEMY</span>
     </button>
   </div>
 
@@ -4676,15 +4966,299 @@ function cleanJarvis() {
 // ═══════════════════════════════════════════════
 function switchView(v) {
   document.querySelectorAll('.bot-nav-btn').forEach(b => b.classList.toggle('on', b.dataset.view === v));
-  const jarvisPanel = document.getElementById('p-jarvis');
-  const elevatePanel = document.getElementById('p-elevate');
-  jarvisPanel.classList.toggle('on', v === 'jarvis');
-  elevatePanel.classList.toggle('on', v === 'elevate');
+  ['jarvis','hustle','money','tools','elevate'].forEach(id => {
+    const el = document.getElementById('p-' + id);
+    if (el) el.classList.toggle('on', v === id);
+  });
   if (v === 'elevate') {
     const frame = document.getElementById('elevate-frame');
     if (!frame.src) frame.src = 'learn.html';
   }
+  if (v === 'money') { renderMoneyDash(); renderOfferVault(); }
+  if (v === 'hustle') renderHooks('all');
 }
+
+// ═══════════════════════════════════════════════
+// HUSTLE — Script Generator
+// ═══════════════════════════════════════════════
+const SCRIPT_FORMATS = {
+  tiktok:'Write a viral TikTok script (60-90 seconds) about this topic: ',
+  reel:'Write a viral Instagram Reel script (30-60 seconds) about this topic: ',
+  short:'Write a YouTube Shorts script (under 60 seconds) about this topic: ',
+  thread:'Write a viral Twitter/X thread (8-10 tweets) about this topic: ',
+  email:'Write a high-converting email (subject line + body) about this topic: '
+};
+let scriptFmt = 'tiktok';
+
+function setScriptFmt(btn) {
+  scriptFmt = btn.dataset.fmt;
+  document.querySelectorAll('.sfmt-btn').forEach(b => b.classList.toggle('on', b === btn));
+}
+
+function genScript() {
+  const topic = document.getElementById('script-topic').value.trim() || activeNiche || 'making money online';
+  const hook = document.getElementById('hook-starter').value.trim();
+  let prompt = SCRIPT_FORMATS[scriptFmt] + topic;
+  if (hook) prompt += `. Open with this hook: "${hook}"`;
+  prompt += `. Niche context: ${activeNiche || 'online business'}. Make it viral, engaging, with a strong CTA. Format with clear sections.`;
+  document.getElementById('script-topic').value = '';
+  switchView('jarvis');
+  setTimeout(() => { document.getElementById('i-jarvis').value = prompt; send('jarvis'); }, 80);
+}
+
+function repurposeContent() {
+  const content = document.getElementById('repurpose-inp').value.trim();
+  if (!content) { toast('Paste some content first'); return; }
+  const fmts = [...document.querySelectorAll('.rfmt-cb:checked')].map(cb => cb.value);
+  if (!fmts.length) { toast('Select at least one output format'); return; }
+  const prompt = `Repurpose this content into ALL of the following:\n${fmts.map((f,i)=>`${i+1}. ${f}`).join('\n')}\n\nOriginal:\n${content}\n\nMake each piece platform-native and ready to post. Label each section clearly.`;
+  document.getElementById('repurpose-inp').value = '';
+  switchView('jarvis');
+  setTimeout(() => { document.getElementById('i-jarvis').value = prompt; send('jarvis'); }, 80);
+}
+
+// Hook Library
+const HOOKS = [
+  {cat:'pain',text:'Nobody told me this about [topic]…'},
+  {cat:'pain',text:'I wasted $X on [topic] until I learned this'},
+  {cat:'pain',text:'Stop doing [thing]. Here’s why:'},
+  {cat:'pain',text:'The worst mistake in [topic] (I made it too)'},
+  {cat:'pain',text:'Why 99% of people fail at [topic]'},
+  {cat:'pain',text:'This one [topic] mistake is costing you $$$'},
+  {cat:'story',text:'I went from $0 to $X selling [product]'},
+  {cat:'story',text:'6 months ago I had nothing. Then I tried [topic]'},
+  {cat:'story',text:'How I quit my 9-5 using [topic]'},
+  {cat:'story',text:'The day I made my first $1,000 online'},
+  {cat:'story',text:'I tried [topic] for 30 days. Here’s what happened:'},
+  {cat:'story',text:'My client paid me $X to do this one thing'},
+  {cat:'curiosity',text:'This one [topic] trick changed everything'},
+  {cat:'curiosity',text:'I found the cheat code for [topic]'},
+  {cat:'curiosity',text:'No one talks about this side of [topic]'},
+  {cat:'curiosity',text:'What they don’t tell you about [topic]'},
+  {cat:'curiosity',text:'POV: You just discovered [topic]'},
+  {cat:'curiosity',text:'The [topic] secret every guru hides'},
+  {cat:'value',text:'5 [topic] tools that pay for themselves'},
+  {cat:'value',text:'Free [thing] I use to make $X/month'},
+  {cat:'value',text:'Here’s the [topic] checklist nobody shares'},
+  {cat:'value',text:'Save this. You’ll need it for [topic].'},
+  {cat:'value',text:'How to [desired result] in [timeframe] (step by step)'},
+  {cat:'value',text:'The only [topic] framework you need'},
+  {cat:'contrarian',text:'Hot take: [common belief] is actually wrong'},
+  {cat:'contrarian',text:'Unpopular opinion: [topic] is overrated'},
+  {cat:'contrarian',text:'Everyone says X but I do Y. Here’s why:'},
+  {cat:'contrarian',text:'The [topic] advice you’re getting is backwards'},
+  {cat:'contrarian',text:'I disagree with every [niche] guru about this'},
+  {cat:'contrarian',text:'Stop following [popular advice]. Do this instead:'}
+];
+
+function filterHooks(btn) {
+  document.querySelectorAll('.hcat-btn').forEach(b => b.classList.toggle('on', b === btn));
+  renderHooks(btn.dataset.cat);
+}
+
+function renderHooks(cat) {
+  const grid = document.getElementById('hook-grid');
+  if (!grid) return;
+  cat = cat || 'all';
+  const list = cat === 'all' ? HOOKS : HOOKS.filter(h => h.cat === cat);
+  grid.innerHTML = list.map(h => {
+    const safe = h.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return `<div class="hook-card" onclick="useHook('${h.text.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}')">
+      <div class="hook-cat-tag">${h.cat.toUpperCase()}</div>
+      <div class="hook-text">${safe}</div>
+      <div class="hook-use">USE →</div>
+    </div>`;
+  }).join('');
+}
+
+function useHook(text) {
+  document.getElementById('hook-starter').value = text;
+  toast('Hook loaded — fill in your topic above');
+}
+
+// ═══════════════════════════════════════════════
+// MONEY — Dashboard, Offer Vault, Revenue Planner
+// ═══════════════════════════════════════════════
+let offerVault = JSON.parse(localStorage.getItem('jv-offers') || '[]');
+function saveOfferVault() { localStorage.setItem('jv-offers', JSON.stringify(offerVault)); }
+
+function dashLogSale() {
+  const amt = parseFloat(document.getElementById('dash-sale-amt').value) || 0;
+  if (!amt) { toast('Enter a sale amount'); return; }
+  cfg.income = (cfg.income || 0) + amt;
+  saveCfg();
+  document.getElementById('dash-sale-amt').value = '';
+  updateStats();
+  renderMoneyDash();
+  toast('+$' + amt.toFixed(2) + ' logged!');
+}
+
+function renderMoneyDash() {
+  const inc = cfg.income || 0;
+  const goal = cfg.goal || 10000;
+  const pct = Math.min(100, (inc / goal) * 100);
+  const el = document.getElementById('dash-income');
+  const bar = document.getElementById('dash-bar');
+  const pctEl = document.getElementById('dash-pct');
+  if (el) el.textContent = '$' + inc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if (bar) bar.style.width = pct.toFixed(1) + '%';
+  if (pctEl) pctEl.textContent = pct.toFixed(1) + '% of $' + goal.toLocaleString() + '/mo goal';
+}
+
+function addOffer() {
+  const name = document.getElementById('offer-name').value.trim();
+  const price = parseFloat(document.getElementById('offer-price').value) || 0;
+  const type = document.getElementById('offer-type').value;
+  const url = document.getElementById('offer-url').value.trim();
+  if (!name) { toast('Enter a product name'); return; }
+  offerVault.unshift({ id: Date.now(), name, price, type, url });
+  saveOfferVault();
+  document.getElementById('offer-name').value = '';
+  document.getElementById('offer-price').value = '';
+  document.getElementById('offer-url').value = '';
+  renderOfferVault();
+  toast('Saved to vault!');
+}
+
+function delOffer(id) {
+  offerVault = offerVault.filter(o => o.id !== id);
+  saveOfferVault();
+  renderOfferVault();
+}
+
+function renderOfferVault() {
+  const list = document.getElementById('offer-list');
+  if (!list) return;
+  if (!offerVault.length) { list.innerHTML = '<div class="offers-empty">No products yet — add your first offer above</div>'; return; }
+  list.innerHTML = offerVault.map(o => {
+    const nm = o.name.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    const nmEsc = o.name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    return `<div class="offer-card">
+      <div class="offer-top">
+        <div>
+          <div class="offer-name">${nm}</div>
+          <div class="offer-meta">${o.type}</div>
+        </div>
+        <div class="offer-price-tag">$${(o.price||0).toFixed(2)}</div>
+      </div>
+      ${o.url ? `<a class="offer-link" href="${o.url}" target="_blank">Open product ↗</a>` : ''}
+      <div class="offer-acts">
+        <button class="offer-build-btn" onclick="buildSalesPageFromVault('${nmEsc}',${o.price||0})">Build Page</button>
+        <button class="offer-del-btn" onclick="delOffer(${o.id})">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function calcRevenue() {
+  const price = parseFloat(document.getElementById('rev-price').value) || 0;
+  if (!price) { toast('Enter a product price'); return; }
+  const goal = cfg.goal || 10000;
+  const sales = Math.ceil(goal / price);
+  const daily = Math.ceil(sales / 30);
+  const weekly = Math.ceil(sales / 4.33);
+  const leads = Math.ceil(sales / 0.02);
+  document.getElementById('rev-result').innerHTML =
+    `<div class="rev-row"><span>Monthly sales needed</span><strong>${sales.toLocaleString()}</strong></div>
+     <div class="rev-row"><span>Weekly sales needed</span><strong>${weekly}</strong></div>
+     <div class="rev-row"><span>Daily sales needed</span><strong>${daily}</strong></div>
+     <div class="rev-row"><span>Leads needed (2% cvr)</span><strong>${leads.toLocaleString()}/mo</strong></div>
+     <div class="rev-row"><span>Views needed (1% click)</span><strong>${(leads*100).toLocaleString()}/mo</strong></div>`;
+}
+
+function runAudit() {
+  const inc = cfg.income || 0;
+  const goal = cfg.goal || 10000;
+  const products = offerVault.length;
+  const niche = activeNiche || 'not set';
+  const prompt = `Run my weekly business audit:\n- Monthly income: $${inc}\n- Monthly goal: $${goal}\n- Products in vault: ${products}\n- Niche: ${niche}\n- Tasks completed: ${(cfg.done||[]).length}\n- Tasks pending: ${(cfg.tasks||[]).length}\n\nGive me:\n1. Letter grade (A–F) with one line why\n2. Top 3 wins this week\n3. Top 3 priorities for next 7 days\n4. One thing I need to START doing right now\n5. One thing I need to STOP doing\n\nBe brutally honest and specific.`;
+  switchView('jarvis');
+  setTimeout(() => { document.getElementById('i-jarvis').value = prompt; send('jarvis'); }, 80);
+}
+
+// ═══════════════════════════════════════════════
+// TOOLS — Blast, Drop, Sales Page, Proposal, Spy
+// ═══════════════════════════════════════════════
+function writeTgBlast() {
+  const niche = activeNiche || 'online business';
+  const prompt = `Write a short, engaging Telegram community message (under 200 words) for an audience interested in ${niche}. Include 1-2 relevant emojis, be conversational, end with a clear CTA. Format for Telegram markdown.`;
+  switchView('jarvis');
+  setTimeout(() => { document.getElementById('i-jarvis').value = prompt; send('jarvis'); }, 80);
+}
+
+async function sendTgBlast() {
+  const msg = document.getElementById('tg-msg').value.trim();
+  if (!msg) { toast('Write a message first'); return; }
+  if (!cfg.tgToken || !cfg.tgChat) { toast('Add Telegram token + chat ID in ⚙ Settings'); return; }
+  const btn = document.getElementById('tg-send-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const r = await fetch(`https://api.telegram.org/bot${cfg.tgToken}/sendMessage`,
+      {method:'POST',headers:{'Content-Type':'application/json'},
+       body:JSON.stringify({chat_id:cfg.tgChat,text:msg,parse_mode:'Markdown'})});
+    const j = await r.json();
+    if (j.ok) { toast('Blast sent!'); document.getElementById('tg-msg').value = ''; }
+    else toast('Telegram: ' + j.description);
+  } catch(e) { toast('Network error'); }
+  btn.disabled = false; btn.textContent = '📤 SEND BLAST';
+}
+
+function writeDiscordDrop() {
+  const niche = activeNiche || 'my community';
+  const prompt = `Write a short Discord server announcement (under 150 words) for a community about ${niche}. Use Discord-friendly formatting and 1-2 emojis. End with a question or action to drive engagement.`;
+  switchView('jarvis');
+  setTimeout(() => { document.getElementById('i-jarvis').value = prompt; send('jarvis'); }, 80);
+}
+
+async function sendDiscordDrop() {
+  const msg = document.getElementById('discord-msg').value.trim();
+  if (!msg) { toast('Write a message first'); return; }
+  if (!cfg.discordWh) { toast('Add Discord webhook URL in ⚙ Settings'); return; }
+  const btn = document.getElementById('discord-send-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  try {
+    const r = await fetch(cfg.discordWh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:msg})});
+    if (r.ok) { toast('Drop sent to Discord!'); document.getElementById('discord-msg').value = ''; }
+    else toast('Discord error: ' + r.status);
+  } catch(e) { toast('Network error'); }
+  btn.disabled = false; btn.textContent = '🎮 SEND DROP';
+}
+
+function buildSalesPage() {
+  const name = document.getElementById('sp-name').value.trim();
+  const price = parseFloat(document.getElementById('sp-price').value) || 0;
+  buildSalesPageFromVault(name, price);
+}
+
+function buildSalesPageFromVault(name, price) {
+  if (!name) { toast('Enter a product name'); return; }
+  const niche = activeNiche || 'online business';
+  const prompt = `Build a complete, high-converting sales page for:\nProduct: ${name}\nPrice: $${price}\nNiche: ${niche}\n\nWrite in order:\n1. HEADLINE — the big transformation promise\n2. SUB-HEADLINE — what they get\n3. PAIN SECTION — 3 bullet points of life without this\n4. SOLUTION — what this product does\n5. WHAT'S INSIDE — 5-7 deliverables\n6. TESTIMONIAL — one realistic quote\n7. PRICE — reveal + anchor comparison\n8. CTA BUTTON TEXT\n9. GUARANTEE — 30-day promise\n10. FAQ — 3 questions + answers\n\nMake it punchy, persuasive, and ready to paste into Gumroad.`;
+  switchView('jarvis');
+  setTimeout(() => { document.getElementById('i-jarvis').value = prompt; send('jarvis'); }, 80);
+}
+
+function genProposal() {
+  const client = document.getElementById('prop-client').value.trim();
+  const prob = document.getElementById('prop-prob').value.trim();
+  const sol = document.getElementById('prop-sol').value.trim();
+  const price = document.getElementById('prop-price').value.trim();
+  if (!client) { toast('Enter client name'); return; }
+  if (!prob) { toast('Describe their problem'); return; }
+  const prompt = `Write a professional client proposal for:\nClient: ${client}\nTheir problem: ${prob}\nMy solution: ${sol||'AI strategy and content creation'}\nInvestment: ${price?'$'+price:'to be discussed'}\n\nStructure:\n1. Executive Summary (2-3 sentences)\n2. Understanding Your Challenge\n3. My Approach\n4. Deliverables & Timeline (4-5 bullets)\n5. Investment + payment terms\n6. Why Work With Me (3 reasons)\n7. Next Steps (clear CTA)\n\nUnder 500 words. Confident, concise, professional.`;
+  switchView('jarvis');
+  setTimeout(() => { document.getElementById('i-jarvis').value = prompt; send('jarvis'); }, 80);
+}
+
+function spyCompetitor() {
+  const comp = document.getElementById('comp-name').value.trim();
+  if (!comp) { toast('Enter a competitor name or handle'); return; }
+  const niche = activeNiche || 'online business';
+  const prompt = `Analyze my competitor "${comp}" in the ${niche} niche:\n1. What they likely sell and at what price points\n2. Their content strategy and what’s working\n3. Their positioning and messaging angle\n4. Their weaknesses and gaps I can exploit\n5. How I should differentiate from them\n6. One thing they do well I should ethically model\n7. My #1 competitive advantage vs them\n\nGive me actionable intelligence I can use immediately.`;
+  switchView('jarvis');
+  setTimeout(() => { document.getElementById('i-jarvis').value = prompt; send('jarvis'); }, 80);
+}
+
 
 init();
 </script>
