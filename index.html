@@ -999,6 +999,36 @@ textarea.hub-inp{resize:none;min-height:68px}
 .ic-tip{position:absolute;background:rgba(20,0,6,.97);border:1px solid var(--gold-b);border-radius:4px;padding:5px 9px;font-size:10px;color:var(--gold);pointer-events:none;opacity:0;transition:opacity .12s;z-index:20;white-space:nowrap;transform:translate(-50%,-115%)}
 .ic-tip.on{opacity:1}
 .ic-empty{text-align:center;font-size:9px;letter-spacing:2px;color:rgba(190,150,160,.25);text-transform:uppercase;padding:24px 0}
+
+/* ═══ SEARCH OVERLAY ═══ */
+#search-overlay{position:fixed;inset:0;z-index:550;background:rgba(1,0,4,.98);display:none;flex-direction:column}
+#search-overlay.on{display:flex}
+.srch-hdr{display:flex;align-items:center;gap:9px;padding:14px 16px;padding-top:max(14px,env(safe-area-inset-top));border-bottom:1px solid var(--red-b)}
+.srch-inp{flex:1;background:rgba(70,0,18,.1);border:1px solid rgba(110,0,30,.4);border-radius:6px;color:var(--text);font-family:inherit;font-size:15px;padding:11px 13px;outline:none}
+.srch-inp:focus{border-color:rgba(204,34,68,.6)}
+.srch-close{background:none;border:none;color:var(--text-d);font-size:24px;cursor:pointer;line-height:1}
+.srch-results{flex:1;overflow-y:auto;padding:10px 14px;display:flex;flex-direction:column;gap:8px}
+.srch-empty{text-align:center;color:rgba(190,150,160,.3);font-size:11px;letter-spacing:2px;padding:40px 0;text-transform:uppercase}
+.srch-item{background:rgba(60,0,16,.2);border:1px solid rgba(100,0,28,.28);border-left:2px solid rgba(204,34,68,.4);border-radius:4px;padding:9px 12px;cursor:pointer;transition:all .15s}
+.srch-item:active{background:rgba(140,0,32,.3)}
+.srch-type{font-size:7px;letter-spacing:2px;color:rgba(204,34,68,.55);text-transform:uppercase;margin-bottom:3px}
+.srch-snip{font-size:12px;color:var(--text);line-height:1.5;word-break:break-word}
+.srch-snip mark{background:rgba(184,134,11,.35);color:#ffe08a;padding:0 1px;border-radius:2px}
+.srch-count{font-size:8px;letter-spacing:2px;color:rgba(190,150,160,.35);text-transform:uppercase;padding:2px 2px 6px}
+.msg.flash .bubble{animation:msg-flash 1.6s ease}
+@keyframes msg-flash{0%,100%{box-shadow:none}30%{box-shadow:0 0 0 2px var(--gold),0 0 20px rgba(184,134,11,.5)}}
+/* ═══ CHART RANGE + INSIGHTS ═══ */
+.ic-range{display:flex;gap:5px;padding:0 14px 6px}
+.icr-btn{padding:3px 10px;background:rgba(60,0,16,.2);border:1px solid rgba(100,0,28,.3);border-radius:14px;color:rgba(180,140,150,.45);font-family:inherit;font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .15s}
+.icr-btn.on{background:rgba(140,0,32,.28);border-color:rgba(204,34,68,.45);color:var(--live)}
+.ic-insights{display:grid;grid-template-columns:1fr 1fr;gap:7px;padding:8px 14px 2px}
+.ici{background:rgba(60,0,16,.18);border:1px solid rgba(100,0,28,.25);border-radius:4px;padding:8px 10px}
+.ici-l{font-size:6px;letter-spacing:2px;color:rgba(190,150,160,.35);text-transform:uppercase}
+.ici-v{font-size:14px;color:var(--gold);font-weight:bold;margin-top:2px;text-shadow:0 0 8px rgba(184,134,11,.3)}
+/* ═══ VOICE SETTINGS ═══ */
+.voice-slider{width:100%;accent-color:var(--live)}
+.vs-row{display:flex;align-items:center;gap:10px}
+.vs-row span{font-size:10px;color:var(--gold);min-width:30px;text-align:right}
 </style>
 </head>
 <body>
@@ -1061,6 +1091,23 @@ textarea.hub-inp{resize:none;min-height:68px}
         <input type="number" id="c-api-limit" placeholder="300" min="10">
         <div class="hint">Safety cap — stops runaway usage if a key ever leaks. Default 300 calls/day.</div>
       </div>
+    </div>
+    <div class="cfg-sec">
+      <div class="cfg-sec-title">Voice</div>
+      <div class="field">
+        <label>JARVIS Voice</label>
+        <select id="c-voice" class="hub-select"></select>
+        <div class="hint">Voices come from your device/browser. Used for spoken replies and Voice Mode.</div>
+      </div>
+      <div class="field">
+        <label>Speed</label>
+        <div class="vs-row"><input type="range" class="voice-slider" id="c-voice-rate" min="0.6" max="1.6" step="0.05" value="1.1" oninput="document.getElementById('vr-val').textContent=this.value"><span id="vr-val">1.1</span></div>
+      </div>
+      <div class="field">
+        <label>Pitch</label>
+        <div class="vs-row"><input type="range" class="voice-slider" id="c-voice-pitch" min="0.5" max="1.5" step="0.05" value="0.85" oninput="document.getElementById('vp-val').textContent=this.value"><span id="vp-val">0.85</span></div>
+      </div>
+      <button class="save-btn" style="background:rgba(40,0,12,.7);border:1px solid var(--red-b)" onclick="testVoice()">▶ TEST VOICE</button>
     </div>
     <div class="cfg-sec">
       <div class="cfg-sec-title">Your Profile</div>
@@ -1135,6 +1182,15 @@ textarea.hub-inp{resize:none;min-height:68px}
   <div class="vo-hint">Say "stop listening" or tap × to exit</div>
 </div>
 
+<!-- Search Overlay -->
+<div id="search-overlay">
+  <div class="srch-hdr">
+    <input class="srch-inp" id="srch-inp" placeholder="Search chats, brain, products, sales…" oninput="runSearch(this.value)" autocomplete="off">
+    <button class="srch-close" onclick="closeSearch()">×</button>
+  </div>
+  <div class="srch-results" id="srch-results"><div class="srch-empty">Type to search everything</div></div>
+</div>
+
 <!-- App -->
 <div id="app">
 
@@ -1162,6 +1218,7 @@ textarea.hub-inp{resize:none;min-height:68px}
         <span class="clock" id="clock">--:--</span>
         <span class="sys-tag">SYS ONLINE</span>
       </div>
+      <button class="icon-btn" onclick="openSearch()" title="Search everything">🔍</button>
       <button class="icon-btn" onclick="toggleVoiceOut()" id="voice-out-btn" title="Toggle voice output">🔊</button>
       <button class="icon-btn" onclick="openCfg()">⚙</button>
     </div>
@@ -1305,7 +1362,14 @@ textarea.hub-inp{resize:none;min-height:68px}
         </div>
         <div class="goal-bar-wrap"><div class="goal-bar" id="dash-bar" style="width:0%"></div></div>
         <div class="goal-pct" id="dash-pct">0% of $10,000 goal</div>
+        <div class="ic-range">
+          <button class="icr-btn" data-r="7" onclick="setChartRange(7)">7D</button>
+          <button class="icr-btn on" data-r="14" onclick="setChartRange(14)">14D</button>
+          <button class="icr-btn" data-r="30" onclick="setChartRange(30)">30D</button>
+          <button class="icr-btn" data-r="90" onclick="setChartRange(90)">90D</button>
+        </div>
         <div class="income-chart" id="income-chart"></div>
+        <div class="ic-insights" id="ic-insights"></div>
         <div class="hub-body">
           <div class="hub-row">
             <div class="hub-field">
@@ -1694,6 +1758,7 @@ function runAgentNiche(agent, prompt) {
 
 function init() {
   loadTools();
+  loadVoices();
   setTimeout(() => runBriefing(false), 1600);
   loadCfg();
   loadNiche();
@@ -1782,6 +1847,11 @@ function fillCfgForm() {
   document.getElementById('c-tg-chat').value    = cfg.tgChat||'';
   document.getElementById('c-discord-wh').value = cfg.discordWh||'';
   document.getElementById('c-brief-tg').checked = !!cfg.briefTg;
+  document.getElementById('c-voice-rate').value = cfg.voiceRate||1.1;
+  document.getElementById('vr-val').textContent = cfg.voiceRate||1.1;
+  document.getElementById('c-voice-pitch').value = cfg.voicePitch||0.85;
+  document.getElementById('vp-val').textContent = cfg.voicePitch||0.85;
+  populateVoices();
   document.getElementById('c-ctx').value      = cfg.ctx||'';
   toggleProvider();
 }
@@ -1827,6 +1897,9 @@ function saveCfg() {
   cfg.tgChat    = document.getElementById('c-tg-chat').value.trim();
   cfg.discordWh = document.getElementById('c-discord-wh').value.trim();
   cfg.briefTg   = document.getElementById('c-brief-tg').checked;
+  cfg.voiceName  = document.getElementById('c-voice').value;
+  cfg.voiceRate  = parseFloat(document.getElementById('c-voice-rate').value)||1.1;
+  cfg.voicePitch = parseFloat(document.getElementById('c-voice-pitch').value)||0.85;
   localStorage.setItem('jv-cfg', JSON.stringify(cfg));
   logEvent('settings-change', cfg.provider || '');
   updateStats(); updateDot(); closeCfg(); toast('Saved');
@@ -2587,9 +2660,16 @@ function speak(text) {
   if (!voiceOut || !window.speechSynthesis) return;
   window.speechSynthesis.cancel();
   const clean = text.replace(/<[^>]*>/g,'').replace(/[*_`#]/g,'').substring(0,280);
-  const u = new SpeechSynthesisUtterance(clean);
-  u.rate = 1.1; u.pitch = 0.85;
-  window.speechSynthesis.speak(u);
+  window.speechSynthesis.speak(applyVoice(new SpeechSynthesisUtterance(clean)));
+}
+function applyVoice(u) {
+  u.rate = cfg.voiceRate || 1.1;
+  u.pitch = cfg.voicePitch || 0.85;
+  if (cfg.voiceName && window._voices) {
+    const v = window._voices.find(v => v.name === cfg.voiceName);
+    if (v) u.voice = v;
+  }
+  return u;
 }
 
 // ═══════════════════════════════════════════════
@@ -6054,8 +6134,7 @@ function speakThenListen(text) {
   if (!clean || !window.speechSynthesis) { startVoiceListen(); return; }
   setVoiceState('speaking');
   window.speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(clean);
-  u.rate = 1.08; u.pitch = 0.85;
+  const u = applyVoice(new SpeechSynthesisUtterance(clean));
   u.onend = () => { if (voiceModeActive) startVoiceListen(); };
   u.onerror = () => { if (voiceModeActive) startVoiceListen(); };
   window.speechSynthesis.speak(u);
@@ -6150,7 +6229,7 @@ function renderIncomeChart() {
   const host = document.getElementById('income-chart');
   if (!host) return;
   const list = (typeof sales !== 'undefined' ? sales : []);
-  const DAYS = 14;
+  const DAYS = (typeof chartRange !== 'undefined' ? chartRange : 14);
   const now = new Date();
   const buckets = [];
   for (let i = DAYS - 1; i >= 0; i--) {
@@ -6164,7 +6243,8 @@ function renderIncomeChart() {
   });
   const total14 = buckets.reduce((a,b)=>a+b.total,0);
   if (total14 <= 0) {
-    host.innerHTML = `<div class="ic-title"><span>Last 14 days</span></div><div class="ic-empty">Log a sale to see your trend</div>`;
+    host.innerHTML = `<div class="ic-title"><span>Last ${DAYS} days</span></div><div class="ic-empty">Log a sale to see your trend</div>`;
+    const ins = document.getElementById('ic-insights'); if (ins) ins.innerHTML = '';
     return;
   }
   const max = Math.max(...buckets.map(b=>b.total), 1);
@@ -6177,10 +6257,11 @@ function renderIncomeChart() {
     const h = b.total > 0 ? Math.max(3, (b.total/max) * (H - 16)) : 0;
     const y = H - 12 - h;
     if (h > 0) bars += `<rect class="ic-bar" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" ry="3" data-lbl="${b.day.toLocaleDateString('en-US',{month:'short',day:'numeric'})}" data-val="${b.total.toFixed(2)}"></rect>`;
-    if (i % 2 === 0) labels += `<text class="ic-lbl" x="${(x+barW/2).toFixed(1)}" y="${H-2}" text-anchor="middle">${b.label}</text>`;
+    const step = n <= 14 ? 2 : n <= 30 ? 5 : 15;
+    if (i % step === 0) labels += `<text class="ic-lbl" x="${(x+barW/2).toFixed(1)}" y="${H-2}" text-anchor="middle">${b.label}</text>`;
   });
   host.innerHTML = `
-    <div class="ic-title"><span>Revenue · last 14 days</span><b>$${total14.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</b></div>
+    <div class="ic-title"><span>Revenue · last ${DAYS} days</span><b>$${total14.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</b></div>
     <svg class="ic-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
       <defs><linearGradient id="icGrad" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0%" stop-color="#e0b020"/><stop offset="100%" stop-color="#7a5a00"/>
@@ -6190,6 +6271,7 @@ function renderIncomeChart() {
     </svg>
     <div class="ic-tip" id="ic-tip"></div>`;
   // tap/hover tooltip
+  renderInsights(buckets, list, DAYS);
   const tip = host.querySelector('#ic-tip');
   host.querySelectorAll('.ic-bar').forEach(bar => {
     const show = e => {
@@ -6204,6 +6286,131 @@ function renderIncomeChart() {
     bar.addEventListener('mouseleave', hide);
     bar.addEventListener('touchstart', e => { show(e); clearTimeout(window._icT); window._icT = setTimeout(hide, 1800); }, {passive:true});
   });
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// UNIVERSAL SEARCH
+// ═══════════════════════════════════════════════════════════
+function openSearch() {
+  document.getElementById('search-overlay').classList.add('on');
+  const i = document.getElementById('srch-inp');
+  i.value = ''; setTimeout(()=>i.focus(), 100);
+  document.getElementById('srch-results').innerHTML = '<div class="srch-empty">Type to search everything</div>';
+}
+function closeSearch() { document.getElementById('search-overlay').classList.remove('on'); }
+
+function hl(text, q) {
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  let snip = text;
+  if (idx > 40) snip = '…' + text.slice(idx - 30);
+  snip = snip.slice(0, 160);
+  const safe = escH(snip);
+  const re = new RegExp('(' + q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')', 'ig');
+  return safe.replace(re, '<mark>$1</mark>');
+}
+
+function runSearch(q) {
+  q = (q||'').trim();
+  const box = document.getElementById('srch-results');
+  if (q.length < 2) { box.innerHTML = '<div class="srch-empty">Type to search everything</div>'; return; }
+  const ql = q.toLowerCase();
+  const results = [];
+  // Chats
+  (convos['jarvis']||[]).forEach((m, i) => {
+    const c = Array.isArray(m.content) ? (m.content.map(x=>x.text||'').join(' ')) : String(m.content||'');
+    if (c.toLowerCase().includes(ql)) results.push({ type: m.role==='user'?'You':'JARVIS', snip: c, action: `jumpToMsg(${i})` });
+  });
+  // Brain
+  (brain||[]).forEach(b => { if ((b.fact||'').toLowerCase().includes(ql)) results.push({ type:'Brain · '+(b.category||''), snip:b.fact, action:`gotoPanel('brain')` }); });
+  // Vault products
+  (vault||[]).forEach(p => { const t=(p.name+' '+(p.niche||'')); if (t.toLowerCase().includes(ql)) results.push({ type:'Product', snip:`${p.name} — ${p.niche||''} ${p.price?'$'+p.price:''}`, action:`gotoPanel('money')` }); });
+  // Offer vault
+  (offerVault||[]).forEach(o => { if ((o.name+' '+o.type).toLowerCase().includes(ql)) results.push({ type:'Offer', snip:`${o.name} · ${o.type} · $${o.price||0}`, action:`gotoView('money')` }); });
+  // Sales
+  (typeof sales!=='undefined'?sales:[]).forEach(s => { if ((s.prod||'').toLowerCase().includes(ql)) results.push({ type:'Sale', snip:`${s.prod} · $${s.amt} · ${new Date(s.date).toLocaleDateString()}`, action:`gotoView('money')` }); });
+
+  if (!results.length) { box.innerHTML = '<div class="srch-empty">No matches for "'+escH(q)+'"</div>'; return; }
+  box.innerHTML = `<div class="srch-count">${results.length} result${results.length>1?'s':''}</div>` +
+    results.slice(0, 60).map(r =>
+      `<div class="srch-item" onclick="${r.action};closeSearch()">
+        <div class="srch-type">${escH(r.type)}</div>
+        <div class="srch-snip">${hl(r.snip, q)}</div>
+      </div>`).join('');
+}
+
+function jumpToMsg(i) {
+  switchView('jarvis');
+  const msgs = document.querySelectorAll('#m-jarvis .msg');
+  const el = msgs[i];
+  if (el) { el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.add('flash'); setTimeout(()=>el.classList.remove('flash'), 1700); }
+}
+function gotoPanel(p) { switchView('jarvis'); if (typeof openCategory === 'function') { try { openCategory(p); } catch(e){} } }
+function gotoView(v) { switchView(v); }
+
+// ═══════════════════════════════════════════════════════════
+// CHART RANGE + INSIGHTS
+// ═══════════════════════════════════════════════════════════
+let chartRange = 14;
+function setChartRange(n) {
+  chartRange = n;
+  document.querySelectorAll('.icr-btn').forEach(b => b.classList.toggle('on', +b.dataset.r === n));
+  renderIncomeChart();
+}
+
+function renderInsights(buckets, allSales, days) {
+  const host = document.getElementById('ic-insights');
+  if (!host) return;
+  const total = buckets.reduce((a,b)=>a+b.total, 0);
+  const activeDays = buckets.filter(b=>b.total>0).length;
+  const best = buckets.reduce((m,b)=> b.total>m ? b.total : m, 0);
+  const avg = total / days;
+  const projected = avg * 30;
+  // top product across the window
+  const cutoff = Date.now() - days*86400000;
+  const byProd = {};
+  (allSales||[]).forEach(s => { if (s.date >= cutoff) { byProd[s.prod||'Product'] = (byProd[s.prod||'Product']||0) + s.amt; } });
+  let topProd = '—', topVal = 0;
+  Object.entries(byProd).forEach(([k,v]) => { if (v > topVal) { topVal = v; topProd = k; } });
+  const money = n => '$' + n.toLocaleString('en-US', {maximumFractionDigits:0});
+  host.innerHTML = `
+    <div class="ici"><div class="ici-l">Daily avg</div><div class="ici-v">${money(avg)}</div></div>
+    <div class="ici"><div class="ici-l">Best day</div><div class="ici-v">${money(best)}</div></div>
+    <div class="ici"><div class="ici-l">Projected /mo</div><div class="ici-v">${money(projected)}</div></div>
+    <div class="ici"><div class="ici-l">Top: ${escH(topProd).slice(0,14)}</div><div class="ici-v">${money(topVal)}</div></div>`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// VOICE PICKER
+// ═══════════════════════════════════════════════════════════
+window._voices = [];
+function loadVoices() {
+  if (!window.speechSynthesis) return;
+  window._voices = window.speechSynthesis.getVoices() || [];
+}
+function populateVoices() {
+  loadVoices();
+  const sel = document.getElementById('c-voice');
+  if (!sel) return;
+  const cur = cfg.voiceName || '';
+  const en = window._voices.filter(v => /en[-_]/i.test(v.lang));
+  const list = en.length ? en : window._voices;
+  sel.innerHTML = '<option value="">Default</option>' +
+    list.map(v => `<option value="${escH(v.name)}"${v.name===cur?' selected':''}>${escH(v.name)} (${escH(v.lang)})</option>`).join('');
+}
+function testVoice() {
+  if (!window.speechSynthesis) { toast('Voice not supported'); return; }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance('JARVIS online. Systems nominal, Commander.');
+  u.rate = parseFloat(document.getElementById('c-voice-rate').value)||1.1;
+  u.pitch = parseFloat(document.getElementById('c-voice-pitch').value)||0.85;
+  const name = document.getElementById('c-voice').value;
+  const v = window._voices.find(v => v.name === name);
+  if (v) u.voice = v;
+  window.speechSynthesis.speak(u);
+}
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = () => { loadVoices(); const s=document.getElementById('c-voice'); if (s && document.getElementById('cfg')?.classList.contains('open')) populateVoices(); };
 }
 
 
