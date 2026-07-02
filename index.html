@@ -964,6 +964,23 @@ textarea.hub-inp{resize:none;min-height:68px}
 .agent-step .as-num{font-size:8px;letter-spacing:2px;color:#00cc77;text-transform:uppercase;display:block;margin-bottom:3px}
 .agent-step.done{border-left-color:rgba(0,200,100,.8)}
 .web-chip{display:inline-flex;align-items:center;gap:4px;font-size:8px;letter-spacing:1px;color:#66bbff;background:rgba(0,40,80,.3);border:1px solid rgba(0,120,255,.25);border-radius:4px;padding:2px 7px;margin:4px 4px 0 0;text-transform:uppercase}
+
+/* ═══ DOC + VOICE MODE ═══ */
+.doc-parsing{font-size:9px;letter-spacing:1px;color:#66bbff;padding:4px 0}
+#voice-overlay{position:fixed;inset:0;z-index:600;background:radial-gradient(ellipse at 50% 45%,rgba(20,0,8,.97),rgba(1,0,4,.99));display:none;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+#voice-overlay.on{display:flex}
+.vo-orb{width:130px;height:130px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.vo-orb::before{content:'';position:absolute;inset:0;border-radius:50%;border:2px solid transparent;border-top-color:var(--live);border-right-color:var(--gold);animation:spin 2.4s linear infinite}
+.vo-orb::after{content:'';position:absolute;inset:16px;border-radius:50%;background:radial-gradient(circle,#ff2244,var(--live));box-shadow:0 0 30px var(--live),0 0 70px rgba(204,34,68,.5);transition:transform .15s}
+.vo-orb.listening::after{animation:vo-pulse 1s ease-in-out infinite}
+.vo-orb.speaking::after{background:radial-gradient(circle,#ffcc44,var(--gold));box-shadow:0 0 30px var(--gold),0 0 70px rgba(184,134,11,.5)}
+.vo-orb.thinking::after{background:radial-gradient(circle,#aa66ff,#7733cc);box-shadow:0 0 30px #9933ff}
+@keyframes vo-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.vo-status{font-size:11px;letter-spacing:5px;color:var(--live);text-transform:uppercase;text-shadow:0 0 12px rgba(204,34,68,.5);font-family:'Cinzel',serif}
+.vo-transcript{font-size:13px;color:var(--text);text-align:center;max-width:80%;min-height:40px;line-height:1.5}
+.vo-close{position:absolute;top:max(20px,env(safe-area-inset-top));right:20px;background:none;border:1px solid var(--red-b);border-radius:50%;width:40px;height:40px;color:var(--text-d);font-size:20px;cursor:pointer}
+.vo-hint{position:absolute;bottom:max(30px,env(safe-area-inset-bottom));font-size:8px;letter-spacing:2px;color:rgba(190,150,160,.3);text-transform:uppercase}
+.model-badge{font-size:7px;letter-spacing:1px;color:rgba(184,134,11,.55);padding:2px 6px;border:1px solid rgba(138,104,0,.25);border-radius:3px;margin-left:6px}
 </style>
 </head>
 <body>
@@ -1011,6 +1028,15 @@ textarea.hub-inp{resize:none;min-height:68px}
         <label>Model</label>
         <input type="text" id="c-model" placeholder="llama-3.1-8b-instant">
         <div class="hint" id="h-model">Groq free models: <code>llama-3.1-8b-instant</code> (fast) · <code>llama-3.3-70b-versatile</code> (smarter)</div>
+      </div>
+      <div class="field">
+        <label>Smart Model (for hard tasks)</label>
+        <input type="text" id="c-model-big" placeholder="llama-3.3-70b-versatile">
+        <div class="hint">When auto-routing is on, JARVIS uses this bigger/smarter model for complex work (writing, code, analysis, agent) and the fast model for quick replies.</div>
+      </div>
+      <div class="field" style="display:flex;align-items:center;gap:9px">
+        <input type="checkbox" id="c-auto-model" style="width:18px;height:18px;accent-color:var(--live);flex:none">
+        <label style="margin:0">Auto model routing (recommended)</label>
       </div>
       <div class="field">
         <label>Daily AI Call Limit</label>
@@ -1078,6 +1104,15 @@ textarea.hub-inp{resize:none;min-height:68px}
 
 <canvas id="fx"></canvas>
 
+<!-- Voice Mode Overlay -->
+<div id="voice-overlay">
+  <button class="vo-close" onclick="stopVoiceMode()">×</button>
+  <div class="vo-orb" id="vo-orb"><span style="font-size:38px;position:relative;z-index:1">🎙️</span></div>
+  <div class="vo-status" id="vo-status">Listening…</div>
+  <div class="vo-transcript" id="vo-transcript"></div>
+  <div class="vo-hint">Say "stop listening" or tap × to exit</div>
+</div>
+
 <!-- App -->
 <div id="app">
 
@@ -1140,6 +1175,7 @@ textarea.hub-inp{resize:none;min-height:68px}
         <div class="ttg" id="ttg-think" onclick="toggleTool('think')"><span class="ttg-dot"></span>💭 Reasoning</div>
         <div class="ttg" onclick="promptImage()"><span class="ttg-dot" style="background:#cc88ff"></span>🎨 Image</div>
         <div class="ttg" onclick="promptAgent()"><span class="ttg-dot" style="background:#00ccff"></span>🤖 Agent</div>
+        <div class="ttg" onclick="startVoiceMode()"><span class="ttg-dot" style="background:#ff4488"></span>🎙️ Voice Mode</div>
       </div>
       <div class="qrow">
         <button class="qbtn" onclick="qpNiche('jarvis','Give me 5 hot digital product ideas I can create and sell on Gumroad today in the niche of: ')">Product Ideas</button>
@@ -1711,6 +1747,8 @@ function fillCfgForm() {
   document.getElementById('c-income').value   = cfg.income||'';
   document.getElementById('c-date').value     = cfg.date||'';
   document.getElementById('c-tasks').value    = (cfg.tasks||[]).join('\n');
+  document.getElementById('c-model-big').value  = cfg.modelBig||'llama-3.3-70b-versatile';
+  document.getElementById('c-auto-model').checked = cfg.autoModel !== false;
   document.getElementById('c-api-limit').value  = cfg.apiLimit||300;
   document.getElementById('c-yt-key').value     = cfg.ytKey||'';
   document.getElementById('c-gum-key').value    = cfg.gumKey||'';
@@ -1753,6 +1791,8 @@ function saveCfg() {
   cfg.date     = document.getElementById('c-date').value;
   cfg.tasks    = document.getElementById('c-tasks').value.split('\n').map(t=>t.trim()).filter(Boolean);
   cfg.ctx      = document.getElementById('c-ctx').value.trim();
+  cfg.modelBig  = document.getElementById('c-model-big').value.trim()||'llama-3.3-70b-versatile';
+  cfg.autoModel = document.getElementById('c-auto-model').checked;
   cfg.apiLimit  = parseInt(document.getElementById('c-api-limit').value)||300;
   cfg.ytKey     = document.getElementById('c-yt-key').value.trim();
   cfg.gumKey    = document.getElementById('c-gum-key').value.trim();
@@ -2004,7 +2044,7 @@ async function callAPI(agent, messages, onToken) {
   if (!cfg.apikey) throw new Error('No API key. Tap ⚙ to add your key.');
   const base = p==='openai' ? 'https://api.openai.com' : 'https://api.groq.com/openai';
   const hasVision = messages.some(m => Array.isArray(m.content));
-  let model = cfg.model || 'llama-3.1-8b-instant';
+  let model = pickModel(messages, p);
   if (hasVision && p !== 'openai') model = 'llama-3.2-11b-vision-preview';
   const res = await fetch(`${base}/v1/chat/completions`, {
     method:'POST',
@@ -2051,7 +2091,7 @@ async function callAPIWithPrompt(sysP, messages, onToken) {
   const res = await fetch(`${base}/v1/chat/completions`, {
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':`Bearer ${cfg.apikey}`},
-    body:JSON.stringify({model:cfg.model||'llama-3.1-8b-instant',messages:[{role:'system',content:sysP},...messages],stream:true}),
+    body:JSON.stringify({model:pickModel(messages,p,sysP),messages:[{role:'system',content:sysP},...messages],stream:true}),
   });
   if (!res.ok) { const t=await res.text().catch(()=>''); throw new Error(`HTTP ${res.status}: ${t||res.statusText}`); }
   const reader=res.body.getReader(); const dec=new TextDecoder(); let full='';
@@ -2219,7 +2259,7 @@ function handleAttach(files) {
   if (!files || !files[0]) return;
   const file = files[0];
   const agent = attachTargetAgent;
-  if (file.size > 4 * 1024 * 1024) { toast('File too large — max 4MB'); return; }
+  if (file.size > 12 * 1024 * 1024) { toast('File too large — max 12MB'); return; }
 
   const reader = new FileReader();
   if (file.type.startsWith('image/')) {
@@ -2228,6 +2268,15 @@ function handleAttach(files) {
       showAttachPreview(agent);
     };
     reader.readAsDataURL(file);
+  } else if (file.type === 'application/pdf' || /\.pdf$/i.test(file.name)) {
+    toast('Reading PDF…');
+    file.arrayBuffer().then(async buf => {
+      const txt = await extractPdfText(buf);
+      if (!txt || txt.length < 20) { toast('Could not read text from this PDF (may be scanned/image-only)'); return; }
+      pendingAttachment = {type:'file', name:file.name, mime:'application/pdf', data:txt};
+      showAttachPreview(agent);
+      toast(`PDF read — ${txt.length.toLocaleString()} chars`);
+    }).catch(()=> toast('Failed to read PDF'));
   } else {
     reader.onload = e => {
       pendingAttachment = {type:'file', name:file.name, mime:file.type, data:e.target.result};
@@ -2469,15 +2518,20 @@ function initSpeech() {
   recognition.lang = 'en-US';
   recognition.onresult = e => {
     const t = Array.from(e.results).map(r=>r[0].transcript).join('');
+    if (voiceModeActive) { window._voHeard = t; const tr=document.getElementById('vo-transcript'); if(tr) tr.textContent = t; return; }
     document.getElementById('i-jarvis').value = t;
     autoH(document.getElementById('i-jarvis'));
   };
   recognition.onend = () => {
+    if (voiceModeActive) { onVoiceHeard(); return; }
     document.getElementById('mic').classList.remove('on');
     const t = document.getElementById('i-jarvis').value.trim();
     if (t) setTimeout(()=>send('jarvis'),300);
   };
-  recognition.onerror = () => document.getElementById('mic').classList.remove('on');
+  recognition.onerror = ev => {
+    if (voiceModeActive && ev.error !== 'no-speech') { setVoiceState('error'); }
+    document.getElementById('mic').classList.remove('on');
+  };
 }
 
 function startMic(e) {
@@ -5777,6 +5831,200 @@ async function agentRun(goal) {
   }
   agentBusy = false;
   busy = false;
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// SMART MODEL ROUTING
+// ═══════════════════════════════════════════════════════════
+const HARD_RE = /\b(write|essay|full|complete|code|debug|build|analy[sz]e|strategy|plan|research|detailed|in-depth|breakdown|compare|explain why|step[- ]by[- ]step|proposal|script|outline|draft|review|refactor|optimi[sz]e|architecture)\b/i;
+
+function pickModel(messages, provider, sysP) {
+  const fast = cfg.model || 'llama-3.1-8b-instant';
+  const big  = cfg.modelBig || 'llama-3.3-70b-versatile';
+  if (provider === 'openai' || provider === 'ollama') return cfg.model || (provider==='openai'?'gpt-4o-mini':'llama3.2:3b');
+  if (cfg.autoModel === false) return fast;
+  // Reasoning + agent always deserve the big brain
+  if (tools && tools.think) return big;
+  const sys = String(sysP||'');
+  if (/planner|executing step|Synthesize the completed/i.test(sys)) return big;
+  if (/Extract 0-3 DURABLE/i.test(sys)) return fast; // memory extraction — keep cheap
+  // Judge by the last user message
+  const lastUser = [...(messages||[])].reverse().find(m => m.role === 'user');
+  let text = '';
+  if (lastUser) text = Array.isArray(lastUser.content)
+    ? lastUser.content.map(c=>c.text||'').join(' ')
+    : String(lastUser.content||'');
+  if (text.length > 600) return big;            // long / document-heavy
+  if (HARD_RE.test(text)) return big;           // complex task keywords
+  return fast;                                   // quick reply
+}
+
+// ═══════════════════════════════════════════════════════════
+// PDF TEXT EXTRACTION (native DecompressionStream — no libraries)
+// ═══════════════════════════════════════════════════════════
+async function inflate(bytes) {
+  // try zlib then raw deflate
+  for (const fmt of ['deflate', 'deflate-raw']) {
+    try {
+      const ds = new DecompressionStream(fmt);
+      const stream = new Blob([bytes]).stream().pipeThrough(ds);
+      const buf = await new Response(stream).arrayBuffer();
+      return new Uint8Array(buf);
+    } catch(e) {}
+  }
+  return null;
+}
+
+function bytesIndexOf(hay, needle, start) {
+  outer: for (let i = start; i <= hay.length - needle.length; i++) {
+    for (let j = 0; j < needle.length; j++) if (hay[i+j] !== needle[j]) continue outer;
+    return i;
+  }
+  return -1;
+}
+
+async function extractPdfText(arrayBuf) {
+  const data = new Uint8Array(arrayBuf);
+  const enc = s => [...s].map(c => c.charCodeAt(0));
+  const STREAM = enc('stream'), ENDSTREAM = enc('endstream');
+  let out = [];
+  let pos = 0, guard = 0;
+  while (guard++ < 5000) {
+    const s = bytesIndexOf(data, STREAM, pos);
+    if (s < 0) break;
+    // skip 'stream' + CRLF/LF
+    let ds = s + 6;
+    if (data[ds] === 13) ds++;
+    if (data[ds] === 10) ds++;
+    const e = bytesIndexOf(data, ENDSTREAM, ds);
+    if (e < 0) break;
+    let ce = e;
+    while (ce > ds && (data[ce-1] === 10 || data[ce-1] === 13 || data[ce-1] === 32)) ce--;
+    let chunk = data.slice(ds, ce);
+    pos = e + 9;
+    // attempt inflate; if fails, treat as raw (uncompressed stream)
+    let text = await inflate(chunk);
+    if (!text) text = chunk;
+    out.push(extractTextOps(text));
+  }
+  let joined = out.join(' ').replace(/[ \t]+/g, ' ').replace(/\s+\n/g, '\n').trim();
+  return joined.slice(0, 40000);
+}
+
+function extractTextOps(bytes) {
+  // Decode latin1 then pull text from (…)Tj and [ … ]TJ operators inside BT/ET
+  let s = '';
+  for (let i = 0; i < bytes.length; i++) s += String.fromCharCode(bytes[i]);
+  let res = [];
+  // Parenthesized strings: ( ... ) possibly escaped
+  const re = /\(((?:\\.|[^\\()])*)\)/g;
+  let m;
+  while ((m = re.exec(s))) {
+    let t = m[1]
+      .replace(/\\n/g,'\n').replace(/\\r/g,'').replace(/\\t/g,' ')
+      .replace(/\\\(/g,'(').replace(/\\\)/g,')').replace(/\\\\/g,'\\')
+      .replace(/\\(\d{1,3})/g, (_,o)=>String.fromCharCode(parseInt(o,8)));
+    if (t.trim()) res.push(t);
+  }
+  // Hex strings <...> occasionally used
+  let joined = res.join('');
+  // Heuristic: only keep if it looks like real text (has spaces/letters)
+  return joined;
+}
+
+// ═══════════════════════════════════════════════════════════
+// HANDS-FREE VOICE MODE
+// ═══════════════════════════════════════════════════════════
+let voiceModeActive = false;
+window._voHeard = '';
+
+function setVoiceState(state) {
+  const orb = document.getElementById('vo-orb');
+  const status = document.getElementById('vo-status');
+  if (!orb || !status) return;
+  orb.className = 'vo-orb ' + state;
+  const labels = { listening:'Listening…', thinking:'Thinking…', speaking:'Speaking…', error:'Tap orb to retry' };
+  status.textContent = labels[state] || state;
+}
+
+function startVoiceMode() {
+  if (!recognition) { toast('Voice not supported on this browser'); return; }
+  voiceModeActive = true;
+  window._voHeard = '';
+  document.getElementById('voice-overlay').classList.add('on');
+  document.getElementById('vo-transcript').textContent = '';
+  const orb = document.getElementById('vo-orb');
+  if (orb) orb.onclick = () => { if (!busy) startVoiceListen(); };
+  voiceOut = true; // ensure spoken replies
+  logEvent('voice-mode', 'start');
+  setTimeout(startVoiceListen, 400);
+}
+
+function stopVoiceMode() {
+  voiceModeActive = false;
+  document.getElementById('voice-overlay').classList.remove('on');
+  try { recognition.stop(); } catch(e){}
+  try { window.speechSynthesis.cancel(); } catch(e){}
+}
+
+function startVoiceListen() {
+  if (!voiceModeActive) return;
+  window._voHeard = '';
+  document.getElementById('vo-transcript').textContent = '';
+  setVoiceState('listening');
+  try { recognition.start(); } catch(e){ setTimeout(()=>{ try{recognition.start();}catch(_){} }, 400); }
+}
+
+async function onVoiceHeard() {
+  if (!voiceModeActive) return;
+  const heard = (window._voHeard || '').trim();
+  if (!heard) { startVoiceListen(); return; } // nothing said, keep listening
+  // voice exit phrases
+  if (/^(stop listening|exit voice|close voice|stop voice mode|goodbye jarvis)\.?$/i.test(heard)) {
+    stopVoiceMode(); return;
+  }
+  document.getElementById('vo-transcript').textContent = heard;
+  setVoiceState('thinking');
+  await voiceSend(heard);
+}
+
+async function voiceSend(text) {
+  // Send through the normal pipeline but speak the result and resume listening
+  const inp = document.getElementById('i-jarvis');
+  addMsg('jarvis','user', text);
+  window._lastUserMsg = text;
+  pushConvo('jarvis','user', text);
+  busy = true;
+  const el = mkStream('jarvis');
+  try {
+    let msgs = (convos['jarvis']||[]).slice(-8);
+    let full = await callAPI('jarvis', msgs, t => el?.upd(t));
+    if (tools.web) full = await resolveSearchLoop(full, 'jarvis', el);
+    el?.fin(full);
+    pushConvo('jarvis','assistant', full);
+    renderInlineImages(el, full);
+    if (tools.mem) memExtract(text, full);
+    // speak, then resume listening when done
+    speakThenListen(full);
+  } catch(e) {
+    el?.fin('⚠ ' + e.message);
+    startVoiceListen();
+  }
+  busy = false;
+}
+
+function speakThenListen(text) {
+  const clean = text.replace(/<[^>]*>/g,'').replace(/\[(IMAGE|SEARCH|WEB)[:\]][\s\S]*?(\]|$)/g,'')
+    .replace(/<think>[\s\S]*?<\/think>/gi,'').replace(/[*_`#]/g,'').trim().slice(0, 500);
+  if (!clean || !window.speechSynthesis) { startVoiceListen(); return; }
+  setVoiceState('speaking');
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(clean);
+  u.rate = 1.08; u.pitch = 0.85;
+  u.onend = () => { if (voiceModeActive) startVoiceListen(); };
+  u.onerror = () => { if (voiceModeActive) startVoiceListen(); };
+  window.speechSynthesis.speak(u);
 }
 
 
