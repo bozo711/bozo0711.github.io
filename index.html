@@ -7,6 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000814">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://i.ytimg.com; connect-src 'self' https://api.groq.com https://api.openai.com https://api.telegram.org https://discord.com https://discordapp.com https://www.googleapis.com https://api.gumroad.com http://localhost:11434 http://127.0.0.1:11434; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>J.A.R.V.I.S.</title>
@@ -930,6 +931,23 @@ textarea.hub-inp{resize:none;min-height:68px}
 .rfmt-row input[type=checkbox]{accent-color:var(--live);width:14px;height:14px;cursor:pointer;flex-shrink:0}
 .rfmt-row label{font-size:10px;color:var(--text);cursor:pointer;flex:1}
 .rfmt-row .rfmt-cnt{font-size:8px;color:rgba(204,34,68,.4);letter-spacing:1px}
+
+/* ═══ FX CANVAS (embers) ═══ */
+#fx{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.55}
+/* ═══ MESSAGE ENTRANCE ═══ */
+.msg{animation:msg-in .28s cubic-bezier(.2,.9,.3,1)}
+@keyframes msg-in{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+/* ═══ LOGO GLITCH ═══ */
+.logo{animation:logo-glitch 9s steps(1) infinite}
+@keyframes logo-glitch{0%,96%,100%{text-shadow:0 0 20px var(--live),0 0 50px rgba(180,0,30,.4)}97%{text-shadow:2px 0 0 rgba(0,200,255,.6),-2px 0 0 var(--live),0 0 20px var(--live)}98%{text-shadow:-2px 0 0 rgba(0,200,255,.5),2px 0 0 var(--live),0 0 26px var(--live)}}
+/* ═══ BOOT UPGRADE ═══ */
+.boot-bar-wrap{margin-top:20px;width:190px;height:3px;background:rgba(100,0,30,.25);border-radius:2px;overflow:hidden;position:relative}
+.boot-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--red),var(--live),var(--gold));border-radius:2px;transition:width .18s ease;box-shadow:0 0 10px rgba(204,34,68,.7)}
+.boot-pct{margin-top:8px;font-size:8px;letter-spacing:4px;color:rgba(204,34,68,.55)}
+.boot-ring{position:relative}
+.boot-ring::after{content:'';position:absolute;inset:14px;border-radius:50%;border:1px solid transparent;border-bottom-color:rgba(138,104,0,.6);border-left-color:rgba(138,104,0,.25);animation:spin 1.8s linear infinite reverse}
+.boot-ring::before{content:'';position:absolute;inset:-12px;border-radius:50%;border:1px dashed rgba(110,0,30,.3);animation:spin 7s linear infinite}
+@media (prefers-reduced-motion: reduce){#fx{display:none}.msg{animation:none}.logo{animation:none}}
 </style>
 </head>
 <body>
@@ -938,6 +956,8 @@ textarea.hub-inp{resize:none;min-height:68px}
 <div id="boot">
   <div class="boot-ring"></div>
   <div class="boot-title">J.A.R.V.I.S.</div>
+  <div class="boot-bar-wrap"><div class="boot-bar" id="boot-bar"></div></div>
+  <div class="boot-pct" id="boot-pct">0%</div>
   <div class="boot-log" id="boot-log"></div>
 </div>
 
@@ -975,6 +995,11 @@ textarea.hub-inp{resize:none;min-height:68px}
         <label>Model</label>
         <input type="text" id="c-model" placeholder="llama-3.1-8b-instant">
         <div class="hint" id="h-model">Groq free models: <code>llama-3.1-8b-instant</code> (fast) · <code>llama-3.3-70b-versatile</code> (smarter)</div>
+      </div>
+      <div class="field">
+        <label>Daily AI Call Limit</label>
+        <input type="number" id="c-api-limit" placeholder="300" min="10">
+        <div class="hint">Safety cap — stops runaway usage if a key ever leaks. Default 300 calls/day.</div>
       </div>
     </div>
     <div class="cfg-sec">
@@ -1024,9 +1049,18 @@ textarea.hub-inp{resize:none;min-height:68px}
         <div class="hint">Discord server → channel settings → Integrations → Webhooks → New Webhook → Copy URL.</div>
       </div>
     </div>
+    <div class="cfg-sec">
+      <div class="cfg-sec-title">Backup &amp; Restore</div>
+      <div class="hint" style="margin-bottom:10px">Export saves EVERYTHING — settings, chats, products, brain, tasks, offers, sales — to one file. Your API keys are inside it, so keep the file private. Import it on any device to restore.</div>
+      <button class="save-btn" style="background:linear-gradient(135deg,rgba(0,90,0,.7),rgba(0,50,0,.8));margin-bottom:8px" onclick="exportBackup()">⬇ EXPORT FULL BACKUP</button>
+      <button class="save-btn" style="background:rgba(40,0,12,.8);border:1px solid var(--red-b)" onclick="document.getElementById('backup-file').click()">⬆ IMPORT BACKUP</button>
+      <input type="file" id="backup-file" accept=".json,application/json" style="display:none" onchange="importBackup(event)">
+    </div>
     <button class="save-btn" onclick="saveCfg()">SAVE &amp; APPLY</button>
   </div>
 </div>
+
+<canvas id="fx"></canvas>
 
 <!-- App -->
 <div id="app">
@@ -1112,7 +1146,7 @@ textarea.hub-inp{resize:none;min-height:68px}
 
     <!-- ELEVATE panel -->
     <div id="p-elevate">
-      <iframe id="elevate-frame" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
+      <iframe id="elevate-frame" sandbox="allow-scripts allow-same-origin allow-popups allow-presentation" allowfullscreen allow="autoplay; encrypted-media; picture-in-picture"></iframe>
     </div>
 
 
@@ -1378,6 +1412,56 @@ let pendingAttachment = null; // {type:'image'|'file', name, mime, data}
 let attachTargetAgent = '';
 let jarvisMode = null;
 
+// ── SECURITY HELPERS ──
+function escH(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+function safeUrl(u) {
+  u = String(u || '').trim();
+  if (!u) return '';
+  if (!/^[a-z][a-z0-9+.-]*:/i.test(u)) u = 'https://' + u;
+  try {
+    const p = new URL(u);
+    return (p.protocol === 'https:' || p.protocol === 'http:') ? p.href : '';
+  } catch(e) { return ''; }
+}
+
+function sanHtml(s) {
+  // Strip scripts, event handlers, and js: URLs from AI-generated HTML before rendering
+  const doc = new DOMParser().parseFromString(String(s || ''), 'text/html');
+  doc.querySelectorAll('script,style,iframe,object,embed,link,meta,form').forEach(el => el.remove());
+  doc.querySelectorAll('*').forEach(el => {
+    [...el.attributes].forEach(a => {
+      if (/^on/i.test(a.name)) el.removeAttribute(a.name);
+      else if ((a.name === 'href' || a.name === 'src') && /^\s*javascript:/i.test(a.value)) el.removeAttribute(a.name);
+    });
+  });
+  return doc.body.innerHTML;
+}
+
+// ── AUDIT LOG (jv-log ring buffer, 200 entries) ──
+function logEvent(type, detail) {
+  try {
+    const log = JSON.parse(localStorage.getItem('jv-log') || '[]');
+    log.unshift({ t: Date.now(), type, detail: String(detail || '').slice(0, 80) });
+    localStorage.setItem('jv-log', JSON.stringify(log.slice(0, 200)));
+  } catch(e) {}
+}
+
+// ── DAILY AI SPEND GUARD ──
+function apiGuardOk() {
+  const today = new Date().toDateString();
+  let g = {};
+  try { g = JSON.parse(localStorage.getItem('jv-guard') || '{}'); } catch(e) {}
+  if (g.day !== today) g = { day: today, n: 0 };
+  const cap = parseInt(cfg.apiLimit) || 300;
+  if (g.n >= cap) { localStorage.setItem('jv-guard', JSON.stringify(g)); return false; }
+  g.n++;
+  localStorage.setItem('jv-guard', JSON.stringify(g));
+  logEvent('ai-call', cfg.provider || 'groq');
+  return true;
+}
+
 const MODES = {
   // ── SOLO MODES ────────────────────────────────
   code:     { label:'CODE MODE',     color:'#00cc44', desc:'Write · debug · optimize · explain code',
@@ -1551,8 +1635,22 @@ function init() {
 // ═══════════════════════════════════════════════
 async function boot() {
   const el = document.getElementById('boot-log');
-  el.textContent = `ONLINE, ${(cfg.name||'COMMANDER').toUpperCase()}`;
-  await delay(180);
+  const bar = document.getElementById('boot-bar');
+  const pct = document.getElementById('boot-pct');
+  const stages = [
+    [16, 'CORE SYSTEMS'],
+    [34, 'NEURAL LINK'],
+    [52, 'EMPIRE MODULES'],
+    [71, 'SECURING VAULT'],
+    [88, 'ARC REACTOR'],
+    [100, `ONLINE, ${(cfg.name||'COMMANDER').toUpperCase()}`]
+  ];
+  for (const [p, label] of stages) {
+    if (bar) bar.style.width = p + '%';
+    if (pct) pct.textContent = p + '%';
+    el.textContent = label;
+    await delay(p === 100 ? 240 : 110);
+  }
   document.getElementById('boot').classList.add('out');
   setTimeout(() => {
     document.getElementById('boot').style.display = 'none';
@@ -1589,6 +1687,7 @@ function fillCfgForm() {
   document.getElementById('c-income').value   = cfg.income||'';
   document.getElementById('c-date').value     = cfg.date||'';
   document.getElementById('c-tasks').value    = (cfg.tasks||[]).join('\n');
+  document.getElementById('c-api-limit').value  = cfg.apiLimit||300;
   document.getElementById('c-yt-key').value     = cfg.ytKey||'';
   document.getElementById('c-gum-key').value    = cfg.gumKey||'';
   document.getElementById('c-tg-token').value   = cfg.tgToken||'';
@@ -1630,12 +1729,14 @@ function saveCfg() {
   cfg.date     = document.getElementById('c-date').value;
   cfg.tasks    = document.getElementById('c-tasks').value.split('\n').map(t=>t.trim()).filter(Boolean);
   cfg.ctx      = document.getElementById('c-ctx').value.trim();
+  cfg.apiLimit  = parseInt(document.getElementById('c-api-limit').value)||300;
   cfg.ytKey     = document.getElementById('c-yt-key').value.trim();
   cfg.gumKey    = document.getElementById('c-gum-key').value.trim();
   cfg.tgToken   = document.getElementById('c-tg-token').value.trim();
   cfg.tgChat    = document.getElementById('c-tg-chat').value.trim();
   cfg.discordWh = document.getElementById('c-discord-wh').value.trim();
   localStorage.setItem('jv-cfg', JSON.stringify(cfg));
+  logEvent('settings-change', cfg.provider || '');
   updateStats(); updateDot(); closeCfg(); toast('Saved');
 }
 
@@ -1851,6 +1952,7 @@ Commands: "status" · "list" · "add product X" · "set income X" · "[name] mod
 }
 
 async function callAPI(agent, messages, onToken) {
+  if (!apiGuardOk()) throw new Error(`Daily AI call limit reached (${parseInt(cfg.apiLimit)||300}). Raise it in ⚙ Settings if intentional.`);
   const p = cfg.provider || 'groq';
 
   if (p === 'ollama') {
@@ -1898,6 +2000,7 @@ async function callAPI(agent, messages, onToken) {
 }
 
 async function callAPIWithPrompt(sysP, messages, onToken) {
+  if (!apiGuardOk()) throw new Error(`Daily AI call limit reached (${parseInt(cfg.apiLimit)||300}). Raise it in ⚙ Settings if intentional.`);
   const p = cfg.provider || 'groq';
   if (p === 'ollama') {
     if (!cfg.url) throw new Error('No Ollama URL. Tap ⚙ to configure.');
@@ -2673,8 +2776,8 @@ function renderVault() {
     card.innerHTML = `
       <div class="vcard-top">
         <div>
-          <div class="vcard-name">${p.name}</div>
-          <div class="vcard-niche">${p.niche||'—'}</div>
+          <div class="vcard-name">${escH(p.name)}</div>
+          <div class="vcard-niche">${escH(p.niche||'—')}</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px">
           <span class="vcard-price">${p.price?'$'+p.price:''}</span>
@@ -2685,7 +2788,7 @@ function renderVault() {
         <span class="stage-badge stage-${p.stage}" onclick="advanceStage(${p.id})" title="Tap to advance stage">
           ${STAGES[p.stage]}${p.stage<3?' →':''}
         </span>
-        ${p.link?`<a class="vcard-link" href="${p.link}" target="_blank">GUMROAD ↗</a>`:''}
+        ${safeUrl(p.link)?`<a class="vcard-link" href="${safeUrl(p.link)}" target="_blank" rel="noopener noreferrer">GUMROAD ↗</a>`:''}
         <span style="margin-left:auto;font-size:8px;color:var(--text-d)">${new Date(p.date).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
       </div>`;
     list.appendChild(card);
@@ -2759,7 +2862,7 @@ function renderSales() {
   list.innerHTML = sales.slice(0,30).map((s,i)=>`
     <div class="sale-item">
       <div>
-        <div style="font-size:12px;color:var(--text)">${s.prod}</div>
+        <div style="font-size:12px;color:var(--text)">${escH(s.prod)}</div>
         <div class="sale-item-date">${new Date(s.date).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</div>
       </div>
       <div style="display:flex;align-items:center;gap:10px">
@@ -4402,18 +4505,6 @@ function setPubStatus(msg, type='info') {
   if (type !== 'err') setTimeout(()=>{ el.textContent=''; el.className='pub-status'; }, 6000);
 }
 
-
-Rules:
-- name: clear, specific, benefit-driven (not generic)
-- price: realistic for the niche ($7 low ticket, $17-$27 mid, $37-$97 high)
-- description: compelling HTML — hook, what's included (bullets), who it's for, benefit close. No placeholders.
-- tags: 3-5 relevant comma-separated tags
-
-User context: ${cfg.name}, niche: ${getNiche()||'digital products'}, income goal: $${cfg.goal||0}/mo.
-
-After the block, give a one-line note on why you priced it that way.`;
-}
-
 function parseProductBlock(text) {
   const m = text.match(/\[PRODUCT\]([\s\S]*?)\[\/PRODUCT\]/);
   if (!m) return null;
@@ -4427,7 +4518,7 @@ function showProductProposal(prod) {
   const dd = document.getElementById('pub-desc-disp');
   if (nd) nd.textContent = prod.name;
   if (pd) pd.textContent = '$' + (prod.price||0);
-  if (dd) dd.innerHTML = prod.description || '';
+  if (dd) dd.innerHTML = sanHtml(prod.description || '');
   const card = document.getElementById('pub-proposal');
   if (card) { card.style.display = 'block'; card.scrollIntoView({behavior:'smooth',block:'nearest'}); }
   document.getElementById('pub-form').style.display = 'none';
@@ -4804,16 +4895,6 @@ function loadBeats() {
   renderBeatGrid(); renderMelGrid(); renderSavedBeats(); renderRefs();
 }
 
-
-Valid scale values: "Min Penta", "Maj Penta", "Minor", "Major", "Blues"
-Valid wave values: "sine", "triangle", "sawtooth", "square"
-Only include melody notes that actually exist in the chosen key + scale.
-Use sharps not flats for note names (C#, D#, F#, G#, A# — NOT Db, Eb, Gb, Ab, Bb).
-After the block, briefly describe the vibe and what makes it sound like that artist/style.
-
-You know: drum programming, trap patterns, 808s, melody construction, music theory, sampling law, mixing basics. Address the user as ${cfg.name || 'Commander'}.`;
-}
-
 function mkBeatStream() {
   const c = document.getElementById('beat-msgs');
   const div = document.createElement('div');
@@ -4834,7 +4915,41 @@ function normalizeNoteName(n) {
 function parseBeatPattern(text) {
   const m = text.match(/\[BEAT_PATTERN\]([\s\S]*?)\[\/BEAT_PATTERN\]/);
   if (!m) return null;
-  try { return JSON.parse(m[1].trim()); } catch(e) { return null; }
+  try { return validateBeatPattern(JSON.parse(m[1].trim())); } catch(e) { return null; }
+}
+
+function validateBeatPattern(pat) {
+  if (!pat || typeof pat !== 'object' || Array.isArray(pat)) return null;
+  const clean = {};
+  const bpm = parseInt(pat.bpm);
+  if (Number.isFinite(bpm)) clean.bpm = Math.min(240, Math.max(40, bpm));
+  if (typeof pat.key === 'string' && /^[A-G][#b]?$/.test(pat.key.trim())) clean.key = pat.key.trim();
+  const OK_SCALES = ['major','minor','dorian','phrygian','lydian','mixolydian','harmonic minor','melodic minor','pentatonic'];
+  if (typeof pat.scale === 'string' && OK_SCALES.includes(pat.scale.trim().toLowerCase())) clean.scale = pat.scale.trim().toLowerCase();
+  const OK_WAVES = ['sine','square','sawtooth','triangle'];
+  if (typeof pat.wave === 'string' && OK_WAVES.includes(pat.wave.trim().toLowerCase())) clean.wave = pat.wave.trim().toLowerCase();
+  ['kick','snare','hihat','openhat','open','clap','perc','bass'].forEach(k => {
+    if (Array.isArray(pat[k]) && pat[k].length === 16) clean[k] = pat[k].map(v => v ? 1 : 0);
+  });
+  if (pat.drums && typeof pat.drums === 'object' && !Array.isArray(pat.drums)) {
+    clean.drums = {};
+    Object.entries(pat.drums).forEach(([k, row]) => {
+      if (Array.isArray(row) && row.length === 16) clean.drums[k] = row.map(v => v ? 1 : 0);
+    });
+  }
+  const NOTE_RE = /^[A-G][#b]?[0-8]$/;
+  if (Array.isArray(pat.melody)) {
+    clean.melody = pat.melody.filter(e =>
+      e && typeof e === 'object' && typeof e.note === 'string' && NOTE_RE.test(e.note.trim()) &&
+      Number.isInteger(e.step) && e.step >= 0 && e.step < 16
+    ).map(e => ({ note: e.note.trim(), step: e.step })).slice(0, 64);
+  } else if (pat.melody && typeof pat.melody === 'object') {
+    clean.melody = {};
+    Object.entries(pat.melody).forEach(([note, steps]) => {
+      if (NOTE_RE.test(note.trim()) && Array.isArray(steps) && steps.length === 16) clean.melody[note.trim()] = steps.map(v => !!v);
+    });
+  }
+  return clean;
 }
 
 function injectBeatPlayer(bubble, pat) {
@@ -4949,6 +5064,12 @@ function handleCodeResponse() {}
 function sendCode() { send('jarvis'); }
 function sendTax() { send('jarvis'); }
 function sendBeatMsg() { send('jarvis'); }
+async function beatCmd(t) {
+  const inp = document.getElementById('i-jarvis');
+  if (inp) { inp.value = t; }
+  switchView('jarvis');
+  send('jarvis');
+}
 
 // ── CONTEXT CLEANER ──
 function cleanJarvis() {
@@ -5087,7 +5208,8 @@ function dashLogSale() {
   const amt = parseFloat(document.getElementById('dash-sale-amt').value) || 0;
   if (!amt) { toast('Enter a sale amount'); return; }
   cfg.income = (cfg.income || 0) + amt;
-  saveCfg();
+  localStorage.setItem('jv-cfg', JSON.stringify(cfg));
+  logEvent('sale-logged', '$' + amt);
   document.getElementById('dash-sale-amt').value = '';
   updateStats();
   renderMoneyDash();
@@ -5142,7 +5264,7 @@ function renderOfferVault() {
         </div>
         <div class="offer-price-tag">$${(o.price||0).toFixed(2)}</div>
       </div>
-      ${o.url ? `<a class="offer-link" href="${o.url}" target="_blank">Open product ↗</a>` : ''}
+      ${safeUrl(o.url) ? `<a class="offer-link" href="${safeUrl(o.url)}" target="_blank" rel="noopener noreferrer">Open product ↗</a>` : ''}
       <div class="offer-acts">
         <button class="offer-build-btn" onclick="buildSalesPageFromVault('${nmEsc}',${o.price||0})">Build Page</button>
         <button class="offer-del-btn" onclick="delOffer(${o.id})">Delete</button>
@@ -5198,7 +5320,7 @@ async function sendTgBlast() {
       {method:'POST',headers:{'Content-Type':'application/json'},
        body:JSON.stringify({chat_id:cfg.tgChat,text:msg,parse_mode:'Markdown'})});
     const j = await r.json();
-    if (j.ok) { toast('Blast sent!'); document.getElementById('tg-msg').value = ''; }
+    if (j.ok) { logEvent('tg-send', msg.slice(0,40)); toast('Blast sent!'); document.getElementById('tg-msg').value = ''; }
     else toast('Telegram: ' + j.description);
   } catch(e) { toast('Network error'); }
   btn.disabled = false; btn.textContent = '📤 SEND BLAST';
@@ -5219,7 +5341,7 @@ async function sendDiscordDrop() {
   btn.disabled = true; btn.textContent = 'Sending…';
   try {
     const r = await fetch(cfg.discordWh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({content:msg})});
-    if (r.ok) { toast('Drop sent to Discord!'); document.getElementById('discord-msg').value = ''; }
+    if (r.ok) { logEvent('discord-send', msg.slice(0,40)); toast('Drop sent to Discord!'); document.getElementById('discord-msg').value = ''; }
     else toast('Discord error: ' + r.status);
   } catch(e) { toast('Network error'); }
   btn.disabled = false; btn.textContent = '🎮 SEND DROP';
@@ -5261,14 +5383,117 @@ function spyCompetitor() {
 }
 
 
+// ═══════════════════════════════════════════════
+// BACKUP & RESTORE
+// ═══════════════════════════════════════════════
+function exportBackup() {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && (k.startsWith('jv-') || k === 'elev-saved')) data[k] = localStorage.getItem(k);
+  }
+  const blob = new Blob([JSON.stringify({ app: 'jarvis-backup', version: 1, date: new Date().toISOString(), data }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'jarvis-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  logEvent('backup-export', '');
+  toast('Backup downloaded — keep it private');
+}
+
+function importBackup(ev) {
+  const file = ev.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const j = JSON.parse(reader.result);
+      if (j.app !== 'jarvis-backup' || !j.data || typeof j.data !== 'object') { toast('Not a valid JARVIS backup file'); return; }
+      Object.entries(j.data).forEach(([k, v]) => {
+        if (typeof v === 'string' && (k.startsWith('jv-') || k === 'elev-saved')) localStorage.setItem(k, v);
+      });
+      logEvent('backup-import', '');
+      toast('Backup restored — reloading…');
+      setTimeout(() => location.reload(), 900);
+    } catch(e) { toast('Could not read backup file'); }
+  };
+  reader.readAsText(file);
+  ev.target.value = '';
+}
+
+// ═══════════════════════════════════════════════
+// FX — floating ember particles
+// ═══════════════════════════════════════════════
+(function emberFX() {
+  const cv = document.getElementById('fx');
+  if (!cv || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cx = cv.getContext('2d');
+  let W, H, parts = [];
+  function size() {
+    W = cv.width = innerWidth * devicePixelRatio;
+    H = cv.height = innerHeight * devicePixelRatio;
+  }
+  size();
+  addEventListener('resize', size);
+  const N = Math.min(26, Math.floor(innerWidth / 16));
+  for (let i = 0; i < N; i++) parts.push(spawn(true));
+  function spawn(anyY) {
+    const gold = Math.random() < 0.3;
+    return {
+      x: Math.random() * W,
+      y: anyY ? Math.random() * H : H + 10,
+      r: (Math.random() * 1.6 + 0.5) * devicePixelRatio,
+      vy: (Math.random() * 0.35 + 0.12) * devicePixelRatio,
+      vx: (Math.random() - 0.5) * 0.15 * devicePixelRatio,
+      a: Math.random() * 0.5 + 0.15,
+      fl: Math.random() * Math.PI * 2,
+      gold
+    };
+  }
+  let last = 0;
+  function tick(t) {
+    if (document.hidden) { requestAnimationFrame(tick); return; }
+    if (t - last < 33) { requestAnimationFrame(tick); return; }
+    last = t;
+    cx.clearRect(0, 0, W, H);
+    for (let i = 0; i < parts.length; i++) {
+      const p = parts[i];
+      p.y -= p.vy; p.x += p.vx; p.fl += 0.05;
+      if (p.y < -12) parts[i] = spawn(false);
+      const flicker = 0.7 + Math.sin(p.fl) * 0.3;
+      cx.beginPath();
+      cx.arc(p.x, p.y, p.r, 0, 7);
+      cx.fillStyle = p.gold
+        ? `rgba(200,160,30,${(p.a * flicker).toFixed(3)})`
+        : `rgba(204,34,68,${(p.a * flicker).toFixed(3)})`;
+      cx.shadowColor = p.gold ? 'rgba(200,160,30,.8)' : 'rgba(204,34,68,.8)';
+      cx.shadowBlur = 6 * devicePixelRatio;
+      cx.fill();
+      cx.shadowBlur = 0;
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+
 init();
 </script>
 
 <script>
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .catch(() => {}); // silent fail — app still works without SW
+    navigator.serviceWorker.register('/sw.js').then(reg => {
+      reg.addEventListener('updatefound', () => {
+        const nw = reg.installing;
+        if (!nw) return;
+        nw.addEventListener('statechange', () => {
+          if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+            try { toast('Update ready — close & reopen the app'); } catch(e) {}
+          }
+        });
+      });
+    }).catch(() => {});
   });
 }
 </script>
