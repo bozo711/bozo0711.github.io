@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#000814">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://i.ytimg.com; connect-src 'self' https://api.groq.com https://api.openai.com https://api.telegram.org https://discord.com https://discordapp.com https://www.googleapis.com https://api.gumroad.com http://localhost:11434 http://127.0.0.1:11434; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://i.ytimg.com https://image.pollinations.ai; connect-src 'self' https://api.groq.com https://api.openai.com https://api.telegram.org https://discord.com https://discordapp.com https://www.googleapis.com https://api.gumroad.com https://r.jina.ai https://s.jina.ai https://image.pollinations.ai http://localhost:11434 http://127.0.0.1:11434; frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com; media-src 'self' blob:; object-src 'none'; base-uri 'self'; form-action 'self'">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <title>J.A.R.V.I.S.</title>
@@ -948,6 +948,22 @@ textarea.hub-inp{resize:none;min-height:68px}
 .boot-ring::after{content:'';position:absolute;inset:14px;border-radius:50%;border:1px solid transparent;border-bottom-color:rgba(138,104,0,.6);border-left-color:rgba(138,104,0,.25);animation:spin 1.8s linear infinite reverse}
 .boot-ring::before{content:'';position:absolute;inset:-12px;border-radius:50%;border:1px dashed rgba(110,0,30,.3);animation:spin 7s linear infinite}
 @media (prefers-reduced-motion: reduce){#fx{display:none}.msg{animation:none}.logo{animation:none}}
+
+/* ═══ AI POWERS ═══ */
+.tool-toggles{flex-shrink:0;display:flex;gap:6px;padding:5px 12px;background:rgba(2,0,7,.97);border-bottom:1px solid rgba(70,0,20,.3);overflow-x:auto;scrollbar-width:none}
+.tool-toggles::-webkit-scrollbar{display:none}
+.ttg{flex-shrink:0;display:flex;align-items:center;gap:5px;padding:4px 11px;background:rgba(60,0,16,.2);border:1px solid rgba(100,0,28,.3);border-radius:20px;color:rgba(180,140,150,.5);font-family:inherit;font-size:8px;letter-spacing:1.5px;cursor:pointer;transition:all .15s;text-transform:uppercase;white-space:nowrap}
+.ttg .ttg-dot{width:6px;height:6px;border-radius:50%;background:rgba(120,60,70,.5);transition:all .2s}
+.ttg.on{background:rgba(0,80,40,.25);border-color:rgba(0,200,100,.4);color:#7fffb0}
+.ttg.on .ttg-dot{background:#00ff88;box-shadow:0 0 6px #00ff88}
+.gen-img-card{margin-top:10px;border:1px solid rgba(153,51,255,.3);border-radius:6px;overflow:hidden;background:rgba(20,0,40,.4);max-width:320px}
+.gen-img-card img{width:100%;display:block;background:rgba(30,0,60,.3);min-height:120px}
+.gen-img-cap{padding:7px 10px;font-size:9px;letter-spacing:1px;color:rgba(190,140,220,.6);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.gen-img-dl{color:#cc88ff;text-decoration:none;font-size:8px;letter-spacing:1px;border:1px solid rgba(153,51,255,.4);padding:3px 8px;border-radius:4px;white-space:nowrap}
+.agent-step{margin:6px 0;padding:8px 11px;border-left:2px solid rgba(0,200,100,.4);background:rgba(0,60,30,.12);border-radius:0 5px 5px 0;font-size:11px;color:rgba(180,220,190,.8)}
+.agent-step .as-num{font-size:8px;letter-spacing:2px;color:#00cc77;text-transform:uppercase;display:block;margin-bottom:3px}
+.agent-step.done{border-left-color:rgba(0,200,100,.8)}
+.web-chip{display:inline-flex;align-items:center;gap:4px;font-size:8px;letter-spacing:1px;color:#66bbff;background:rgba(0,40,80,.3);border:1px solid rgba(0,120,255,.25);border-radius:4px;padding:2px 7px;margin:4px 4px 0 0;text-transform:uppercase}
 </style>
 </head>
 <body>
@@ -1118,6 +1134,13 @@ textarea.hub-inp{resize:none;min-height:68px}
     <!-- JARVIS -->
     <div class="panel on" id="p-jarvis">
       <div class="msgs" id="m-jarvis"></div>
+      <div class="tool-toggles" id="tool-toggles">
+        <div class="ttg" id="ttg-web" onclick="toggleTool('web')"><span class="ttg-dot"></span>🌐 Web</div>
+        <div class="ttg" id="ttg-mem" onclick="toggleTool('mem')"><span class="ttg-dot"></span>🧠 Memory</div>
+        <div class="ttg" id="ttg-think" onclick="toggleTool('think')"><span class="ttg-dot"></span>💭 Reasoning</div>
+        <div class="ttg" onclick="promptImage()"><span class="ttg-dot" style="background:#cc88ff"></span>🎨 Image</div>
+        <div class="ttg" onclick="promptAgent()"><span class="ttg-dot" style="background:#00ccff"></span>🤖 Agent</div>
+      </div>
       <div class="qrow">
         <button class="qbtn" onclick="qpNiche('jarvis','Give me 5 hot digital product ideas I can create and sell on Gumroad today in the niche of: ')">Product Ideas</button>
         <button class="qbtn" onclick="qpNiche('jarvis','What is the fastest way to make my first $100 online selling digital products in: ')">First $100</button>
@@ -1610,6 +1633,7 @@ function runAgentNiche(agent, prompt) {
 }
 
 function init() {
+  loadTools();
   loadCfg();
   loadNiche();
   loadConvos();
@@ -1917,7 +1941,7 @@ function fmt(t) {
 function sysPrompt(agent) {
   const now = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   const niche = getNiche();
-  const brainFacts = (brain||[]).slice(0,25).map(b=>`[${b.category}] ${b.fact}`).join('\n');
+  const brainFacts = memRetrieve(window._lastUserMsg||'', 30).map(b=>`[${b.category}] ${b.fact}`).join('\n');
   const activeTasks = (tasks2||[]).filter(t=>!t.done).slice(0,8).map(t=>`[${t.priority.toUpperCase()}] ${t.text}`).join('\n');
   const base = `Date: ${now}
 User: ${cfg.name}
@@ -1931,6 +1955,8 @@ Business Context: ${cfg.ctx||'Building a digital product business selling on Gum
   const modeBlock = (jarvisMode && MODES[jarvisMode])
     ? `\n\n⚡ ACTIVE MODE: ${MODES[jarvisMode].label}\n${MODES[jarvisMode].focus}\nStay locked in this mode for every response until the user exits.`
     : '';
+
+  const toolBlock = toolInstructions();
 
   const jarvisFull = `You are JARVIS — a full-stack AI built for ${cfg.name}. One conversation. Every capability. You handle it all:
 
@@ -1946,7 +1972,7 @@ Rules: Direct and specific. Address ${cfg.name} by name. Never say "I'd suggest"
 
 ${base}
 
-Commands: "status" · "list" · "add product X" · "set income X" · "[name] mode" to focus · "exit mode" to reset${modeBlock}`;
+Commands: "status" · "list" · "add product X" · "set income X" · "[name] mode" to focus · "exit mode" to reset${modeBlock}${toolBlock}`;
 
   return jarvisFull;
 }
@@ -2114,7 +2140,12 @@ async function send(agent) {
   const displayText = text + (attach ? `\n📎 ${attach.name}` : '');
   addMsg(target,'user', displayText);
   sfx('send');
-  pushConvo(target,'user', text || `[Attached: ${attach?.name}]`);
+  window._lastUserMsg = text || '';
+  let webContext = '';
+  if (target === 'jarvis' && tools.web && text) {
+    webContext = await gatherWeb(text, target);
+  }
+  pushConvo(target,'user', (webContext ? webContext + '\n\n' : '') + (text || `[Attached: ${attach?.name}]`));
 
   busy = true;
   const sb = document.getElementById(`sb-${agent}`);
@@ -2135,12 +2166,21 @@ async function send(agent) {
         last.content = `[File: ${attach.name}]\n${attach.data.slice(0,8000)}\n[/File]\n\n${text || 'Analyze this file and give me actionable insights.'}`;
       }
     }
-    const full = await callAPI(target, msgs, t => el?.upd(t));
+    let full = await callAPI(target, msgs, t => el?.upd(t));
+    // Agentic web search loop — model can request [SEARCH: q]
+    if (target === 'jarvis' && tools.web) full = await resolveSearchLoop(full, target, el);
     el?.fin(full);
+    // Restore clean user message in history (strip injected web context)
+    if (webContext && convos[target]) {
+      const lastUser = [...convos[target]].reverse().find(m => m.role === 'user');
+      if (lastUser) lastUser.content = text || lastUser.content;
+    }
     pushConvo(target,'assistant',full);
+    if (target === 'jarvis') { renderInlineImages(el, full); }
     sfx('recv');
-    if (voiceOut && agent==='jarvis') speak(full);
+    if (voiceOut && agent==='jarvis') speak(full.replace(/\[(IMAGE|SEARCH|WEB)[:\]][\s\S]*?(\]|$)/g,''));
     if (target === 'jarvis') { const bp = parseBeatPattern(full); if (bp) applyBeatPattern(bp); }
+    if (target === 'jarvis' && tools.mem && text) memExtract(text, full);
   } catch(e) {
     el?.fin(`⚠ ${e.message}`);
   }
@@ -5476,6 +5516,269 @@ function importBackup(ev) {
   }
   requestAnimationFrame(tick);
 })();
+
+// ═══════════════════════════════════════════════════════════
+// AI POWERS — web access · memory · image gen · autonomous agent
+// ═══════════════════════════════════════════════════════════
+let tools = { web:false, mem:false, think:false };
+window._lastUserMsg = '';
+
+function loadTools() {
+  try { tools = Object.assign(tools, JSON.parse(localStorage.getItem('jv-tools')||'{}')); } catch(e){}
+  ['web','mem','think'].forEach(k => {
+    const el = document.getElementById('ttg-'+k);
+    if (el) el.classList.toggle('on', !!tools[k]);
+  });
+}
+function toggleTool(k) {
+  tools[k] = !tools[k];
+  localStorage.setItem('jv-tools', JSON.stringify(tools));
+  const el = document.getElementById('ttg-'+k);
+  if (el) el.classList.toggle('on', tools[k]);
+  const names = { web:'Web access', mem:'Long-term memory', think:'Reasoning mode' };
+  toast(names[k] + (tools[k] ? ' ON' : ' OFF'));
+}
+
+function toolInstructions() {
+  let s = '';
+  if (tools.web) s += `\n\n🌐 WEB ACCESS: You can look things up live. To search the web, output a line exactly like [SEARCH: your query]. To read a specific page, the user can paste a URL and its content will already be provided to you. Use searches when you need current facts, competitor info, trends, or prices. Request at most 2 searches, then answer using what you find. Cite what you learned.`;
+  if (tools.think) s += `\n\n💭 REASONING MODE: For any non-trivial question, first think step by step inside <think>...</think> tags (planning, considering angles, checking your logic), then give your final answer after the closing tag. Keep the thinking concise but real.`;
+  if (tools.mem) s += `\n\n🧠 MEMORY: Relevant facts you've learned about ${cfg.name}'s business are in the Knowledge Base above. Use them. They persist across every conversation.`;
+  return s;
+}
+
+// ── WEB ACCESS (Jina Reader — free, no key) ──
+function extractUrls(text) {
+  const re = /(https?:\/\/[^\s<>"')]+)/gi;
+  return [...new Set((text.match(re) || []).map(u => u.replace(/[.,;]+$/, '')))].slice(0, 3);
+}
+
+async function readUrl(url) {
+  try {
+    const r = await fetch('https://r.jina.ai/' + url, { headers: { 'X-Return-Format': 'text' } });
+    if (!r.ok) return '';
+    const t = await r.text();
+    return t.slice(0, 6000);
+  } catch(e) { return ''; }
+}
+
+async function webSearch(query) {
+  // Read DuckDuckGo HTML results through Jina reader (free, no key)
+  try {
+    const url = 'https://r.jina.ai/https://duckduckgo.com/html/?q=' + encodeURIComponent(query);
+    const r = await fetch(url, { headers: { 'X-Return-Format': 'text' } });
+    if (!r.ok) return '';
+    const t = await r.text();
+    return t.slice(0, 5000);
+  } catch(e) { return ''; }
+}
+
+async function gatherWeb(text, target) {
+  const urls = extractUrls(text);
+  if (!urls.length) return '';
+  const el = document.getElementById('m-'+target);
+  const chip = document.createElement('div');
+  chip.className = 'msg a';
+  chip.innerHTML = '<div class="bubble" style="background:none;border:none;padding:0">' +
+    urls.map(u => `<span class="web-chip">🌐 reading ${u.replace(/^https?:\/\//,'').slice(0,28)}…</span>`).join('') + '</div>';
+  if (el) { el.appendChild(chip); el.scrollTop = el.scrollHeight; }
+  const parts = [];
+  for (const u of urls) {
+    const content = await readUrl(u);
+    if (content) parts.push(`[WEB PAGE: ${u}]\n${content}\n[/WEB PAGE]`);
+  }
+  if (chip) chip.remove();
+  return parts.length ? 'The user referenced these pages. Here is their live content:\n\n' + parts.join('\n\n') : '';
+}
+
+async function resolveSearchLoop(reply, target, el) {
+  let out = reply, rounds = 0;
+  while (rounds < 2) {
+    const m = out.match(/\[SEARCH:\s*([^\]]+)\]/i);
+    if (!m) break;
+    rounds++;
+    const query = m[1].trim();
+    if (el) el.upd(out.replace(/\[SEARCH:[^\]]+\]/i, `\n\n🌐 *searching: ${query}…*`));
+    const results = await webSearch(query);
+    const msgs = (convos[target]||[]).slice(-6).concat([
+      { role:'assistant', content: out },
+      { role:'user', content: `Search results for "${query}":\n\n${results||'(no results found)'}\n\nNow continue your answer using these results. Do not output another [SEARCH] unless truly necessary.` }
+    ]);
+    out = await callAPI(target, msgs, t => el?.upd(t));
+  }
+  return out.replace(/\[SEARCH:[^\]]*\]/gi, '').trim();
+}
+
+// ── LONG-TERM MEMORY (keyword-scored retrieval + auto-extract) ──
+const MEM_STOP = new Set('the a an and or but of to in for on with is are was were be been i you he she it we they my your me us them this that these those what how why when where who as at by from into about will would can could should do does did have has had not no so if then than'.split(' '));
+
+function memTokens(s) {
+  return (String(s||'').toLowerCase().match(/[a-z0-9$]{3,}/g) || []).filter(w => !MEM_STOP.has(w));
+}
+
+function memRetrieve(query, limit) {
+  if (!brain || !brain.length) return [];
+  const q = new Set(memTokens(query));
+  if (!q.size) return brain.slice(0, limit);
+  const now = Date.now();
+  const scored = brain.map(b => {
+    const toks = memTokens(b.fact + ' ' + (b.category||''));
+    let overlap = 0;
+    for (const t of toks) if (q.has(t)) overlap++;
+    const recency = 1 - Math.min(1, (now - (b.date||now)) / (1000*60*60*24*90)); // 90-day decay
+    return { b, score: overlap * 2 + recency };
+  });
+  scored.sort((a,c) => c.score - a.score);
+  // always include a few most-recent facts even with 0 overlap
+  const top = scored.filter(s => s.score >= 1).slice(0, limit).map(s => s.b);
+  if (top.length < 6) {
+    for (const s of scored) { if (!top.includes(s.b)) top.push(s.b); if (top.length >= 6) break; }
+  }
+  return top;
+}
+
+async function memExtract(userText, aiReply) {
+  // Lightweight background extraction — ask model for 0-3 durable facts
+  try {
+    const sys = `Extract 0-3 DURABLE facts about the user or their business worth remembering long-term from this exchange. Only stable facts (goals, niche, products, preferences, decisions, key numbers) — NOT one-off chit-chat or the AI's generic advice. Reply ONLY with a JSON array like [{"category":"Business","fact":"..."}]. Categories: Business, Products, Strategy, Personal, Lessons. If nothing durable, reply [].`;
+    const msgs = [{ role:'user', content:`USER: ${userText}\n\nAI: ${aiReply.slice(0,1500)}` }];
+    let raw = '';
+    await callAPIWithPrompt(sys, msgs, t => { raw = t; });
+    const mm = raw.match(/\[[\s\S]*\]/);
+    if (!mm) return;
+    const facts = JSON.parse(mm[0]);
+    if (!Array.isArray(facts) || !facts.length) return;
+    let added = 0;
+    facts.forEach(f => {
+      if (!f || !f.fact) return;
+      const factStr = String(f.fact).slice(0, 240);
+      // dedupe by token overlap
+      const dup = brain.some(b => {
+        const a = new Set(memTokens(b.fact)), c = memTokens(factStr);
+        const hit = c.filter(x => a.has(x)).length;
+        return c.length && hit / c.length > 0.7;
+      });
+      if (dup) return;
+      const cat = ['Business','Products','Strategy','Personal','Lessons'].includes(f.category) ? f.category : 'Business';
+      brain.unshift({ id: Date.now()+Math.random(), category: cat, fact: factStr, date: Date.now(), auto: true });
+      added++;
+    });
+    if (added) { saveBrainData(); if (typeof renderBrain === 'function') renderBrain(); logEvent('mem-learned', added + ' facts'); }
+  } catch(e) {}
+}
+
+// ── IMAGE GENERATION (Pollinations — free, no key) ──
+function imgUrl(prompt) {
+  const seed = Math.floor(Math.random()*1e6);
+  return 'https://image.pollinations.ai/prompt/' + encodeURIComponent(prompt.slice(0,300)) +
+    `?width=768&height=768&nologo=true&seed=${seed}`;
+}
+
+function renderImageCard(container, prompt) {
+  const url = imgUrl(prompt);
+  const card = document.createElement('div');
+  card.className = 'msg a';
+  card.innerHTML = `<div class="msg-who">JARVIS · IMAGE</div>
+    <div class="bubble" style="padding:6px">
+      <div class="gen-img-card">
+        <img src="${url}" alt="${escH(prompt)}" loading="lazy">
+        <div class="gen-img-cap"><span>${escH(prompt.slice(0,60))}</span><a class="gen-img-dl" href="${url}" target="_blank" rel="noopener noreferrer">OPEN ↗</a></div>
+      </div>
+    </div>`;
+  const msgArea = document.getElementById('m-jarvis');
+  if (msgArea) { msgArea.appendChild(card); msgArea.scrollTop = msgArea.scrollHeight; }
+}
+
+function renderInlineImages(el, full) {
+  const re = /\[IMAGE:\s*([^\]]+)\]/gi;
+  let m;
+  const prompts = [];
+  while ((m = re.exec(full))) prompts.push(m[1].trim());
+  prompts.slice(0,3).forEach(p => renderImageCard(null, p));
+}
+
+function promptImage() {
+  const p = prompt('Describe the image to generate:');
+  if (p && p.trim()) { renderImageCard(null, p.trim()); logEvent('image-gen', p.slice(0,40)); }
+}
+
+// ── AUTONOMOUS AGENT (plan → execute steps → synthesize) ──
+let agentBusy = false;
+async function promptAgent() {
+  if (agentBusy) { toast('Agent already running'); return; }
+  const goal = prompt('Give JARVIS a goal to accomplish autonomously:');
+  if (goal && goal.trim()) agentRun(goal.trim());
+}
+
+async function agentRun(goal) {
+  if (agentBusy) return;
+  agentBusy = true;
+  window._lastUserMsg = goal;
+  addMsg('jarvis','user', '🤖 AGENT GOAL: ' + goal);
+  const area = document.getElementById('m-jarvis');
+  const wrap = document.createElement('div');
+  wrap.className = 'msg a';
+  wrap.innerHTML = '<div class="msg-who">JARVIS · AGENT</div><div class="bubble" id="agent-box"><span class="cur"></span></div>';
+  if (area) { area.appendChild(wrap); area.scrollTop = area.scrollHeight; }
+  const box = document.getElementById('agent-box');
+  busy = true;
+  try {
+    // 1. PLAN
+    box.innerHTML = '<em>Planning…</em><span class="cur"></span>';
+    const planSys = `You are an autonomous planner for ${cfg.name}. Break the goal into 2-5 concrete, ordered steps. Reply ONLY with a JSON array of short step strings, e.g. ["Research X","Draft Y","Write Z"]. Niche: ${getNiche()||'digital products'}.`;
+    let planRaw = '';
+    await callAPIWithPrompt(planSys, [{role:'user',content:'GOAL: '+goal}], t => { planRaw = t; });
+    let steps = [];
+    try { steps = JSON.parse((planRaw.match(/\[[\s\S]*\]/)||['[]'])[0]); } catch(e){}
+    if (!Array.isArray(steps) || !steps.length) steps = [goal];
+    steps = steps.slice(0, 5).map(String);
+
+    box.innerHTML = '';
+    const results = [];
+    // 2. EXECUTE each step
+    for (let i = 0; i < steps.length; i++) {
+      const stepDiv = document.createElement('div');
+      stepDiv.className = 'agent-step';
+      stepDiv.innerHTML = `<span class="as-num">Step ${i+1}/${steps.length}</span><strong>${escH(steps[i])}</strong><div style="margin-top:5px" id="ag-out-${i}"><span class="cur"></span></div>`;
+      box.appendChild(stepDiv);
+      area.scrollTop = area.scrollHeight;
+      const out = document.getElementById('ag-out-'+i);
+
+      // optional web for this step
+      let ctx = '';
+      if (tools.web) {
+        const sr = await webSearch(steps[i] + ' ' + (getNiche()||''));
+        if (sr) ctx = `\n\nLive web research:\n${sr.slice(0,2500)}`;
+      }
+      const stepSys = `You are JARVIS executing step ${i+1} of a plan toward this goal: "${goal}".\nSteps so far completed:\n${results.map((r,j)=>`${j+1}. ${steps[j]}`).join('\n')||'(none)'}\nDo ONLY the current step fully and concretely. Produce the actual deliverable, not a description of it.${ctx}`;
+      let so = '';
+      await callAPIWithPrompt(stepSys, [{role:'user',content:'Current step: '+steps[i]}], t => { so = t; out.innerHTML = fmt(t)+'<span class="cur"></span>'; area.scrollTop = area.scrollHeight; });
+      out.innerHTML = fmt(so);
+      stepDiv.classList.add('done');
+      results.push(so);
+    }
+
+    // 3. SYNTHESIZE
+    const synthDiv = document.createElement('div');
+    synthDiv.className = 'agent-step';
+    synthDiv.style.borderLeftColor = 'var(--gold)';
+    synthDiv.innerHTML = `<span class="as-num" style="color:var(--gold)">✓ Final Result</span><div id="ag-synth"><span class="cur"></span></div>`;
+    box.appendChild(synthDiv);
+    const synthSys = `Synthesize the completed work into one clean, final deliverable for ${cfg.name}. Goal was: "${goal}". Combine the step outputs into something ready to use. Be concise — no fluff.`;
+    let syn = '';
+    await callAPIWithPrompt(synthSys, [{role:'user',content: steps.map((s,i)=>`## ${s}\n${results[i]}`).join('\n\n')}], t => { syn = t; document.getElementById('ag-synth').innerHTML = fmt(t)+'<span class="cur"></span>'; area.scrollTop = area.scrollHeight; });
+    document.getElementById('ag-synth').innerHTML = fmt(syn);
+    pushConvo('jarvis','assistant', `[Agent completed: ${goal}]\n\n${syn}`);
+    if (tools.mem) memExtract(goal, syn);
+    logEvent('agent-run', goal.slice(0,40));
+    sfx('recv');
+  } catch(e) {
+    if (box) box.innerHTML = `⚠ Agent error: ${escH(e.message)}`;
+  }
+  agentBusy = false;
+  busy = false;
+}
+
 
 init();
 </script>
