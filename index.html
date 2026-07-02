@@ -981,6 +981,24 @@ textarea.hub-inp{resize:none;min-height:68px}
 .vo-close{position:absolute;top:max(20px,env(safe-area-inset-top));right:20px;background:none;border:1px solid var(--red-b);border-radius:50%;width:40px;height:40px;color:var(--text-d);font-size:20px;cursor:pointer}
 .vo-hint{position:absolute;bottom:max(30px,env(safe-area-inset-bottom));font-size:8px;letter-spacing:2px;color:rgba(190,150,160,.3);text-transform:uppercase}
 .model-badge{font-size:7px;letter-spacing:1px;color:rgba(184,134,11,.55);padding:2px 6px;border:1px solid rgba(138,104,0,.25);border-radius:3px;margin-left:6px}
+
+/* ═══ MESSAGE ACTIONS ═══ */
+.msg-actions{display:flex;gap:6px;margin-top:5px;opacity:.55;transition:opacity .15s}
+.msg-actions:hover{opacity:1}
+.msg-act{background:rgba(70,0,18,.15);border:1px solid rgba(110,0,30,.3);color:rgba(190,150,160,.6);font-family:inherit;font-size:8px;letter-spacing:1.5px;padding:3px 9px;cursor:pointer;border-radius:3px;text-transform:uppercase;transition:all .15s}
+.msg-act:active{background:rgba(140,0,32,.35);color:var(--live)}
+/* ═══ INCOME CHART ═══ */
+.income-chart{padding:6px 14px 12px}
+.ic-title{font-size:7px;letter-spacing:3px;color:rgba(190,150,160,.35);text-transform:uppercase;margin-bottom:8px;display:flex;justify-content:space-between}
+.ic-title b{color:var(--gold);letter-spacing:1px}
+.ic-svg{width:100%;height:96px;display:block;overflow:visible}
+.ic-bar{fill:url(#icGrad);transition:opacity .15s;cursor:pointer}
+.ic-bar:hover{opacity:.7}
+.ic-axis{stroke:rgba(190,150,160,.12);stroke-width:1}
+.ic-lbl{fill:rgba(190,150,160,.3);font-size:7px;font-family:'Courier New',monospace}
+.ic-tip{position:absolute;background:rgba(20,0,6,.97);border:1px solid var(--gold-b);border-radius:4px;padding:5px 9px;font-size:10px;color:var(--gold);pointer-events:none;opacity:0;transition:opacity .12s;z-index:20;white-space:nowrap;transform:translate(-50%,-115%)}
+.ic-tip.on{opacity:1}
+.ic-empty{text-align:center;font-size:9px;letter-spacing:2px;color:rgba(190,150,160,.25);text-transform:uppercase;padding:24px 0}
 </style>
 </head>
 <body>
@@ -1090,6 +1108,10 @@ textarea.hub-inp{resize:none;min-height:68px}
         <input type="password" id="c-discord-wh" placeholder="https://discord.com/api/webhooks/…">
         <div class="hint">Discord server → channel settings → Integrations → Webhooks → New Webhook → Copy URL.</div>
       </div>
+      <div class="field" style="display:flex;align-items:center;gap:9px">
+        <input type="checkbox" id="c-brief-tg" style="width:18px;height:18px;accent-color:var(--live);flex:none">
+        <label style="margin:0">Text me my daily briefing on Telegram</label>
+      </div>
     </div>
     <div class="cfg-sec">
       <div class="cfg-sec-title">Backup &amp; Restore</div>
@@ -1183,6 +1205,7 @@ textarea.hub-inp{resize:none;min-height:68px}
         <button class="qbtn" onclick="qp('jarvis','What is the single most important thing I should do right now to move forward?')">What Now</button>
         <button class="qbtn" onclick="qp('jarvis','Motivate me. I need to push through right now.')">Motivate</button>
         <button class="qbtn" onclick="cmd('status')">Status</button>
+        <button class="qbtn" onclick="runBriefing(true)" style="color:rgba(255,200,60,.8)">☀️ Briefing</button>
         <button class="qbtn" onclick="cleanJarvis()" style="color:rgba(204,34,68,.6)">🧹 Clean</button>
         <button class="qbtn" onclick="qpNiche('jarvis','Write me a high-converting weekly email newsletter for my audience in the niche of: ')">Newsletter</button>
         <button class="qbtn" onclick="qpNiche('jarvis','Find me the top 5 affiliate programs I can promote in the niche of: ')">Affiliate</button>
@@ -1282,6 +1305,7 @@ textarea.hub-inp{resize:none;min-height:68px}
         </div>
         <div class="goal-bar-wrap"><div class="goal-bar" id="dash-bar" style="width:0%"></div></div>
         <div class="goal-pct" id="dash-pct">0% of $10,000 goal</div>
+        <div class="income-chart" id="income-chart"></div>
         <div class="hub-body">
           <div class="hub-row">
             <div class="hub-field">
@@ -1670,11 +1694,13 @@ function runAgentNiche(agent, prompt) {
 
 function init() {
   loadTools();
+  setTimeout(() => runBriefing(false), 1600);
   loadCfg();
   loadNiche();
   loadConvos();
   loadBrain();
   loadTasks2();
+  loadSales();
   loadBeats();
   loadCodeState();
   initAttach();
@@ -1755,6 +1781,7 @@ function fillCfgForm() {
   document.getElementById('c-tg-token').value   = cfg.tgToken||'';
   document.getElementById('c-tg-chat').value    = cfg.tgChat||'';
   document.getElementById('c-discord-wh').value = cfg.discordWh||'';
+  document.getElementById('c-brief-tg').checked = !!cfg.briefTg;
   document.getElementById('c-ctx').value      = cfg.ctx||'';
   toggleProvider();
 }
@@ -1799,6 +1826,7 @@ function saveCfg() {
   cfg.tgToken   = document.getElementById('c-tg-token').value.trim();
   cfg.tgChat    = document.getElementById('c-tg-chat').value.trim();
   cfg.discordWh = document.getElementById('c-discord-wh').value.trim();
+  cfg.briefTg   = document.getElementById('c-brief-tg').checked;
   localStorage.setItem('jv-cfg', JSON.stringify(cfg));
   logEvent('settings-change', cfg.provider || '');
   updateStats(); updateDot(); closeCfg(); toast('Saved');
@@ -1940,6 +1968,7 @@ function renderMsg(agent, role, content) {
   div.innerHTML = `<div class="msg-who">${role==='user'?cfg.name.toUpperCase():agent.toUpperCase()}</div>
     <div class="bubble">${fmt(content)}</div>`;
   c.appendChild(div);
+  if (role !== 'user') attachMsgActions(div);
   c.scrollTop = c.scrollHeight;
 }
 
@@ -1953,7 +1982,7 @@ function mkStream(agent) {
   c.scrollTop = c.scrollHeight;
   const bubble = div.querySelector('.bubble');
   const upd = text => { bubble.innerHTML = fmt(text)+'<span class="cur"></span>'; c.scrollTop=c.scrollHeight; };
-  const fin = text => { div.classList.remove('thinking'); bubble.innerHTML = fmt(text); c.scrollTop=c.scrollHeight; };
+  const fin = text => { div.classList.remove('thinking'); bubble.innerHTML = fmt(text); attachMsgActions(div); c.scrollTop=c.scrollHeight; };
   return { upd, fin };
 }
 
@@ -2932,6 +2961,7 @@ function delSale(i) {
 
 function renderSales() {
   updateFreedom();
+  if (!document.getElementById('st-total') || !document.getElementById('sale-history-list')) return; // SALES panel not mounted
   const total = sales.reduce((s,x)=>s+x.amt,0);
   const now = new Date(); const today = now.toDateString();
   const weekAgo = Date.now() - 7*86400000;
@@ -5301,12 +5331,15 @@ function saveOfferVault() { localStorage.setItem('jv-offers', JSON.stringify(off
 function dashLogSale() {
   const amt = parseFloat(document.getElementById('dash-sale-amt').value) || 0;
   if (!amt) { toast('Enter a sale amount'); return; }
-  cfg.income = (cfg.income || 0) + amt;
+  sales.unshift({ amt, prod: 'Quick log', date: Date.now() });
+  saveSalesData();
+  cfg.income = Math.round(sales.reduce((s,x)=>s+x.amt,0) * 100) / 100;
   localStorage.setItem('jv-cfg', JSON.stringify(cfg));
   logEvent('sale-logged', '$' + amt);
   document.getElementById('dash-sale-amt').value = '';
   updateStats();
   renderMoneyDash();
+  if (typeof renderSales === 'function') renderSales();
   toast('+$' + amt.toFixed(2) + ' logged!');
 }
 
@@ -5320,6 +5353,7 @@ function renderMoneyDash() {
   if (el) el.textContent = '$' + inc.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
   if (bar) bar.style.width = pct.toFixed(1) + '%';
   if (pctEl) pctEl.textContent = pct.toFixed(1) + '% of $' + goal.toLocaleString() + '/mo goal';
+  renderIncomeChart();
 }
 
 function addOffer() {
@@ -6025,6 +6059,151 @@ function speakThenListen(text) {
   u.onend = () => { if (voiceModeActive) startVoiceListen(); };
   u.onerror = () => { if (voiceModeActive) startVoiceListen(); };
   window.speechSynthesis.speak(u);
+}
+
+
+// ═══════════════════════════════════════════════════════════
+// MESSAGE ACTIONS — copy / export any reply
+// ═══════════════════════════════════════════════════════════
+function attachMsgActions(msgDiv) {
+  if (!msgDiv || msgDiv.querySelector('.msg-actions')) return;
+  const row = document.createElement('div');
+  row.className = 'msg-actions';
+  row.innerHTML = `<button class="msg-act" onclick="copyMsg(this)">⧉ Copy</button>
+    <button class="msg-act" onclick="exportMsg(this)">⬇ Export</button>`;
+  msgDiv.appendChild(row);
+}
+function msgText(el) {
+  const bubble = el.closest('.msg')?.querySelector('.bubble');
+  if (!bubble) return '';
+  // reconstruct readable text (line breaks from <br> and block elements)
+  const clone = bubble.cloneNode(true);
+  clone.querySelectorAll('br').forEach(b => b.replaceWith('\n'));
+  clone.querySelectorAll('div,p').forEach(d => d.append('\n'));
+  return (clone.textContent || '').replace(/\n{3,}/g, '\n\n').trim();
+}
+function copyMsg(el) {
+  const t = msgText(el);
+  navigator.clipboard?.writeText(t).then(()=>toast('Copied')).catch(()=>toast('Copy failed'));
+}
+function exportMsg(el) {
+  const t = msgText(el);
+  if (!t) { toast('Nothing to export'); return; }
+  const blob = new Blob([t], { type: 'text/markdown' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'jarvis-' + new Date().toISOString().slice(0,16).replace(/[:T]/g,'-') + '.md';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  logEvent('export', t.length + ' chars');
+  toast('Exported as .md');
+}
+
+// ═══════════════════════════════════════════════════════════
+// DAILY BRIEFING — proactive intelligence
+// ═══════════════════════════════════════════════════════════
+async function runBriefing(force) {
+  const today = new Date().toDateString();
+  if (!force && localStorage.getItem('jv-brief-date') === today) return;
+  const ready = cfg.provider === 'ollama' ? cfg.url : cfg.apikey;
+  if (!ready) { if (force) { toast('Add your API key in ⚙ first'); openCfg(); } return; }
+  if (busy) return;
+  localStorage.setItem('jv-brief-date', today);
+  switchView('jarvis');
+
+  const inc = cfg.income || 0, goal = cfg.goal || 10000;
+  const pct = goal ? Math.round(inc/goal*100) : 0;
+  const niche = getNiche() || 'not set';
+  const openTasks = (typeof tasks2 !== 'undefined' ? tasks2 : []).filter(t=>!t.done).slice(0,5).map(t=>t.text).join('; ') || 'none logged';
+  const recent = (typeof sales !== 'undefined' ? sales : []).slice(0,5).reduce((a,s)=>a+s.amt,0);
+
+  const sys = `You are JARVIS delivering ${cfg.name}'s morning briefing. Be punchy, specific, motivating — like a chief of staff. Use short sections with emoji headers. Keep under 200 words.`;
+  const p = `Give me my daily briefing.\nDate: ${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}\nIncome: $${inc}/$${goal} (${pct}%)\nNiche: ${niche}\nRecent sales total: $${recent}\nOpen tasks: ${openTasks}\n\nInclude:\n☀️ One-line status\n🎯 The ONE priority for today\n💡 One fresh money-making idea in my niche\n🔥 A short motivational push\nEnd with a single clear first action.`;
+
+  const el = mkStream('jarvis');
+  busy = true;
+  try {
+    let full = await callAPIWithPrompt(sys, [{role:'user',content:p}], t => el?.upd(t));
+    el?.fin(full);
+    pushConvo('jarvis','assistant', full);
+    logEvent('briefing', pct + '%');
+    if (cfg.briefTg && cfg.tgToken && cfg.tgChat) sendBriefingTelegram(full);
+  } catch(e) { el?.fin('⚠ '+e.message); }
+  busy = false;
+}
+
+async function sendBriefingTelegram(text) {
+  try {
+    const clean = text.replace(/[*_`#]/g,'').slice(0, 3500);
+    await fetch(`https://api.telegram.org/bot${cfg.tgToken}/sendMessage`,
+      { method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ chat_id: cfg.tgChat, text: '☀️ JARVIS Daily Briefing\n\n'+clean }) });
+    logEvent('briefing-tg', '');
+    toast('Briefing sent to Telegram');
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════════════════════════════
+// INCOME CHART — 14-day daily revenue (single gold series)
+// ═══════════════════════════════════════════════════════════
+function renderIncomeChart() {
+  const host = document.getElementById('income-chart');
+  if (!host) return;
+  const list = (typeof sales !== 'undefined' ? sales : []);
+  const DAYS = 14;
+  const now = new Date();
+  const buckets = [];
+  for (let i = DAYS - 1; i >= 0; i--) {
+    const d = new Date(now); d.setDate(now.getDate() - i); d.setHours(0,0,0,0);
+    buckets.push({ day: d, label: d.toLocaleDateString('en-US',{day:'numeric'}), total: 0 });
+  }
+  list.forEach(s => {
+    const sd = new Date(s.date); sd.setHours(0,0,0,0);
+    const idx = buckets.findIndex(b => b.day.getTime() === sd.getTime());
+    if (idx >= 0) buckets[idx].total += s.amt;
+  });
+  const total14 = buckets.reduce((a,b)=>a+b.total,0);
+  if (total14 <= 0) {
+    host.innerHTML = `<div class="ic-title"><span>Last 14 days</span></div><div class="ic-empty">Log a sale to see your trend</div>`;
+    return;
+  }
+  const max = Math.max(...buckets.map(b=>b.total), 1);
+  const W = 320, H = 96, pad = 4, n = buckets.length;
+  const bw = (W - pad*2) / n;
+  const barW = bw * 0.62;
+  let bars = '', labels = '';
+  buckets.forEach((b, i) => {
+    const x = pad + i*bw + (bw - barW)/2;
+    const h = b.total > 0 ? Math.max(3, (b.total/max) * (H - 16)) : 0;
+    const y = H - 12 - h;
+    if (h > 0) bars += `<rect class="ic-bar" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3" ry="3" data-lbl="${b.day.toLocaleDateString('en-US',{month:'short',day:'numeric'})}" data-val="${b.total.toFixed(2)}"></rect>`;
+    if (i % 2 === 0) labels += `<text class="ic-lbl" x="${(x+barW/2).toFixed(1)}" y="${H-2}" text-anchor="middle">${b.label}</text>`;
+  });
+  host.innerHTML = `
+    <div class="ic-title"><span>Revenue · last 14 days</span><b>$${total14.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</b></div>
+    <svg class="ic-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
+      <defs><linearGradient id="icGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#e0b020"/><stop offset="100%" stop-color="#7a5a00"/>
+      </linearGradient></defs>
+      <line class="ic-axis" x1="${pad}" y1="${H-12}" x2="${W-pad}" y2="${H-12}"/>
+      ${bars}${labels}
+    </svg>
+    <div class="ic-tip" id="ic-tip"></div>`;
+  // tap/hover tooltip
+  const tip = host.querySelector('#ic-tip');
+  host.querySelectorAll('.ic-bar').forEach(bar => {
+    const show = e => {
+      const r = bar.getBoundingClientRect(), hr = host.getBoundingClientRect();
+      tip.textContent = `${bar.dataset.lbl}: $${parseFloat(bar.dataset.val).toLocaleString()}`;
+      tip.style.left = (r.left - hr.left + r.width/2) + 'px';
+      tip.style.top = (r.top - hr.top) + 'px';
+      tip.classList.add('on');
+    };
+    const hide = () => tip.classList.remove('on');
+    bar.addEventListener('mouseenter', show);
+    bar.addEventListener('mouseleave', hide);
+    bar.addEventListener('touchstart', e => { show(e); clearTimeout(window._icT); window._icT = setTimeout(hide, 1800); }, {passive:true});
+  });
 }
 
 
